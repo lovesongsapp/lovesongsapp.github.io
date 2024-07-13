@@ -1,8 +1,8 @@
-const CACHE_NAME = 'LoveSongs-v2';
+const CACHE_NAME = 'LoveSongs-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/offline.html',
+  '/offline.html'
 ];
 
 self.addEventListener("install", (event) => {
