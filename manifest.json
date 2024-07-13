@@ -65,9 +65,9 @@
       "form_factor": "narrow"
     },
     {
-      "src": "screenshot/screenshot-desktop-wide.png",
+      "src": "screenshot/screenshot-desktop-wide.jpg",
       "sizes": "1920x1080",
-      "type": "image/png",
+      "type": "image/jpg",
       "form_factor": "wide"
     }
   ],
