@@ -11,10 +11,15 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
-
       try {
-        await cache.addAll(urlsToCache);
-        console.log("Cached offline page during install");
+        for (let url of urlsToCache) {
+          try {
+            await cache.add(url);
+            console.log(`Cached ${url} during install`);
+          } catch (error) {
+            console.error(`Cache add error for ${url} during installation:`, error);
+          }
+        }
       } catch (error) {
         console.error("Cache addAll error during installation:", error);
       }
