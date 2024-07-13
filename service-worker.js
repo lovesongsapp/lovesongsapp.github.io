@@ -1,8 +1,7 @@
-const CACHE_NAME = 'LoveSongs-v1';
+const CACHE_NAME = 'LoveSongs-v2';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/js/music-list.js',
   '/offline.html',
 ];
 
