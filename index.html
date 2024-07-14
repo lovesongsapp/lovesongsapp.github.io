@@ -67,11 +67,21 @@
     </div>
 </div>
 <!--add-home-->
-      <div class="app" style="display: none;">
-    <h1>LoveSongsApp</h1>
-    <!-- Botão para instalar o PWA -->
-    <button id="install-button" class="app">Instalar</button>
-  </div>
+      <div class="app" id="InstallBanner" style="display:none;">
+         <div class="logo-app"></div>
+         <div class="header-app">
+            <div>
+               <p class="app-title">WALTEMAR.COM.BR</p>
+               <p class="app-subtitle">Desenvolvimentos Web</p>
+               <p class="add-info">Não contém anúncios ⭐ v5.0</p>
+            </div>
+            <div class="close-button">
+               <ion-icon name="close-outline" onclick="closeApp()"></ion-icon>
+            </div>
+         </div>
+         <p class="message">Adicionar o aplicativo a sua tela inicial?</p>
+         <button class="install-btn-app" id="installButton">Adicionar</button>
+      </div>
  
   
 <!-- cookie start -->
