@@ -42,7 +42,7 @@
         }
       ]
     }
-  },
+  ],
   "shortcuts": [
     {
       "name": "Playlists",
@@ -144,7 +144,18 @@
     "window-controls-overlay"
   ],
   "lang": "pt-BR",
+  "dir": "ltr",
+  "orientation": "portrait",
   "categories": [
     "music"
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": "navigate-existing",
+    "navigate_existing_client": {
+      "target_url_patterns": [
+        "https://waltemar.com.br/*"
+      ]
+    }
+  },
+  "iarc_rating_id": "ESRB_E"
 }
