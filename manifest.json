@@ -1,12 +1,47 @@
 {
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "id": "/index.html",
+  "name": "Waltemar Carneiro",
+  "short_name": "Waltemar Carneiro",
+  "description": "Aplicativos Web",
   "display": "standalone",
+  "iarc_rating_id": "ESRB_E",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "background_color": "#ffffff",
+  "theme_color": "#f0f4f9",
+  "start_url": "/index.html",
+  "orientation": "portrait",
   "scope": "/",
-  "start_url": "/",
-  "name": "Love Songs",
-  "short_name": "Love Songs",
+  "default_locale": "BR",
   "description": "Descubra o amor nas melodias atemporais do nosso aplicativo de música romântica, onde as décadas de 80 e 90 se encontram. Deixe-se envolver por uma trilha sonora nostálgica que celebra o romance em cada nota.",
+  "scope_extensions": [
+    {
+      "origin": "https://lovesongsapp.github.io",
+      "path": "/"
+    }
+  ],
+  "prefer_related_applications": false,
+  "protocol_handlers": [],
+  "related_applications": [],
+  "launch_handler": {
+    "client_mode": "navigate-existing",
+    "navigate_existing_client": {
+      "target_url_patterns": [
+        "https://waltemar.com.br/*"
+      ]
+    }
+  },
+  "handle_links": "all",
+  "file_handlers": [
+    {
+      "action": "/open-file",
+      "accept": {
+        "application/pdf": [".pdf"],
+        "image/png": [".png"],
+        "image/jpeg": [".jpg", ".jpeg"]
+      }
+    }
+  ],
   "icons": [
     {
       "src": "icons/icon192.png",
