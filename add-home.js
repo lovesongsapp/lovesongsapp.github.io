@@ -1,30 +1,47 @@
-// Verifica se o PWA pode ser instalado
-window.addEventListener('beforeinstallprompt', (event) => {
-  // Impede que o navegador mostre o aviso padrão
-  event.preventDefault();
-  // Salva o evento para ser usado posteriormente
-  deferredPrompt = event;
-  // Mostra o botão de instalação
-  document.getElementById('install-button').style.display = 'block';
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const installBanner = document.getElementById('InstallBanner');
+    installBanner.style.display = 'block'; // Mostrar nova div de instalação
 });
 
-// Evento de clique para instalar o PWA
-document.getElementById('install-button').addEventListener('click', () => {
-  // Mostra o aviso de instalação
-  deferredPrompt.prompt();
-  // Aguarda o usuário responder ao aviso
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('O usuário aceitou instalar o PWA');
-    } else {
-      console.log('O usuário recusou instalar o PWA');
+document.getElementById('installButton').addEventListener('click', () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+        });
     }
-    // Limpa o evento
-    deferredPrompt = null;
-  });
 });
 
-// Oculta o botão de instalação após a instalação
-window.addEventListener('appinstalled', () => {
-  document.getElementById('install-button').style.display = 'none';
-});
+function closeApp() {
+    const installBanner = document.getElementById('InstallBanner');
+    installBanner.style.display = 'none';
+}
+
+
+///////////////////////////////////////////////////////////////////
+
+function showApp() {
+    const app = document.getElementById('InstallBanner');
+    app.classList.add('show');
+    setTimeout(hideApp, 30000); // Esconde o banner após 30 segundos
+}
+
+function hideApp() {
+    const app = document.getElementById('InstallBanner');
+    app.classList.remove('show');
+}
+
+function closeApp() {
+    hideApp();
+}
+
+setTimeout(showApp, 5000); // Mostra o banner após 1 segundo
