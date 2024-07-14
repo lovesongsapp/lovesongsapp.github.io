@@ -1,6 +1,5 @@
 const CACHE_NAME = 'LoveSongs-v1';
 const urlsToCache = [
-  '/',
   '/index.html',
   '/offline.html'
 ];
