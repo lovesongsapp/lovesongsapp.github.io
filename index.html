@@ -87,61 +87,7 @@
       </div>
  
   
-<!-- cookie start -->
-<div id="cookie-consent-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #f0f0f0; padding: 10px; text-align: center; display: none;">
-    <p>Nós usamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com o uso de cookies.</p>
-    <button style="padding: 5px 10px; color: #fff; font-size: 16px; background: purple; border: none; border-radius: 5px; margin-top: 20px;" onclick="acceptCookies()">Aceitar Cookies</button>
-    <button style="padding: 5px 10px; color: #000; font-size: 16px; background: #ddd; border: none; border-radius: 5px; margin-top: 20px;" onclick="manageCookies()">Gerenciar Cookies</button>
-</div>
 
-<script>
-// Função para verificar se o consentimento foi dado anteriormente
-function checkCookieConsent() {
-    return localStorage.getItem('cookieConsent') === 'accepted';
-}
-
-// Função para exibir o banner de consentimento se necessário
-function showCookieConsentBanner() {
-    if (!checkCookieConsent()) {
-        document.getElementById('cookie-consent-banner').style.display = 'block';
-    }
-}
-
-// Função para aceitar cookies
-function acceptCookies() {
-    // Definir cookies necessários para execução de mídia (exemplo)
-    // Aqui você pode adicionar lógica para configurar os cookies necessários
-
-    // Salvar escolha do usuário no localStorage
-    localStorage.setItem('cookieConsent', 'accepted');
-
-    // Esconder o banner após aceitar cookies
-    document.getElementById('cookie-consent-banner').style.display = 'none';
-}
-
-// Função para gerenciar cookies
-function manageCookies() {
-    // Implementar lógica para abrir uma página/modal de gerenciamento de cookies
-    alert('Implemente aqui a lógica para gerenciar cookies.');
-}
-
-// Verificar e exibir o banner de consentimento ao carregar a página
-document.addEventListener('DOMContentLoaded', function() {
-    showCookieConsentBanner();
-});
-// Definição do cookie de consentimento avançado para áudio e vídeo
-function aceitarCookiesAvancados() {
-    // Define o cookie com o consentimento para áudio e vídeo
-    document.cookie = "CONSENT_AVANCADO=audio-video-permitido; SameSite=None; Secure=True";
-}
-
-// Exemplo de chamada para definir o consentimento avançado
-aceitarCookiesAvancados();
-
-</script>
-
-<!-- cookie end -->
- <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/src/js.cookie.min.js"></script>
      
       <script>
          const rangeInput = document.querySelector('input[type="range"]');
