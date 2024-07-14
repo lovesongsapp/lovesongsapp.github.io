@@ -462,7 +462,7 @@ font-weight: 500;
 font-size: 0.9em;
 }
 .logo-header{
-display; flex;
+display: flex;
 position: fixed;
 top: 30px;
 left: 30px;
