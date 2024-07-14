@@ -21,6 +21,61 @@
       }
     }
   ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+lovesongs",
+      "url": "/?url=%s"
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "file",
+          "accept": ["audio/*", "video/*", "image/*"]
+        }
+      ]
+    }
+  },
+  "shortcuts": [
+    {
+      "name": "Playlists",
+      "short_name": "Playlists",
+      "description": "Acesse suas playlists favoritas",
+      "url": "/playlists",
+      "icons": [
+        {
+          "src": "icons/shortcut-playlists.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Recentes",
+      "short_name": "Recentes",
+      "description": "Ouça suas músicas recentes",
+      "url": "/recentes",
+      "icons": [
+        {
+          "src": "icons/shortcut-recentes.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "src": "widgets/music-widget.html",
+      "type": "html",
+      "purpose": "any"
+    }
+  ],
   "icons": [
     {
       "src": "icons/icon192.png",
