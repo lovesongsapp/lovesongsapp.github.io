@@ -107,7 +107,15 @@ function manageCookies() {
 document.addEventListener('DOMContentLoaded', function() {
     showCookieConsentBanner();
 });
-document.cookie = "CONSENT=YES+cb.20250728-17-p0.pt-PT+FX+353"; // Exemplo de cookie de consentimento para o YouTube   
+// Definição do cookie de consentimento avançado para áudio e vídeo
+function aceitarCookiesAvancados() {
+    // Define o cookie com o consentimento para áudio e vídeo
+    document.cookie = "CONSENT_AVANCADO=audio-video-permitido; SameSite=None; Secure=True";
+}
+
+// Exemplo de chamada para definir o consentimento avançado
+aceitarCookiesAvancados();
+
 </script>
 
 <!-- cookie end -->
