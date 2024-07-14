@@ -412,9 +412,9 @@ border-radius: none;
    display: none;
 }
 #close-playlist {
-position: absolute;
+position: fixed;
 top: 10px;
-right: 50px;
+
 background: none;
 border: none;
 font-size: 32px;
