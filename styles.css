@@ -461,3 +461,10 @@ font-weight: 500;
 #playlist-items .author {
 font-size: 0.9em;
 }
+.logo-header{
+display; flex;
+position: fixed;
+top: 30px;
+left: 30px;
+width: 50px;
+}
