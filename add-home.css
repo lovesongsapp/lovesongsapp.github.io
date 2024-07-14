@@ -9,7 +9,7 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   bottom: 0;
-  display: flex;
+  display: none;
   position: fixed;
   width: 100%;
 }
