@@ -221,7 +221,7 @@ height: 40px;
 list-style-type: none;
 padding: 0;
 margin: 0;
-max-height: 500px;
+/*max-height: 500px;*/
 overflow-y: auto;
 }
 #playlist ul li {
@@ -303,7 +303,8 @@ background: rgba(18, 18, 18, 0.8);
 }
 .dark-mode #playlist {
 background: #00000070;
-color: #ffffff;  
+color: #ffffff;
+bottom: 0;
 }
 .dark-mode #playlist ul li {
 padding: 10px;
