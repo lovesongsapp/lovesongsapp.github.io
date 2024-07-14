@@ -6,7 +6,7 @@
   "background_color": "#ffffff",
   "theme_color": "#f0f4f9",
   "start_url": "/index.html",
-  "orientation": "portrait",
+  "orientation": "any",
   "scope": "/",
   "description": "Descubra o amor nas melodias atemporais do nosso aplicativo de música romântica, onde as décadas de 80 e 90 se encontram. Deixe-se envolver por uma trilha sonora nostálgica que celebra o romance em cada nota.",
   "prefer_related_applications": false,
