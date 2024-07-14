@@ -155,3 +155,9 @@ self.addEventListener('message', event => {
     self.skipWaiting();
   }
 });
+//MEDIA SESSION
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+    event.waitUntil(clients.openWindow('/'));
+});
+
