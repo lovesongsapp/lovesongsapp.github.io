@@ -66,24 +66,49 @@
 </div>
 
 <!-- cookie start -->
-      <div id="cookie-consent-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #f0f0f0; padding: 10px; text-align: center;">
+<div id="cookie-consent-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #f0f0f0; padding: 10px; text-align: center; display: none;">
     <p>Nós usamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com o uso de cookies.</p>
     <button onclick="acceptCookies()">Aceitar Cookies</button>
     <button onclick="manageCookies()">Gerenciar Cookies</button>
 </div>
 
 <script>
+// Função para verificar se o consentimento foi dado anteriormente
+function checkCookieConsent() {
+    return localStorage.getItem('cookieConsent') === 'accepted';
+}
+
+// Função para exibir o banner de consentimento se necessário
+function showCookieConsentBanner() {
+    if (!checkCookieConsent()) {
+        document.getElementById('cookie-consent-banner').style.display = 'block';
+    }
+}
+
+// Função para aceitar cookies
 function acceptCookies() {
-    // Lógica para aceitar cookies (definir cookies necessários, por exemplo)
-    // Aqui você pode também esconder o banner
+    // Definir cookies necessários para execução de mídia (exemplo)
+    // Aqui você pode adicionar lógica para configurar os cookies necessários
+
+    // Salvar escolha do usuário no localStorage
+    localStorage.setItem('cookieConsent', 'accepted');
+
+    // Esconder o banner após aceitar cookies
     document.getElementById('cookie-consent-banner').style.display = 'none';
 }
 
+// Função para gerenciar cookies
 function manageCookies() {
-    // Redirecionar para uma página de gerenciamento de cookies ou abrir um modal
+    // Implementar lógica para abrir uma página/modal de gerenciamento de cookies
     alert('Implemente aqui a lógica para gerenciar cookies.');
 }
+
+// Verificar e exibir o banner de consentimento ao carregar a página
+document.addEventListener('DOMContentLoaded', function() {
+    showCookieConsentBanner();
+});
 </script>
+
 <!-- cookie end -->
       
       <script>
