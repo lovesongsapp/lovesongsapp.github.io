@@ -6,7 +6,6 @@ padding: 0;
 }
 body {
 font-family: 'Roboto', sans-serif;
-background-color: #f0f0f0;
 color: #311E56;
 transition: background-color 0.3s, color 0.3s;
 user-select: none;
@@ -259,7 +258,14 @@ font-size: 32px;
 #close-playlist:hover {
 text-decoration: underline;
 }
-/*MODO DARK*/
+/* //////////////////// DARK MODE ////////////////////////// */
+.dark-mode .player{
+	background: #13051f;
+}
+.dark-mode{
+background: linear-gradient(0deg, rgba(87,32,162,1) 0%, rgba(19,5,31,1) 49%);
+
+}
 .dark-mode #close-playlist {
 color: #00ffbf;
 }
@@ -268,13 +274,10 @@ font-size: 18px;
 font-weight: 400;
 color: #00FFBF;
 }
-.dark-mode {
-background-color: #121212;
-color: #ffffff;
-}
-.dark-mode .player {
-background: #0f0f0f;
+.dark-mode .player-controls {
+/*background: linear-gradient(180deg, rgba(234,116,210,1) 0%, rgba(19,5,31,1) 49%); DIV TITLE LOVESONGS*/
 box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+color: #f1f1f1;
 }
 .dark-mode .player-header {
 border-bottom: 1px solid #311E56;
@@ -291,7 +294,6 @@ border: 2px solid #F966D6;
 }
 .dark-mode .pause-outline {
 color: #311E56;
-background: #00ffbf;
 }
 .dark-mode .control-button {
 color: #00FFBF;
@@ -352,7 +354,8 @@ background: #ddd;
 height: 3px; /* Define a altura do preenchimento dinâmico */
 border-radius: 5px;
 }
-/* Media query para modo paisagem */
+
+/* //////////////////// MEDIA QUERY LANDSCAPE MODE ////////////////////////// */
 @media (orientation: landscape) {
 .player {
 flex-direction: row;

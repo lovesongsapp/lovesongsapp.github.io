@@ -117,7 +117,7 @@ function onPlayerReady(event) {
         document.documentElement.setAttribute('data-theme', savedTheme);
         document.body.classList.toggle('dark-mode', savedTheme === 'dark');
         document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
-        metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#0F0F0F' : '#f0f4f9');
+        metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
     }
 
     document.getElementById('theme-toggle').addEventListener('click', function() {
@@ -132,7 +132,7 @@ function onPlayerReady(event) {
             document.documentElement.setAttribute('data-theme', 'dark');
             document.body.classList.add('dark-mode');
             this.innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
-            metaThemeColor.setAttribute('content', '#0F0F0F');
+            metaThemeColor.setAttribute('content', '#13051f');
             localStorage.setItem('theme', 'dark');
         }
     });
