@@ -289,11 +289,11 @@ color: #00FFBF;
 border: 2px solid #00FFBF;
 }
 .dark-mode .play-outline:hover {
-color: #F966D6;
-border: 2px solid #F966D6;
+border: 2px solid #00FFBF;
 }
 .dark-mode .pause-outline {
-color: #311E56;
+color: #00FFBF;
+border: 2px solid #00FFBF;
 }
 .dark-mode .control-button {
 color: #00FFBF;
