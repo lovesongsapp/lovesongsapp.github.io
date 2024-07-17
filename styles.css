@@ -355,11 +355,13 @@ border-radius: 5px;
 }
 /* MEDIA QUERY PORTRAIT */
 @MEDIA (orientation: portrait) {
+body .dark-mode {
+background: linear-gradient(0deg, rgba(87,32,162,1) 0%, rgba(19,5,31,1) 10%);
+}
 .dark-mode .player{
-background: linear-gradient(0deg, rgba(87,32,162,1) 0%, rgba(19,5,31,1) 49%);
 max-width: 100%;
 height: 100vh;
-top: 50%;
+/top: 50%;
 }
 }
 /* //////////////////// MEDIA QUERY LANDSCAPE MODE ////////////////////////// */
