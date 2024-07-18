@@ -87,7 +87,8 @@
         <button id="close-playlist">
             <ion-icon name="close-outline"></ion-icon>
         </button>
-        <h2>Playlist</h2>
+        <ion-icon id="busca" name="search-outline" size="large"></ion-icon>
+        <input id="search-input" type="text" placeholder="Buscar..." class="busca">
         <ul id="playlist-items"></ul>
     </div>
 </div>
@@ -108,6 +109,7 @@
          <p class="message">Adicionar o aplicativo a sua tela inicial?</p>
          <button class="install-btn-app" id="installButton">Adicionar</button>
       </div>
+ 
      
       <script>
          const rangeInput = document.querySelector('input[type="range"]');
