@@ -29,10 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoId = urlParams.get('videoId');
     if (videoId) {
 
-//function onYouTubeIframeAPIReady() {
+  //function onYouTubeIframeAPIReady() {
 
     // Aguarde o carregamento do player antes de tentar reproduzir o vídeo
-    window.onYouTubeIframeAPIReady = function() {
+    function onYouTubeIframeAPIReady() {
 
     player = new YT.Player('music-player', {
         height: '100%',
