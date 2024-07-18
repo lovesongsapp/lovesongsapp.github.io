@@ -13,7 +13,6 @@ user-select: none;
 margin: 0;
 padding: 0;
 }
-
 .player-container {
 display: flex;
 justify-content: center;
@@ -37,9 +36,7 @@ display: flex;
 justify-content: space-around;
 align-items: center;
 padding: 0px;
-
 }
-
 .player-header button {
 background: none;
 border: none;
@@ -270,25 +267,20 @@ text-decoration: underline;
 /* //////////////////// DARK MODE ////////////////////////// */
 .dark-mode .player{
 background: linear-gradient(0deg, rgba(87,32,162,1) 0%, rgba(19,5,31,1) 49%);
-
 }
 .dark-mode{
-
 }
 .dark-mode #close-playlist {
 color: #00ffbf;
 }
-
 .dark-mode .player-controls {
 color: #f1f1f1;
 background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg-controls.jpg) no-repeat center center;
 background-size: cover;
 }
-
 .dark-mode .player-header button {
 color: #00FFBF;
 font-size: 24px;
-
 }
 .dark-mode .player-header ion-icon {
 color: #00FFBF;
@@ -333,12 +325,10 @@ background: #0f0f0f;
 font-weight: 500;
 color: #f1f1f1;
 }
-
 .dark-mode #playlist-items .author {
 color: #AAAAAA;
 font-size: 0.9em;
 }
-
 /* PREENCHIMENTO DINAMICO */
 input[type="range"]::-webkit-slider-runnable-track {
 background: linear-gradient(to right, #00FFBF, #00FFBF) 0% / var(--slider-value) 100% no-repeat, #ddd;
@@ -377,7 +367,6 @@ height: 100vh;
 .dark-mode #music-player{
 height: 50%;
 }
-    
 }
 /* //////////////////// MEDIA QUERY LANDSCAPE MODE ////////////////////////// */
 @media (orientation: landscape) {
