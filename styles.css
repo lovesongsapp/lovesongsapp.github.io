@@ -5,6 +5,7 @@ margin: 0;
 padding: 0;
 }
 body {
+background: #fdefff;
 font-family: 'Roboto', sans-serif;
 color: #311E56;
 transition: background-color 0.3s, color 0.3s;
@@ -20,7 +21,6 @@ align-items: center;
 height: 100%;
 }
 .player {
-background: #f0f0f0;
 width: 100%;
 max-width: 400px;
 overflow: hidden;
