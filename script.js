@@ -235,3 +235,58 @@ function renderPlaylist() {
         playlistContainer.appendChild(listItem);
     });
 }
+
+// BUSCA CONFIG
+
+// Adicione o evento de keyup ao input de texto
+document.getElementById('search-input').addEventListener('keyup', function(event) {
+    const searchText = event.target.value.toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
+});
+
+// Crie a função que filtre a playlist com base no texto digitado
+function filterPlaylist(searchText) {
+    const filteredPlaylist = playlistData.filter(video => {
+        const title = video.title.toLowerCase();
+        const author = video.author.toLowerCase();
+        return title.includes(searchText) || author.includes(searchText);
+    });
+    return filteredPlaylist;
+}
+
+// Atualize a lista de vídeos na playlist com os resultados da busca
+function renderPlaylist(playlist) {
+    const playlistContainer = document.getElementById('playlist-items');
+    playlistContainer.innerHTML = '';
+
+    playlist.forEach((video, index) => {
+        const listItem = document.createElement('li');
+
+        const thumbnail = document.createElement('img');
+        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
+        listItem.appendChild(thumbnail);
+
+        const textContainer = document.createElement('div');
+        textContainer.className = 'text-container';
+
+        const titleText = document.createElement('span');
+        titleText.className = 'title';
+        titleText.textContent = video.title;
+        textContainer.appendChild(titleText);
+
+        const authorText = document.createElement('span');
+        authorText.className = 'author';
+        authorText.textContent = video.author;
+        textContainer.appendChild(authorText);
+
+        listItem.appendChild(textContainer);
+
+        listItem.addEventListener('click', () => {
+            player.playVideoAt(index);
+            document.getElementById('playlist-overlay').style.display = 'none';
+        });
+
+        playlistContainer.appendChild(listItem);
+    });
+}
