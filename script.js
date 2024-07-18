@@ -250,3 +250,28 @@ document.getElementById('search-input').addEventListener('keyup', function(event
 function filterPlaylist(searchText) {
     return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
+
+//SHARE CONFIG
+
+document.getElementById('share-icon').addEventListener('click', function() {
+    const videoData = player.getVideoData();
+    const videoUrl = `https://www.youtube.com/watch?v=${videoData.video_id}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: videoData.title,
+            text: `Confira este vídeo: ${videoData.title}`,
+            url: videoUrl,
+        }).then(() => {
+            console.log('Compartilhamento bem-sucedido');
+        }).catch((error) => {
+            console.error('Erro ao compartilhar:', error);
+        });
+    } else {
+        // Fallback para navegadores que não suportam a API de compartilhamento
+        alert(`Confira este vídeo: ${videoData.title}\n${videoUrl}`);
+    }
+});
+
+//OTHERS CONFIG
+
