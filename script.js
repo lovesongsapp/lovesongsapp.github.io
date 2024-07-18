@@ -6,6 +6,7 @@ let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
+let initialVideoPlayed = false; // Adicionado
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
@@ -142,7 +143,8 @@ function onPlayerReady(event) {
     const urlParams = new URLSearchParams(window.location.search);
     const videoId = urlParams.get('videoId');
     if (videoId) {
-        player.cueVideoById(videoId);
+        player.loadVideoById(videoId);
+        initialVideoPlayed = true; // Adicionado
     }
 }
 
@@ -235,8 +237,9 @@ function renderPlaylist(playlist) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            player.playVideoAt(video.index);
+            player.loadVideoById(video.videoId); // Alterado para loadVideoById
             document.getElementById('playlist-overlay').style.display = 'none';
+            initialVideoPlayed = false; // Reiniciar para permitir a navegação normal
         });
 
         playlistContainer.appendChild(listItem);
@@ -245,15 +248,13 @@ function renderPlaylist(playlist) {
 
 // BUSCA CONFIG
 
-document.getElementById('search-input').addEventListener('keyup', function(event) {
-    const searchText = event.target.value.toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
+document.getElementById('search-bar').addEventListener('input', function() {
+    const searchText = this.value.toLowerCase();
+    const filteredPlaylist = playlistData.filter(video =>
+        video.title.toLowerCase().includes(searchText) ||
+        video.author.toLowerCase().includes(searchText));
     renderPlaylist(filteredPlaylist);
 });
-
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
-}
 
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
