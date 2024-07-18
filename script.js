@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('music-player', {
-        height: '50vh',
+        height: '100%',
         width: '100%',
         videoId: 'xiN4EOqpvwc',
         playerVars: {
