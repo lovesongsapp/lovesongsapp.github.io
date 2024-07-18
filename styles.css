@@ -373,7 +373,7 @@ max-width: 100%;
 height: 100vh;
 
 }
-#music-player{
+.light-mode #music-player{
 height: 50%;
 }
 .dark-mode #music-player{
