@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
     currentTimeDisplay = document.getElementById('current-time');
     durationDisplay = document.getElementById('duration');
     
-    // Verifique se todos os elementos DOM necessários estão presentes
     if (progressBar && currentTimeDisplay && durationDisplay) {
         onYouTubeIframeAPIReady();
     } else {
@@ -138,6 +137,13 @@ function onPlayerReady(event) {
     });
 
     fetchPlaylistData();
+
+    // Verificar se há um parâmetro videoId na URL e reproduzir o vídeo correspondente
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('videoId');
+    if (videoId) {
+        player.cueVideoById(videoId);
+    }
 }
 
 function onPlayerStateChange(event) {
@@ -239,20 +245,17 @@ function renderPlaylist(playlist) {
 
 // BUSCA CONFIG
 
-// Adicione o evento de keyup ao input de texto
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const searchText = event.target.value.toLowerCase();
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
 
-// Crie a função que filtre a playlist
 function filterPlaylist(searchText) {
     return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
 
-//SHARE CONFIG
-
+// Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
     const currentUrl = window.location.origin + window.location.pathname;
