@@ -485,3 +485,13 @@ font-weight: 500;
 font-size: 0.9em;
 }
 
+.busca{
+    width: 50%;
+    height: 20px;
+    margin-left: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}
