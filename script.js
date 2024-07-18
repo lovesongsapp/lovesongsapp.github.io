@@ -238,21 +238,26 @@ function renderPlaylist() {
 
 // BUSCA CONFIG
 
+let playlistData = [...]; // sua playlist original
+let filteredPlaylist = [...]; // playlist filtrada
+
+// Mostrar a playlist inicialmente
+document.getElementById('playlist').style.display = 'block';
+
 // Adicione o evento de keyup ao input de texto
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const searchText = event.target.value.toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
+    filteredPlaylist = filterPlaylist(searchText, playlistData);
     renderPlaylist(filteredPlaylist);
 });
 
 // Crie a função que filtre a playlist com base no texto digitado
-function filterPlaylist(searchText) {
-    const filteredPlaylist = playlistData.filter(video => {
+function filterPlaylist(searchText, playlist) {
+    return playlist.filter(video => {
         const title = video.title.toLowerCase();
         const author = video.author.toLowerCase();
         return title.includes(searchText) || author.includes(searchText);
     });
-    return filteredPlaylist;
 }
 
 // Atualize a lista de vídeos na playlist com os resultados da busca
@@ -283,7 +288,7 @@ function renderPlaylist(playlist) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            player.playVideoAt(index);
+            player.playVideoAt(index); // use o índice do vídeo selecionado na playlist filtrada
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
