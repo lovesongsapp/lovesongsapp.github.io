@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('Um ou mais elementos DOM não foram encontrados.');
     }
-});
+
 
 // Verificar se há um parâmetro de videoId na URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -47,9 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
-        }
-    });
-}
+         }
+            });
+        };
+    }
+});
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
