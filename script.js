@@ -52,6 +52,7 @@ function onPlayerReady(event) {
     initialVideoId = urlParams.get('videoId');
     
     if (initialVideoId) {
+        // Carregar o vídeo compartilhado e depois configurar o playlist para garantir que não interfira
         player.loadVideoById(initialVideoId);
         initialVideoId = null; // Reset após carregar o vídeo inicial
     }
@@ -241,7 +242,7 @@ function renderPlaylist(playlist) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            player.loadVideoById(video.videoId); // Alterado de playVideoAt para loadVideoById
+            player.loadVideoById(video.videoId);
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
