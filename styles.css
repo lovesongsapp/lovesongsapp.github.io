@@ -389,8 +389,10 @@ align-items: center;
 display: flex;
 flex-direction: column;
 justify-content: center;
-position: relative;
-top: 25%;  
+position: fixed;
+top: 40%;
+left: 50%;
+width: auto;
 }
 .player-controls {
 width: 50%;
