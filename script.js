@@ -44,6 +44,20 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
+    setupControls();
+    fetchPlaylistData();
+
+    // Verificar se há um parâmetro videoId na URL e armazená-lo
+    const urlParams = new URLSearchParams(window.location.search);
+    initialVideoId = urlParams.get('videoId');
+    
+    if (initialVideoId) {
+        player.loadVideoById(initialVideoId);
+        initialVideoId = null; // Reset após carregar o vídeo inicial
+    }
+}
+
+function setupControls() {
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
@@ -136,12 +150,6 @@ function onPlayerReady(event) {
             localStorage.setItem('theme', 'dark');
         }
     });
-
-    fetchPlaylistData();
-
-    // Verificar se há um parâmetro videoId na URL e armazená-lo
-    const urlParams = new URLSearchParams(window.location.search);
-    initialVideoId = urlParams.get('videoId');
 }
 
 function onPlayerStateChange(event) {
@@ -168,10 +176,6 @@ function onPlayerStateChange(event) {
         }
     }
     updateTitleAndArtist();
-    if (initialVideoId) {
-        player.loadVideoById(initialVideoId);
-        initialVideoId = null; // Reset after loading the initial video
-    }
 }
 
 function updateTitleAndArtist() {
@@ -237,26 +241,26 @@ function renderPlaylist(playlist) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            player.loadVideoById(video.videoId); // Alterado para loadVideoById
+            player.loadVideoById(video.videoId); // Alterado de playVideoAt para loadVideoById
             document.getElementById('playlist-overlay').style.display = 'none';
-            initialVideoId = null; // Reiniciar para permitir a navegação normal
         });
 
         playlistContainer.appendChild(listItem);
     });
 }
 
-// BUSCA CONFIG
-
-document.getElementById('search-bar').addEventListener('input', function() {
-    const searchText = this.value.toLowerCase();
-    const filteredPlaylist = playlistData.filter(video =>
-        video.title.toLowerCase().includes(searchText) ||
-        video.author.toLowerCase().includes(searchText));
+document.getElementById('search-input').addEventListener('keyup', function(event) {
+    const searchText = event.target.value.toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
 
-// Compartilhamento
+function filterPlaylist(searchText) {
+    return playlistData.filter(video => 
+        video.title.toLowerCase().includes(searchText) ||
+        video.author.toLowerCase().includes(searchText));
+}
+
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
     const currentUrl = window.location.origin + window.location.pathname;
