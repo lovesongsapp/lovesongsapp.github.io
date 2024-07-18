@@ -355,7 +355,7 @@ background: #ddd;
 height: 3px; /* Define a altura do preenchimento dinâmico */
 border-radius: 5px;
 }
-/* MEDIA QUERY PORTRAIT */
+/*//////////////////////// MEDIA QUERY PORTRAIT /////////////////////////////// */
 @MEDIA (orientation: portrait) {
 body .dark-mode {
 background: linear-gradient(0deg, rgba(87,32,162,1) 0%, rgba(19,5,31,1) 10%);
@@ -368,7 +368,7 @@ height: 100vh;
 height: 50%;
 }
 .busca{
-    top: 20px
+    top: 15px
 }
 }
 /* //////////////////// MEDIA QUERY LANDSCAPE MODE ////////////////////////// */
