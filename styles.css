@@ -493,13 +493,13 @@ font-size: 0.9em;
 
 .busca{
 width: 30%;
-    height: 25px;
+    height: 20px;
     margin-left: 40px;
     background: rgba(0, 0, 0, 0.5);
     color: #FFF;
     border: none;
     border-radius: 5px;
-    padding: 5px;
+    padding: 3px;
     display: flex;
     position:absolute;
 }
