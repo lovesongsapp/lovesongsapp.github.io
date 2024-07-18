@@ -271,21 +271,10 @@ function renderPlaylist(playlist) {
 
 // BUSCA CONFIG
 
-document.getElementById('search-input').addEventListener('keyup', function(event) {
-    const searchText = event.target.value.toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
-});
-
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
-}
-
-// SHARE CONFIG
-
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
-    const videoUrl = `https://www.youtube.com/watch?v=${videoData.video_id}`;
+    const currentUrl = window.location.origin + window.location.pathname;
+    const videoUrl = `${currentUrl}?videoId=${videoData.video_id}`;
 
     if (navigator.share) {
         navigator.share({
