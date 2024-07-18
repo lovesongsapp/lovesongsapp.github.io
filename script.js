@@ -6,7 +6,7 @@ let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
-let initialVideoPlayed = false; // Adicionado
+let initialVideoId = null;
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
@@ -50,7 +50,7 @@ function onPlayerReady(event) {
             this.innerHTML = '<ion-icon name="play-outline" class="play-outline"></ion-icon>';
         } else {
             player.playVideo();
-            this.innerHTML = '<ion-icon name="pause-outline" class="pause-outline"></ion-icon>';
+            this.innerHTML = '<ion-icon name="pause-outline"></ion-icon>';
         }
         isPlaying = !isPlaying;
     });
@@ -139,13 +139,9 @@ function onPlayerReady(event) {
 
     fetchPlaylistData();
 
-    // Verificar se há um parâmetro videoId na URL e reproduzir o vídeo correspondente
+    // Verificar se há um parâmetro videoId na URL e armazená-lo
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId');
-    if (videoId) {
-        player.loadVideoById(videoId);
-        initialVideoPlayed = true; // Adicionado
-    }
+    initialVideoId = urlParams.get('videoId');
 }
 
 function onPlayerStateChange(event) {
@@ -172,6 +168,10 @@ function onPlayerStateChange(event) {
         }
     }
     updateTitleAndArtist();
+    if (initialVideoId) {
+        player.loadVideoById(initialVideoId);
+        initialVideoId = null; // Reset after loading the initial video
+    }
 }
 
 function updateTitleAndArtist() {
@@ -239,7 +239,7 @@ function renderPlaylist(playlist) {
         listItem.addEventListener('click', () => {
             player.loadVideoById(video.videoId); // Alterado para loadVideoById
             document.getElementById('playlist-overlay').style.display = 'none';
-            initialVideoPlayed = false; // Reiniciar para permitir a navegação normal
+            initialVideoId = null; // Reiniciar para permitir a navegação normal
         });
 
         playlistContainer.appendChild(listItem);
