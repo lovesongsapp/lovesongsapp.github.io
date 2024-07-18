@@ -6,6 +6,8 @@ let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
+// Mostrar a playlist inicialmente
+document.getElementById('playlist').style.display = 'block';
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
@@ -237,10 +239,6 @@ function renderPlaylist() {
 }
 
 // BUSCA CONFIG
-// BUSCA CONFIG
-
-// Mostrar a playlist inicialmente
-document.getElementById('playlist').style.display = 'block';
 // Adicione o evento de keyup ao input de texto
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const searchText = event.target.value.toLowerCase();
