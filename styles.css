@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap');
 * {
@@ -72,6 +71,7 @@ flex: 1;
 }
 #music-player {
 width: 100%;
+height: 50vh;
 pointer-events: none;
 }
 .info {
@@ -333,11 +333,13 @@ background: #0f0f0f;
 font-weight: 500;
 color: #f1f1f1;
 }
+
 .dark-mode #playlist-items .author {
 color: #AAAAAA;
 font-size: 0.9em;
 }
-/* Adicionando o preenchimento dinâmico */
+
+/* PREENCHIMENTO DINAMICO */
 input[type="range"]::-webkit-slider-runnable-track {
 background: linear-gradient(to right, #00FFBF, #00FFBF) 0% / var(--slider-value) 100% no-repeat, #ddd;
 height: 3px; /* Define a altura do preenchimento dinâmico */
@@ -371,14 +373,11 @@ background: linear-gradient(0deg, rgba(87,32,162,1) 0%, rgba(19,5,31,1) 10%);
 .dark-mode .player{
 max-width: 100%;
 height: 100vh;
-
-}
-#music-player{
-height: 50%;
 }
 .dark-mode #music-player{
 height: 50%;
 }
+    
 }
 /* //////////////////// MEDIA QUERY LANDSCAPE MODE ////////////////////////// */
 @media (orientation: landscape) {
@@ -394,7 +393,7 @@ height: 100vh;
 }
 #music-player {
 width: 50%;
-height: 300px;
+height: 100%;
 }
 .info {
 align-items: center;
