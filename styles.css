@@ -70,6 +70,7 @@ justify-content: space-between;
 flex: 1;
 }
 #music-player {
+width: 100%;
 pointer-events: none;
 }
 .info {
