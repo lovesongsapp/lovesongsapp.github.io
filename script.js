@@ -180,8 +180,9 @@ function formatTime(seconds) {
 
 async function fetchPlaylistData() {
     const playlist = player.getPlaylist();
-    playlistData = playlist.map(videoId => ({
+    playlistData = playlist.map((videoId, index) => ({
         videoId,
+        index,
         title: '',
         author: ''
     }));
@@ -205,7 +206,7 @@ function renderPlaylist(playlist) {
     const playlistContainer = document.getElementById('playlist-items');
     playlistContainer.innerHTML = '';
 
-    playlist.forEach((video, index) => {
+    playlist.forEach(video => {
         const listItem = document.createElement('li');
 
         const thumbnail = document.createElement('img');
@@ -228,7 +229,7 @@ function renderPlaylist(playlist) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            player.playVideoAt(index);
+            player.playVideoAt(video.index);
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
@@ -245,12 +246,7 @@ document.getElementById('search-input').addEventListener('keyup', function(event
     renderPlaylist(filteredPlaylist);
 });
 
-// Crie a função que filtre a playlist com base no texto digitado
+// Crie a função que filtre a playlist
 function filterPlaylist(searchText) {
-    const filteredPlaylist = playlistData.filter(video => {
-        const title = video.title.toLowerCase();
-        const author = video.author.toLowerCase();
-        return title.includes(searchText) || author.includes(searchText);
-    });
-    return filteredPlaylist;
+    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
