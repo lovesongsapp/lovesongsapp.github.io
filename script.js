@@ -23,35 +23,31 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Um ou mais elementos DOM não foram encontrados.');
     }
 
-
-// Verificar se há um parâmetro de videoId na URL
+    // Verificar se há um parâmetro de videoId na URL
     const urlParams = new URLSearchParams(window.location.search);
     const videoId = urlParams.get('videoId');
     if (videoId) {
-
-  //function onYouTubeIframeAPIReady() {
-
-    // Aguarde o carregamento do player antes de tentar reproduzir o vídeo
-    function onYouTubeIframeAPIReady() {
-
-    player = new YT.Player('music-player', {
-        height: '100%',
-        width: '100%',
-        videoId: 'xiN4EOqpvwc',
-        playerVars: {
-            listType: 'playlist',
-            list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
-            autoplay: 0,
-            controls: 0
-        },
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-         }
+        // Aguarde o carregamento do player antes de tentar reproduzir o vídeo
+        window.onYouTubeIframeAPIReady = function() {
+            player = new YT.Player('music-player', {
+                height: '100%',
+                width: '100%',
+                videoId: videoId,
+                playerVars: {
+                    listType: 'playlist',
+                    list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
+                    autoplay: 1,
+                    controls: 0
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
             });
         };
     }
 });
+
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
