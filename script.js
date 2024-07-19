@@ -6,7 +6,6 @@ let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
-let sharedVideoId = null;
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
@@ -16,8 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     progressBar = document.getElementById('progress');
     currentTimeDisplay = document.getElementById('current-time');
     durationDisplay = document.getElementById('duration');
-    
-    // Verifique se todos os elementos DOM necessários estão presentes
+
     if (progressBar && currentTimeDisplay && durationDisplay) {
         onYouTubeIframeAPIReady();
     } else {
@@ -27,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc'; // ID padrão caso não haja um na URL
+    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc';
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -47,57 +45,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-    setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
-    setupControlButtons();
-
-    setInterval(() => {
-        if (player && player.getCurrentTime) {
-            const currentTime = player.getCurrentTime();
-            const duration = player.getDuration();
-            if (duration > 0) {
-                progressBar.value = (currentTime / duration) * 100;
-                currentTimeDisplay.textContent = formatTime(currentTime);
-                durationDisplay.textContent = formatTime(duration);
-            }
-        }
-    }, 1000);
-
-    progressBar.addEventListener('input', function() {
-        const duration = player.getDuration();
-        player.seekTo((progressBar.value / 100) * duration, true);
-    });
-
-    const savedTheme = localStorage.getItem('theme');
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-
-    if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-        document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
-        metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
-    }
-
-    document.getElementById('theme-toggle').addEventListener('click', function() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.body.classList.remove('dark-mode');
-            this.innerHTML = '<ion-icon name="moon-outline"></ion-icon>';
-            metaThemeColor.setAttribute('content', '#f0f4f9');
-            localStorage.setItem('theme', 'light');
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.body.classList.add('dark-mode');
-            this.innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
-            metaThemeColor.setAttribute('content', '#13051f');
-            localStorage.setItem('theme', 'dark');
-        }
-    });
-
-    fetchPlaylistData();
-}
-
-function setupControlButtons() {
+    setVideoQuality(minQuality);
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
@@ -146,13 +94,56 @@ function setupControlButtons() {
     document.getElementById('close-playlist').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
+
+    setInterval(() => {
+        if (player && player.getCurrentTime) {
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            if (duration > 0) {
+                progressBar.value = (currentTime / duration) * 100;
+                currentTimeDisplay.textContent = formatTime(currentTime);
+                durationDisplay.textContent = formatTime(duration);
+            }
+        }
+    }, 1000);
+
+    progressBar.addEventListener('input', function() {
+        const duration = player.getDuration();
+        player.seekTo((progressBar.value / 100) * duration, true);
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+        document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
+        metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.body.classList.remove('dark-mode');
+            this.innerHTML = '<ion-icon name="moon-outline"></ion-icon>';
+            metaThemeColor.setAttribute('content', '#f0f4f9');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.body.classList.add('dark-mode');
+            this.innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
+            metaThemeColor.setAttribute('content', '#13051f');
+            localStorage.setItem('theme', 'dark');
+        }
+    });
+
+    fetchPlaylistData();
 }
 
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
-        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
-        isPlaying = false;
-
         switch (mode) {
             case 'repeat_one':
                 player.seekTo(0);
@@ -245,39 +236,32 @@ function renderPlaylist(playlist) {
     });
 }
 
-// BUSCA CONFIG
-
-// Adicione o evento de keyup ao input de texto
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const searchText = event.target.value.toLowerCase();
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
 
-// Crie a função que filtre a playlist
 function filterPlaylist(searchText) {
     return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
 
-// SHARE CONFIG
-
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
-    const videoId = videoData.video_id;
-    const shareUrl = `${window.location.origin}?videoId=${videoId}`;
+    const videoUrl = `${window.location.origin}${window.location.pathname}?videoId=${videoData.video_id}`;
 
     if (navigator.share) {
         navigator.share({
             title: videoData.title,
-            text: `Confira este vídeo: ${videoData.title}`,
-            url: shareUrl,
-        }).then(() => {
-            console.log('Compartilhamento bem-sucedido');
-        }).catch((error) => {
-            console.error('Erro ao compartilhar:', error);
-        });
+            url: videoUrl
+        }).catch(console.error);
     } else {
-        // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+        const tempInput = document.createElement('input');
+        tempInput.value = videoUrl;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        alert('Link copiado para a área de transferência!');
     }
 });
