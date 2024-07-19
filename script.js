@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
     progressBar = document.getElementById('progress');
     currentTimeDisplay = document.getElementById('current-time');
     durationDisplay = document.getElementById('duration');
-
+    
+    // Verifique se todos os elementos DOM necessários estão presentes
     if (progressBar && currentTimeDisplay && durationDisplay) {
         onYouTubeIframeAPIReady();
     } else {
@@ -24,13 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function onYouTubeIframeAPIReady() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc';
-
     player = new YT.Player('music-player', {
         height: '100%',
         width: '100%',
-        videoId: videoId,
+        videoId: 'xiN4EOqpvwc',
         playerVars: {
             listType: 'playlist',
             list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
@@ -45,7 +43,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-    setVideoQuality(minQuality);
+    setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
@@ -69,7 +67,7 @@ function onPlayerReady(event) {
         switch (mode) {
             case 'repeat':
                 mode = 'repeat_one';
-                this.innerHTML = '<ion-icon name="refresh-outline"></ion-icon><span class="repeat-number">1</span>';
+                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
                 break;
             case 'repeat_one':
                 mode = 'shuffle';
@@ -140,10 +138,21 @@ function onPlayerReady(event) {
     });
 
     fetchPlaylistData();
+
+    // Checar se existe um videoId no URL e reproduzi-lo
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('videoId');
+    if (videoId) {
+        player.cueVideoById(videoId);
+        player.playVideo();
+    }
 }
 
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
+        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
+        isPlaying = false;
+
         switch (mode) {
             case 'repeat_one':
                 player.seekTo(0);
@@ -236,32 +245,19 @@ function renderPlaylist(playlist) {
     });
 }
 
+// BUSCA CONFIG
+
+// Adicione o evento de keyup ao input de texto
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const searchText = event.target.value.toLowerCase();
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
 
+// Crie a função para filtrar a playlist com base no texto de busca
 function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
+    return playlistData.filter(video => {
+        return video.title.toLowerCase().includes(searchText) ||
+               video.author.toLowerCase().includes(searchText);
+    });
 }
-
-document.getElementById('share-icon').addEventListener('click', function() {
-    const videoData = player.getVideoData();
-    const videoUrl = `${window.location.origin}${window.location.pathname}?videoId=${videoData.video_id}`;
-
-    if (navigator.share) {
-        navigator.share({
-            title: videoData.title,
-            url: videoUrl
-        }).catch(console.error);
-    } else {
-        const tempInput = document.createElement('input');
-        tempInput.value = videoUrl;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-        alert('Link copiado para a área de transferência!');
-    }
-});
