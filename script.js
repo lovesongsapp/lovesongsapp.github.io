@@ -69,7 +69,7 @@ function onPlayerReady(event) {
         switch (mode) {
             case 'repeat':
                 mode = 'repeat_one';
-                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
+                this.innerHTML = '<ion-icon name="refresh-outline"></ion-icon><span class="repeat-number">1</span>';
                 break;
             case 'repeat_one':
                 mode = 'shuffle';
