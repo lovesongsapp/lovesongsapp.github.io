@@ -1,4 +1,6 @@
 /* /////////////////////// BANNER APP INSTALL ///////////////////////*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 .app {
 background: #fff;
 background-size: cover;    
@@ -28,12 +30,12 @@ border-radius: 10px;
 overflow: hidden;
 }
 .app-title {
-    font-family: 'Montserrat', sans-serif;
+font-family: 'Montserrat', sans-serif;
 font-weight: 700;
 color: #311F56;
 }
 .app-subtitle {
-font-weight: 400;
+font-weight: 500;
 font-size: 0.85rem;
 margin: 0;
 color: #311F56;
@@ -64,6 +66,7 @@ padding: 10px;
 cursor: pointer;
 text-align: center;
 display: block;
+font-family: 'Montserrat, sans-serif;';
 }
 .header-app {
 top: 7px;
