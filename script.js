@@ -46,8 +46,6 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality);
-    
-    // Play/Pause Button
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
@@ -59,21 +57,14 @@ function onPlayerReady(event) {
         isPlaying = !isPlaying;
     });
 
-    // Previous Button
     document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
-        if (mode !== 'repeat_one') {
-            player.previousVideo();
-        }
+        player.previousVideo();
     });
 
-    // Next Button
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
-        if (mode !== 'repeat_one') {
-            player.nextVideo();
-        }
+        player.nextVideo();
     });
 
-    // Repeat/Shuffle Button
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
@@ -95,18 +86,15 @@ function onPlayerReady(event) {
         }
     });
 
-    // Playlist Button
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
         renderPlaylist(playlistData);
     });
 
-    // Close Playlist Button
     document.getElementById('close-playlist').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
 
-    // Progress Bar
     setInterval(() => {
         if (player && player.getCurrentTime) {
             const currentTime = player.getCurrentTime();
@@ -124,7 +112,6 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
-    // Theme Toggle
     const savedTheme = localStorage.getItem('theme');
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
@@ -159,8 +146,8 @@ function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
         switch (mode) {
             case 'repeat_one':
-                player.seekTo(0); // Reinicia o vídeo atual
-                player.playVideo(); // Reproduz o vídeo novamente
+                player.seekTo(0);
+                player.playVideo();
                 break;
             case 'shuffle':
                 player.nextVideo();
