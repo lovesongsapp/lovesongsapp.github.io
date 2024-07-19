@@ -46,16 +46,7 @@ function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     setupControls();
     fetchPlaylistData();
-
-    // Verificar se há um parâmetro videoId na URL e armazená-lo
-    const urlParams = new URLSearchParams(window.location.search);
-    initialVideoId = urlParams.get('videoId');
-    
-    if (initialVideoId) {
-        // Carregar o vídeo compartilhado e depois configurar o playlist para garantir que não interfira
-        player.loadVideoById(initialVideoId);
-        initialVideoId = null; // Reset após carregar o vídeo inicial
-    }
+    handleInitialVideo();
 }
 
 function setupControls() {
@@ -248,6 +239,16 @@ function renderPlaylist(playlist) {
 
         playlistContainer.appendChild(listItem);
     });
+}
+
+function handleInitialVideo() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('videoId');
+
+    if (videoId) {
+        // Carregar o vídeo compartilhado
+        player.loadVideoById(videoId);
+    }
 }
 
 document.getElementById('search-input').addEventListener('keyup', function(event) {
