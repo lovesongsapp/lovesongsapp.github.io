@@ -46,6 +46,8 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality);
+    
+    // Play/Pause Button
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
@@ -57,25 +59,26 @@ function onPlayerReady(event) {
         isPlaying = !isPlaying;
     });
 
+    // Previous Button
     document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
         if (mode !== 'repeat_one') {
             player.previousVideo();
         }
     });
 
+    // Next Button
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
         if (mode !== 'repeat_one') {
             player.nextVideo();
         }
     });
 
+    // Repeat/Shuffle Button
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
                 mode = 'repeat_one';
                 this.innerHTML = '<ion-icon name="refresh-outline"></ion-icon><span class="repeat-number">1</span>';
-                isShuffle = false; // Desabilita o modo shuffle
-                player.setShuffle(isShuffle);
                 break;
             case 'repeat_one':
                 mode = 'shuffle';
@@ -92,15 +95,18 @@ function onPlayerReady(event) {
         }
     });
 
+    // Playlist Button
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
         renderPlaylist(playlistData);
     });
 
+    // Close Playlist Button
     document.getElementById('close-playlist').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
 
+    // Progress Bar
     setInterval(() => {
         if (player && player.getCurrentTime) {
             const currentTime = player.getCurrentTime();
@@ -118,6 +124,7 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
+    // Theme Toggle
     const savedTheme = localStorage.getItem('theme');
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
@@ -234,10 +241,8 @@ function renderPlaylist(playlist) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            if (mode !== 'repeat_one') {
-                player.playVideoAt(video.index);
-                document.getElementById('playlist-overlay').style.display = 'none';
-            }
+            player.playVideoAt(video.index);
+            document.getElementById('playlist-overlay').style.display = 'none';
         });
 
         playlistContainer.appendChild(listItem);
@@ -256,13 +261,20 @@ function filterPlaylist(searchText) {
 
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
-    const videoId = videoData.video_id;
-    const currentUrl = window.location.href.split('?')[0];
-    const newUrl = `${currentUrl}?videoId=${videoId}`;
+    const videoUrl = `${window.location.origin}${window.location.pathname}?videoId=${videoData.video_id}`;
 
-    navigator.clipboard.writeText(newUrl).then(() => {
+    if (navigator.share) {
+        navigator.share({
+            title: videoData.title,
+            url: videoUrl
+        }).catch(console.error);
+    } else {
+        const tempInput = document.createElement('input');
+        tempInput.value = videoUrl;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
         alert('Link copiado para a área de transferência!');
-    }).catch(err => {
-        console.error('Erro ao copiar o link: ', err);
-    });
+    }
 });
