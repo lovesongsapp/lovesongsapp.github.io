@@ -58,11 +58,15 @@ function onPlayerReady(event) {
     });
 
     document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
-        player.previousVideo();
+        if (mode !== 'repeat_one') {
+            player.previousVideo();
+        }
     });
 
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
-        player.nextVideo();
+        if (mode !== 'repeat_one') {
+            player.nextVideo();
+        }
     });
 
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
@@ -146,8 +150,8 @@ function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
         switch (mode) {
             case 'repeat_one':
-                player.seekTo(0);
-                player.playVideo();
+                player.seekTo(0); // Reinicia o vídeo atual
+                player.playVideo(); // Reproduz o vídeo novamente
                 break;
             case 'shuffle':
                 player.nextVideo();
@@ -228,8 +232,10 @@ function renderPlaylist(playlist) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            player.playVideoAt(video.index);
-            document.getElementById('playlist-overlay').style.display = 'none';
+            if (mode !== 'repeat_one') {
+                player.playVideoAt(video.index);
+                document.getElementById('playlist-overlay').style.display = 'none';
+            }
         });
 
         playlistContainer.appendChild(listItem);
@@ -248,20 +254,12 @@ function filterPlaylist(searchText) {
 
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
-    const videoUrl = `${window.location.origin}${window.location.pathname}?videoId=${videoData.video_id}`;
-
-    if (navigator.share) {
-        navigator.share({
-            title: videoData.title,
-            url: videoUrl
-        }).catch(console.error);
-    } else {
-        const tempInput = document.createElement('input');
-        tempInput.value = videoUrl;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
+    const videoId = videoData.video_id;
+    const currentUrl = window.location.href.split('?')[0];
+    const newUrl = `${currentUrl}?videoId=${videoId}`;
+    navigator.clipboard.writeText(newUrl).then(() => {
         alert('Link copiado para a área de transferência!');
-    }
+    }).catch(err => {
+        console.error('Erro ao copiar o link: ', err);
+    });
 });
