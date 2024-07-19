@@ -30,18 +30,18 @@ overflow: hidden;
 .app-title {
     font-family: 'Montserrat', sans-serif;
 font-weight: 700;
-color: #222;
+color: #311F56;
 }
 .app-subtitle {
 font-weight: 400;
 font-size: 0.85rem;
 margin: 0;
-color: #222;
+color: #311F56;
 }
 .add-info {
 font-size: 0.65rem;
 font-weight: 500;
-color: #555;
+color: #311F56;
 }
 .message {
 clear: both;
@@ -49,7 +49,7 @@ font-weight: 500;
 margin-top: 20px;
 margin-bottom: 30px;
 line-height: 1.2;
-color: #555;
+color: #311F56;
 font-size: 1.1rem;
 }
 .app .install-btn-app {
