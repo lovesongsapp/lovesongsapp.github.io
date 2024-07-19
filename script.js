@@ -6,7 +6,7 @@ let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
-let initialVideoId = null;
+let sharedVideoId = null;
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     currentTimeDisplay = document.getElementById('current-time');
     durationDisplay = document.getElementById('duration');
     
+    // Verifique se todos os elementos DOM necessários estão presentes
     if (progressBar && currentTimeDisplay && durationDisplay) {
         onYouTubeIframeAPIReady();
     } else {
@@ -25,10 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function onYouTubeIframeAPIReady() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc'; // ID padrão caso não haja um na URL
+
     player = new YT.Player('music-player', {
         height: '100%',
         width: '100%',
-        videoId: 'xiN4EOqpvwc',
+        videoId: videoId,
         playerVars: {
             listType: 'playlist',
             list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
@@ -44,60 +48,7 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
-    setupControls();
-    fetchPlaylistData();
-    handleInitialVideo();
-}
-
-function setupControls() {
-    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
-        if (isPlaying) {
-            player.pauseVideo();
-            this.innerHTML = '<ion-icon name="play-outline" class="play-outline"></ion-icon>';
-        } else {
-            player.playVideo();
-            this.innerHTML = '<ion-icon name="pause-outline"></ion-icon>';
-        }
-        isPlaying = !isPlaying;
-    });
-
-    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
-        player.previousVideo();
-    });
-
-    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
-        player.nextVideo();
-    });
-
-    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
-        switch (mode) {
-            case 'repeat':
-                mode = 'repeat_one';
-                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
-                break;
-            case 'repeat_one':
-                mode = 'shuffle';
-                this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-                isShuffle = true;
-                player.setShuffle(isShuffle);
-                break;
-            case 'shuffle':
-                mode = 'repeat';
-                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
-                isShuffle = false;
-                player.setShuffle(isShuffle);
-                break;
-        }
-    });
-
-    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
-        document.getElementById('playlist-overlay').style.display = 'flex';
-        renderPlaylist(playlistData);
-    });
-
-    document.getElementById('close-playlist').addEventListener('click', function() {
-        document.getElementById('playlist-overlay').style.display = 'none';
-    });
+    setupControlButtons();
 
     setInterval(() => {
         if (player && player.getCurrentTime) {
@@ -141,6 +92,59 @@ function setupControls() {
             metaThemeColor.setAttribute('content', '#13051f');
             localStorage.setItem('theme', 'dark');
         }
+    });
+
+    fetchPlaylistData();
+}
+
+function setupControlButtons() {
+    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
+        if (isPlaying) {
+            player.pauseVideo();
+            this.innerHTML = '<ion-icon name="play-outline" class="play-outline"></ion-icon>';
+        } else {
+            player.playVideo();
+            this.innerHTML = '<ion-icon name="pause-outline" class="pause-outline"></ion-icon>';
+        }
+        isPlaying = !isPlaying;
+    });
+
+    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
+        player.previousVideo();
+    });
+
+    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
+        player.nextVideo();
+    });
+
+    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
+        switch (mode) {
+            case 'repeat':
+                mode = 'repeat_one';
+                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
+                break;
+            case 'repeat_one':
+                mode = 'shuffle';
+                this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
+                isShuffle = true;
+                player.setShuffle(isShuffle);
+                break;
+            case 'shuffle':
+                mode = 'repeat';
+                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
+                isShuffle = false;
+                player.setShuffle(isShuffle);
+                break;
+        }
+    });
+
+    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
+        document.getElementById('playlist-overlay').style.display = 'flex';
+        renderPlaylist(playlistData);
+    });
+
+    document.getElementById('close-playlist').addEventListener('click', function() {
+        document.getElementById('playlist-overlay').style.display = 'none';
     });
 }
 
@@ -233,7 +237,7 @@ function renderPlaylist(playlist) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            player.loadVideoById(video.videoId);
+            player.playVideoAt(video.index);
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
@@ -241,44 +245,39 @@ function renderPlaylist(playlist) {
     });
 }
 
-function handleInitialVideo() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId');
+// BUSCA CONFIG
 
-    if (videoId) {
-        // Carregar o vídeo compartilhado
-        player.loadVideoById(videoId);
-    }
-}
-
+// Adicione o evento de keyup ao input de texto
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const searchText = event.target.value.toLowerCase();
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
 
+// Crie a função que filtre a playlist
 function filterPlaylist(searchText) {
-    return playlistData.filter(video => 
-        video.title.toLowerCase().includes(searchText) ||
-        video.author.toLowerCase().includes(searchText));
+    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
+
+// SHARE CONFIG
 
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
-    const currentUrl = window.location.origin + window.location.pathname;
-    const videoUrl = `${currentUrl}?videoId=${videoData.video_id}`;
+    const videoId = videoData.video_id;
+    const shareUrl = `${window.location.origin}?videoId=${videoId}`;
 
     if (navigator.share) {
         navigator.share({
             title: videoData.title,
             text: `Confira este vídeo: ${videoData.title}`,
-            url: videoUrl,
+            url: shareUrl,
         }).then(() => {
             console.log('Compartilhamento bem-sucedido');
         }).catch((error) => {
             console.error('Erro ao compartilhar:', error);
         });
     } else {
-        alert(`Confira este vídeo: ${videoData.title}\n${videoUrl}`);
+        // Fallback para navegadores que não suportam a API de compartilhamento
+        alert(`Confira este vídeo: ${videoData.title}\n${shareUrl}`);
     }
 });
