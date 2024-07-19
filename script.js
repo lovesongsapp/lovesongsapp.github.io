@@ -74,6 +74,8 @@ function onPlayerReady(event) {
             case 'repeat':
                 mode = 'repeat_one';
                 this.innerHTML = '<ion-icon name="refresh-outline"></ion-icon><span class="repeat-number">1</span>';
+                isShuffle = false; // Desabilita o modo shuffle
+                player.setShuffle(isShuffle);
                 break;
             case 'repeat_one':
                 mode = 'shuffle';
@@ -257,6 +259,7 @@ document.getElementById('share-icon').addEventListener('click', function() {
     const videoId = videoData.video_id;
     const currentUrl = window.location.href.split('?')[0];
     const newUrl = `${currentUrl}?videoId=${videoId}`;
+
     navigator.clipboard.writeText(newUrl).then(() => {
         alert('Link copiado para a área de transferência!');
     }).catch(err => {
