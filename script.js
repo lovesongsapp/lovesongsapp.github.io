@@ -75,6 +75,13 @@ function onPlayerReady(event) {
         document.body.classList.toggle('dark-mode', savedTheme === 'dark');
         document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
         metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
+    }else {
+        // Apply dark theme by default
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
+        metaThemeColor.setAttribute('content', '#13051f');
+        localStorage.setItem('theme', 'dark');
     }
 
     document.getElementById('theme-toggle').addEventListener('click', function() {
