@@ -290,13 +290,13 @@ font-size: 24px;
 /*.dark-mode .play-outline {
 border: 2px solid #00FFBF;
 }*/
-.dark-mode .play-outline:hover {
+/*.dark-mode .play-outline:hover {
 border: 2px solid #00FFBF;
-}
-.dark-mode .pause-outline {
+}*/
+/*.dark-mode .pause-outline {
 color: #00FFBF;
 border: 2px solid #00FFBF;
-}
+}*/
 .dark-mode .control-button {
 color: #00FFBF;
 }
