@@ -64,7 +64,7 @@
       "url": "/?videoId=qHZiIxprsrs",
       "icons": [
         {
-          "src": "shortcuts/filme.svg",
+          "src": "/shortcuts/filme.svg",
           "sizes": "96x96",
           "type": "image/svg"
         }
@@ -77,7 +77,7 @@
       "url": "/bank/inter.html",
       "icons": [
         {
-          "src": "shortcuts/pix.svg",
+          "src": "/shortcuts/pix.svg",
           "sizes": "96x96",
           "type": "image/svg"
         }
