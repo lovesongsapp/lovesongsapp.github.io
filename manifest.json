@@ -57,26 +57,28 @@
   },
   "shortcuts": [
     {
-      "name": "Playlists",
-      "short_name": "Playlists",
+      "name": "Back For Good",
+      "short_name": "Back For Good",
       "description": "Acesse suas playlists favoritas",
-      "url": "/playlists",
+      "url": "/?videoId=qHZiIxprsrs",
       "icons": [
         {
-          "src": "icons/shortcut-playlists.png",
-          "sizes": "192x192"
+          "src": "shortcuts/filme.svg",
+          "sizes": "96x96",
+          "type": "image/svg"
         }
       ]
     },
     {
-      "name": "Recentes",
-      "short_name": "Recentes",
-      "description": "Ouça suas músicas recentes",
-      "url": "/recentes",
+      "name": "Fazer um Pix",
+      "short_name": "Fazer um Pix",
+      "description": "Doação Voluntária",
+      "url": "/bank/inter.html",
       "icons": [
         {
-          "src": "icons/shortcut-recentes.png",
-          "sizes": "192x192"
+          "src": "shortcuts/pix.svg",
+          "sizes": "96x96",
+          "type": "image/svg"
         }
       ]
     }
