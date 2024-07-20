@@ -155,18 +155,19 @@ cursor: pointer;
 color: #311E56;
 transition: color 0.3s;
 }
-.play-outline {
+/*.play-outline {
 font-size: 32px;
 border: 2px solid #311E56;
 border-radius: 50px;
 padding: 7px 5px 7px 9px;
-}
-.pause-outline {
+}*/
+
+/*.pause-outline {
 font-size: 32px;
 border: 2px solid #311E56;
 border-radius: 50px;
 padding: 7px;
-}
+}*/
 .control-button:hover {
 color: #F966D6;
 }
