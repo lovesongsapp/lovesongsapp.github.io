@@ -2,9 +2,10 @@
   "id": "/",
   "name": "LoveSongsApp",
   "short_name": "LoveSongs",
+  "version": "1.0.1",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#f0f4f9",
+  "background_color": "#00ffbf",
+  "theme_color": "#00ffbf",
   "start_url": "/index.html",
   "orientation": "any",
   "scope": "/",
@@ -59,7 +60,7 @@
     {
       "name": "Back For Good",
       "short_name": "Back For Good",
-      "description": "Acesse suas playlists favoritas",
+      "description": "Music of Gary Barlow",
       "url": "/?videoId=qHZiIxprsrs",
       "icons": [
         {
