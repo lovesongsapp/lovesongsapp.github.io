@@ -245,6 +245,7 @@ function renderPlaylist(playlist) {
 
         listItem.addEventListener('click', () => {
             if (isShuffle) {
+                // Encontrar o índice embaralhado correspondente ao vídeo clicado
                 const shuffledIndex = playlistData.findIndex(item => item.videoId === video.videoId);
                 player.playVideoAt(shuffledIndex);
             } else {
@@ -258,21 +259,18 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG
-
-// Adicione o evento de keyup ao input de texto
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const searchText = event.target.value.toLowerCase();
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
 
-// Crie a função que filtre a playlist
+// FILTRE A PLAYLIST
 function filterPlaylist(searchText) {
     return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
 
 // SHARE CONFIG
-
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
     const videoId = videoData.video_id;
