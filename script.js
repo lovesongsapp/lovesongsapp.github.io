@@ -75,7 +75,7 @@ function onPlayerReady(event) {
         document.body.classList.toggle('dark-mode', savedTheme === 'dark');
         document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
         metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
-    }else {
+    } else {
         // Apply dark theme by default
         document.documentElement.setAttribute('data-theme', 'dark');
         document.body.classList.add('dark-mode');
@@ -134,13 +134,11 @@ function setupControlButtons() {
                 mode = 'shuffle';
                 this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
                 isShuffle = true;
-                player.setShuffle(isShuffle);
                 break;
             case 'shuffle':
                 mode = 'repeat';
                 this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
                 isShuffle = false;
-                player.setShuffle(isShuffle);
                 break;
         }
     });
@@ -166,7 +164,9 @@ function onPlayerStateChange(event) {
                 player.playVideo();
                 break;
             case 'shuffle':
-                player.nextVideo();
+                const playlist = player.getPlaylist();
+                const nextIndex = Math.floor(Math.random() * playlist.length);
+                player.playVideoAt(nextIndex);
                 break;
             case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
@@ -245,9 +245,9 @@ function renderPlaylist(playlist) {
 
         listItem.addEventListener('click', () => {
             if (isShuffle) {
-                // Encontrar o índice embaralhado correspondente ao vídeo clicado
-                const shuffledIndex = playlistData.findIndex(item => item.videoId === video.videoId);
-                player.playVideoAt(shuffledIndex);
+                // Encontrar o índice correspondente ao vídeo clicado na lista original
+                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
+                player.playVideoAt(originalIndex);
             } else {
                 player.playVideoAt(video.index);
             }
@@ -257,37 +257,3 @@ function renderPlaylist(playlist) {
         playlistContainer.appendChild(listItem);
     });
 }
-
-// BUSCA CONFIG
-document.getElementById('search-input').addEventListener('keyup', function(event) {
-    const searchText = event.target.value.toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
-});
-
-// FILTRE A PLAYLIST
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
-}
-
-// SHARE CONFIG
-document.getElementById('share-icon').addEventListener('click', function() {
-    const videoData = player.getVideoData();
-    const videoId = videoData.video_id;
-    const shareUrl = `${window.location.origin}?videoId=${videoId}`;
-
-    if (navigator.share) {
-        navigator.share({
-            title: videoData.title,
-            text: `Confira este vídeo: ${videoData.title}`,
-            url: shareUrl,
-        }).then(() => {
-            console.log('Compartilhamento bem-sucedido');
-        }).catch((error) => {
-            console.error('Erro ao compartilhar:', error);
-        });
-    } else {
-        // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`Confira este vídeo: ${videoData.title}\n${shareUrl}`);
-    }
-});
