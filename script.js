@@ -244,7 +244,12 @@ function renderPlaylist(playlist) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            player.playVideoAt(video.index);
+            if (isShuffle) {
+                const shuffledIndex = playlistData.findIndex(item => item.videoId === video.videoId);
+                player.playVideoAt(shuffledIndex);
+            } else {
+                player.playVideoAt(video.index);
+            }
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
