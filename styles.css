@@ -9,6 +9,7 @@ padding: 0;
     align-items: center;
     justify-content: space-between;
     height: 35px;
+    position: fixed;
 }
 body {
 background: #fdefff;
