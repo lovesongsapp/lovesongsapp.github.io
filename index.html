@@ -84,12 +84,16 @@
 <!-- PLAYLIST -->
 <div id="playlist-overlay">
     <div id="playlist">
-        <button id="close-playlist">
-            <ion-icon name="close-outline"></ion-icon>
-        </button>
-        <ion-icon id="busca" name="search-outline" size="large"></ion-icon>
-        <input id="search-input" type="text" placeholder="Buscar..." class="busca">
-        <ul id="playlist-items"></ul>
+       <div class="playlist-header">
+          <div>     
+          <ion-icon id="busca" name="search-outline" size="large"></ion-icon>
+          <input id="search-input" type="text" placeholder="Buscar..." class="busca">
+          </div>
+             <button id="close-playlist">
+                  <ion-icon name="close-outline"></ion-icon>
+             </button>
+       </div>   
+              <ul id="playlist-items"></ul>
     </div>
 </div>
 
