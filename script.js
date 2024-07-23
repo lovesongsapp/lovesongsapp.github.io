@@ -276,7 +276,7 @@ function filterPlaylist(searchText) {
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
     const videoId = videoData.video_id;
-    const shareUrl = `${window.location.origin}?videoId=${videoId}`;
+    const shareUrl = `https://bit.ly/lovesongsapp?videoId=${videoId}`;
 
     if (navigator.share) {
         navigator.share({
