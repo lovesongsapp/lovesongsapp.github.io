@@ -257,3 +257,39 @@ function renderPlaylist(playlist) {
         playlistContainer.appendChild(listItem);
     });
 }
+// BUSCA CONFIG
+
+// Adicione o evento de keyup ao input de texto
+document.getElementById('search-input').addEventListener('keyup', function(event) {
+    const searchText = event.target.value.toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
+});
+
+// Crie a função que filtre a playlist
+function filterPlaylist(searchText) {
+    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
+}
+
+// SHARE CONFIG
+
+document.getElementById('share-icon').addEventListener('click', function() {
+    const videoData = player.getVideoData();
+    const videoId = videoData.video_id;
+    const shareUrl = `${window.location.origin}?videoId=${videoId}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: videoData.title,
+            text: `Confira este vídeo: ${videoData.title}`,
+            url: shareUrl,
+        }).then(() => {
+            console.log('Compartilhamento bem-sucedido');
+        }).catch((error) => {
+            console.error('Erro ao compartilhar:', error);
+        });
+    } else {
+        // Fallback para navegadores que não suportam a API de compartilhamento
+        alert(`Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+    }
+});
