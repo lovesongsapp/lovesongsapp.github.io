@@ -251,18 +251,13 @@ background: #69008C;
 cursor: pointer;
 }
 #close-playlist {
-margin-top: 0px;
-right: 20px;
-position: absolute;
 background: none;
 border: none;
 color: #311E56;
 cursor: pointer;
 font-size: 32px;
 }
-#close-playlist:hover {
-text-decoration: underline;
-}
+
 /* //////////////////// DARK MODE ////////////////////////// */
 .dark-mode .player{
 background: linear-gradient(0deg, rgba(87,32,162,1) 0%, rgba(19,5,31,1) 49%);
@@ -441,8 +436,6 @@ margin-top: 20px;
 display: none;
 }
 #close-playlist {
-position: fixed;
-top: 10px;
 background: none;
 border: none;
 font-size: 32px;
