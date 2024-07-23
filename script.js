@@ -281,7 +281,7 @@ document.getElementById('share-icon').addEventListener('click', function() {
     if (navigator.share) {
         navigator.share({
             title: videoData.title,
-            text: `Confira este vídeo: ${videoData.title}`,
+            text: `Permita que essa música toque sua alma: Confira este vídeo: ${videoData.title}`,
             url: shareUrl,
         }).then(() => {
             console.log('Compartilhamento bem-sucedido');
