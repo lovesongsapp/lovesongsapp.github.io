@@ -273,23 +273,43 @@ function filterPlaylist(searchText) {
 
 // SHARE CONFIG
 
-document.getElementById('share-icon').addEventListener('click', function() {
+document.getElementById('share-icon').addEventListener('click', async function() {
     const videoData = player.getVideoData();
     const videoId = videoData.video_id;
-    const shareUrl = `https://bit.ly/lovesongsapp?videoId=${videoId}`;
+    const longUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
+    const bitlyToken = '742eae33655dde134a9502bfcd95bc121f5d84e6'; // Substitua pelo seu token de acesso do Bitly
 
-    if (navigator.share) {
-        navigator.share({
-            title: videoData.title,
-            text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
-            url: shareUrl,
-        }).then(() => {
-            console.log('Compartilhamento bem-sucedido');
-        }).catch((error) => {
-            console.error('Erro ao compartilhar:', error);
+    try {
+        const response = await fetch('https://api-ssl.bitly.com/v4/shorten', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${bitlyToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                long_url: longUrl
+            })
         });
-    } else {
-        // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+
+        const data = await response.json();
+        const shareUrl = data.link;
+
+        if (navigator.share) {
+            navigator.share({
+                title: videoData.title,
+                text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
+                url: shareUrl,
+            }).then(() => {
+                console.log('Compartilhamento bem-sucedido');
+            }).catch((error) => {
+                console.error('Erro ao compartilhar:', error);
+            });
+        } else {
+            // Fallback para navegadores que não suportam a API de compartilhamento
+            alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+        }
+    } catch (error) {
+        console.error('Erro ao encurtar a URL:', error);
     }
 });
+
