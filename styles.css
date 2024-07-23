@@ -363,9 +363,7 @@ height: 100vh;
 .dark-mode #music-player{
 height: 50%;
 }
-.busca{
-    top: 15px
-}
+
 }
 /* //////////////////// MEDIA QUERY LANDSCAPE MODE ////////////////////////// */
 @media (orientation: landscape) {
@@ -488,13 +486,11 @@ font-size: 0.9em;
 
 .busca{
 width: 200px;
-    height: 25px;
-    margin-left: 40px;
+    height: 30px;
     background: rgba(0, 0, 0, 0.5);
     color: #FFF;
     border: none;
-    border-radius: 5px;
-    padding: 3px;
+    border-radius: 3px;
+    padding: 2px;
     display: flex;
-    position:absolute;
 }
