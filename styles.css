@@ -5,13 +5,13 @@ margin: 0;
 padding: 0;
 }
 .playlist-header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 35px;
-    position: fixed;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.7);
+display: flex;
+align-items: center;
+justify-content: space-between;
+height: 35px;
+position: absolute;
+width: 94%;
+background: rgba(0, 0, 0, 0.7);
 }
 body {
 background: #fdefff;
