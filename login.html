@@ -83,106 +83,11 @@
       background: #c33c2e;
     }
   </style>
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js"></script>
+  <!-- Add Firebase products that you want to use -->
   <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
-        authDomain: "lovesongs-1285e.firebaseapp.com",
-        projectId: "lovesongs-1285e",
-        storageBucket: "lovesongs-1285e.appspot.com",
-        messagingSenderId: "940749066428",
-        appId: "1:940749066428:web:4bc067e8721fa576fe40b9",
-        measurementId: "G-HLGV34NCB0"
-      };
-
-      // Initialize Firebase
-      const app = firebase.initializeApp(firebaseConfig);
-      const analytics = firebase.analytics(app);
-
-      // Initialize Firebase Authentication and Firestore
-      const auth = firebase.auth();
-      const db = firebase.firestore();
-
-      // Function to register a new user
-      async function registerUser(email, password, username) {
-        try {
-          const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-          const user = userCredential.user;
-
-          // Save user info to Firestore
-          await db.collection('users').doc(user.uid).set({
-            username: username,
-            email: email,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-
-          console.log('User registered successfully:', user);
-        } catch (error) {
-          console.error('Error registering user:', error.message);
-        }
-      }
-
-      // Function to login a user
-      async function loginUser(email, password) {
-        try {
-          const userCredential = await auth.signInWithEmailAndPassword(email, password);
-          const user = userCredential.user;
-          console.log('User logged in successfully:', user);
-        } catch (error) {
-          console.error('Error logging in user:', error.message);
-        }
-      }
-
-      // Function to login with Google
-      async function loginWithGoogle() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        try {
-          const result = await auth.signInWithPopup(provider);
-          const user = result.user;
-          console.log('User logged in with Google successfully:', user);
-        } catch (error) {
-          console.error('Error logging in with Google:', error.message);
-        }
-      }
-
-      // Handle form submissions
-      document.getElementById('register-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const username = document.getElementById('register-username').value;
-        const email = document.getElementById('register-email').value;
-        const password = document.getElementById('register-password').value;
-        await registerUser(email, password, username);
-      });
-
-      document.getElementById('login-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        await loginUser(email, password);
-      });
-
-      // Handle Google login button click
-      document.getElementById('google-login').addEventListener('click', async () => {
-        await loginWithGoogle();
-      });
-
-      // Switch between forms
-      document.getElementById('show-register').addEventListener('click', () => {
-        document.getElementById('login-form').style.display = 'none';
-        document.getElementById('register-form').style.display = 'block';
-      });
-
-      document.getElementById('show-login').addEventListener('click', () => {
-        document.getElementById('register-form').style.display = 'none';
-        document.getElementById('login-form').style.display = 'block';
-      });
-    });
-  </script>
 </head>
 <body>
   <div class="container">
@@ -212,5 +117,101 @@
       </button>
     </form>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
+      authDomain: "lovesongs-1285e.firebaseapp.com",
+      projectId: "lovesongs-1285e",
+      storageBucket: "lovesongs-1285e.appspot.com",
+      messagingSenderId: "940749066428",
+      appId: "1:940749066428:web:4bc067e8721fa576fe40b9",
+      measurementId: "G-HLGV34NCB0"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Function to register a new user
+    async function registerUser(email, password, username) {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Save user info to Firestore
+        await setDoc(doc(collection(db, 'users'), user.uid), {
+          username: username,
+          email: email,
+          createdAt: serverTimestamp()
+        });
+
+        console.log('User registered successfully:', user);
+      } catch (error) {
+        console.error('Error registering user:', error.message);
+      }
+    }
+
+    // Function to login a user
+    async function loginUser(email, password) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        console.log('User logged in successfully:', user);
+      } catch (error) {
+        console.error('Error logging in user:', error.message);
+      }
+    }
+
+    // Function to login with Google
+    async function loginWithGoogle() {
+      const provider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        console.log('User logged in with Google successfully:', user);
+      } catch (error) {
+        console.error('Error logging in with Google:', error.message);
+      }
+    }
+
+    // Handle form submissions
+    document.getElementById('register-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const username = document.getElementById('register-username').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      await registerUser(email, password, username);
+    });
+
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      await loginUser(email, password);
+    });
+
+    // Handle Google login button click
+    document.getElementById('google-login').addEventListener('click', async () => {
+      await loginWithGoogle();
+    });
+
+    // Switch between forms
+    document.getElementById('show-register').addEventListener('click', () => {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('register-form').style.display = 'block';
+    });
+
+    document.getElementById('show-login').addEventListener('click', () => {
+      document.getElementById('register-form').style.display = 'none';
+      document.getElementById('login-form').style.display = 'block';
+    });
+  </script>
 </body>
 </html>
