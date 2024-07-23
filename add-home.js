@@ -17,6 +17,8 @@ document.getElementById('installButton').addEventListener('click', () => {
                 console.log('User dismissed the install prompt');
             }
             deferredPrompt = null;
+            // Fechar o banner de instalação após o clique
+            closeApp();
         });
     }
 });
