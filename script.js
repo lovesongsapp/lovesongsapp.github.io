@@ -290,6 +290,6 @@ document.getElementById('share-icon').addEventListener('click', function() {
         });
     } else {
         // Fallback para navegadores que não suportam a API de compartilhamento
-        alert('Confira este vídeo: ${videoData.title}\n${shareUrl}');
+        alert('Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}');
     }
 });
