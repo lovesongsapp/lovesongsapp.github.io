@@ -6,18 +6,18 @@
   <title>LoveSongs App</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="login.css">
-  <script src="login.js" defer></script>
   <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
   <!-- Add Firebase products that you want to use -->
   <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </head>
 <body>
   <div class="container">
-    <img src="../icons/icon76.png" style="border-radius: 50px;" alt="LoveSongs App">
+    <img src="icons/icon76.png" alt="LoveSongs App">
     <h1>LoveSongs App</h1>
+
+    <div id="error-message" class="error-message"></div>
 
     <form id="register-form" style="display: none;">
       <input type="text" id="register-username" placeholder="Username" required>
@@ -47,5 +47,8 @@
       </div>
     </form>
   </div>
+
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script type="module" src="login.js"></script>
 </body>
 </html>

@@ -16,6 +16,7 @@ body {
   max-width: 400px;
   text-align: center;
 }
+
 h1 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
@@ -39,8 +40,6 @@ input {
 .password-container {
   position: relative;
   width: 100%;
-  align-items: center;
-  display: flex;
 }
 .password-container input {
   padding-right: 2.5rem;
@@ -48,7 +47,7 @@ input {
 .password-container ion-icon {
   position: absolute;
   right: 1rem;
-  
+  top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
 }
@@ -95,4 +94,8 @@ button:hover {
   color: #007bff;
   text-decoration: none;
   cursor: pointer;
+}
+.error-message {
+  color: red;
+  margin-bottom: 1rem;
 }

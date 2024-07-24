@@ -31,8 +31,7 @@ async function registerUser(email, password, username) {
     alert('User registered successfully!');
     window.location.href = 'sucesso.html';
   } catch (error) {
-    console.error('Error registering user:', error.message);
-    alert('Error registering user: ' + error.message);
+    displayErrorMessage(error.message);
   }
 }
 
@@ -44,8 +43,7 @@ async function loginUser(email, password) {
     alert('User logged in successfully!');
     window.location.href = 'sucesso.html';
   } catch (error) {
-    console.error('Error logging in user:', error.message);
-    alert('Error logging in user: ' + error.message);
+    displayErrorMessage(error.message);
   }
 }
 
@@ -58,8 +56,7 @@ async function loginWithGoogle() {
     alert('User logged in with Google successfully!');
     window.location.href = 'sucesso.html';
   } catch (error) {
-    console.error('Error logging in with Google:', error.message);
-    alert('Error logging in with Google: ' + error.message);
+    displayErrorMessage(error.message);
   }
 }
 
@@ -86,12 +83,14 @@ document.getElementById('show-register').addEventListener('click', (event) => {
   event.preventDefault();
   document.getElementById('login-form').style.display = 'none';
   document.getElementById('register-form').style.display = 'block';
+  clearErrorMessage();
 });
 
 document.getElementById('show-login').addEventListener('click', (event) => {
   event.preventDefault();
   document.getElementById('register-form').style.display = 'none';
   document.getElementById('login-form').style.display = 'block';
+  clearErrorMessage();
 });
 
 function togglePasswordVisibility(inputId, eyeIconId) {
@@ -102,6 +101,16 @@ function togglePasswordVisibility(inputId, eyeIconId) {
     passwordInput.type = isPasswordVisible ? 'password' : 'text';
     eyeIcon.setAttribute('name', isPasswordVisible ? 'eye-outline' : 'eye-off-outline');
   });
+}
+
+function displayErrorMessage(message) {
+  const errorMessageElement = document.getElementById('error-message');
+  errorMessageElement.textContent = message;
+}
+
+function clearErrorMessage() {
+  const errorMessageElement = document.getElementById('error-message');
+  errorMessageElement.textContent = '';
 }
 
 togglePasswordVisibility('register-password', 'register-eye-icon');
