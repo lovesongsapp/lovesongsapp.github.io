@@ -271,17 +271,21 @@ function filterPlaylist(searchText) {
     return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
 
-// Compartilhamento
+// Compartilhamento com thumbnail
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
     const videoId = videoData.video_id;
     const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
+    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
 
     if (navigator.share) {
         navigator.share({
             title: videoData.title,
-            text: `Permita que essa música toque em seu coração! Confira este vídeo: ${videoData.title}`,
+            text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
             url: shareUrl,
+            files: [
+                new File([thumbnailUrl], `${videoId}.jpg`, {type: 'image/jpeg'})
+            ]
         }).then(() => {
             console.log('Compartilhamento bem-sucedido');
         }).catch((error) => {
@@ -289,7 +293,6 @@ document.getElementById('share-icon').addEventListener('click', function() {
         });
     } else {
         // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`Permita que essa música toque em seu coração! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+        alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}\nThumbnail: ${thumbnailUrl}`);
     }
 });
-
