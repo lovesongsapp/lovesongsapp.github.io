@@ -313,3 +313,27 @@ document.getElementById('share-icon').addEventListener('click', async function()
         console.error('Erro ao encurtar a URL:', error);
     }
 });
+////////////
+// Função para verificar se o usuário está logado
+function isUserLoggedIn() {
+    // Verifique a autenticação do usuário (exemplo usando Firebase)
+    return !!firebase.auth().currentUser;
+}
+
+// Modifique o evento de clique no botão play para verificar a autenticação
+document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
+    if (!isUserLoggedIn()) {
+        window.location.href = 'login/login.html';
+        return;
+    }
+
+    if (isPlaying) {
+        player.pauseVideo();
+        this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
+    } else {
+        player.playVideo();
+        this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
+    }
+    isPlaying = !isPlaying;
+});
+
