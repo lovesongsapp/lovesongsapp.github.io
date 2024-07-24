@@ -1,8 +1,7 @@
 // Importações do Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
@@ -21,17 +20,17 @@ const auth = getAuth(app);
 // Função para verificar se o usuário está autenticado
 function isUserLoggedIn() {
     return new Promise((resolve) => {
-        onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             resolve(!!user); // Retorna true se o usuário estiver autenticado
+            unsubscribe(); // Limpa o listener após a verificação
         });
     });
 }
 
-////Atualize o botão de reprodução para verificar a autenticação antes de tocar o vídeo.
+// Atualiza o botão de reprodução para verificar a autenticação antes de tocar o vídeo
 document.querySelector('.control-button:nth-child(3)').addEventListener('click', async function() {
     const isLoggedIn = await isUserLoggedIn();
     if (!isLoggedIn) {
-        // Redireciona para a página de login se o usuário não estiver autenticado
         window.location.href = 'login.html';
         return;
     }
@@ -46,10 +45,10 @@ document.querySelector('.control-button:nth-child(3)').addEventListener('click',
     isPlaying = !isPlaying;
 });
 
-//REDEFINE PASSWORD
+// Redefine senha
 document.getElementById('reset-password-link').addEventListener('click', function() {
     const email = document.getElementById('email-input').value;
-    auth.sendPasswordResetEmail(email)
+    sendPasswordResetEmail(auth, email)
         .then(() => {
             alert('Verifique seu e-mail para redefinir sua senha.');
         })
@@ -57,9 +56,6 @@ document.getElementById('reset-password-link').addEventListener('click', functio
             console.error('Erro ao enviar e-mail de redefinição de senha:', error);
         });
 });
-
-
-/////// SCRIPT FULL
 
 let player;
 let maxQuality = 'large'; // Definir resolução máxima
@@ -69,7 +65,6 @@ let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
-let sharedVideoId = null;
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
@@ -130,6 +125,11 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
+    setupTheme();
+    fetchPlaylistData();
+}
+
+function setupTheme() {
     const savedTheme = localStorage.getItem('theme');
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
@@ -139,7 +139,6 @@ function onPlayerReady(event) {
         document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
         metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
     } else {
-        // Apply dark theme by default
         document.documentElement.setAttribute('data-theme', 'dark');
         document.body.classList.add('dark-mode');
         document.getElementById('theme-toggle').innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
@@ -163,225 +162,188 @@ function onPlayerReady(event) {
             localStorage.setItem('theme', 'dark');
         }
     });
-
-    fetchPlaylistData();
 }
 
 function setupControlButtons() {
-    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
-        if (isPlaying) {
-            player.pauseVideo();
-            this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
-        } else {
-            player.playVideo();
-            this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
-        }
-        isPlaying = !isPlaying;
-    });
-
-    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
-        player.previousVideo();
-    });
-
-    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
-        player.nextVideo();
-    });
-
-    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
-        switch (mode) {
-            case 'repeat':
-                mode = 'repeat_one';
-                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
-                break;
-            case 'repeat_one':
-                mode = 'shuffle';
-                this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-                isShuffle = true;
-                break;
-            case 'shuffle':
-                mode = 'repeat';
-                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
-                isShuffle = false;
-                break;
-        }
-    });
-
-    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
+    document.querySelector('.control-button:nth-child(3)').addEventListener('click', togglePlayPause);
+    document.querySelector('.control-button:nth-child(2)').addEventListener('click', () => player.previousVideo());
+    document.querySelector('.control-button:nth-child(4)').addEventListener('click', () => player.nextVideo());
+    document.querySelector('.control-button:nth-child(1)').addEventListener('click', toggleRepeatShuffleMode);
+    document.querySelector('.control-button:nth-child(5)').addEventListener('click', () => {
         document.getElementById('playlist-overlay').style.display = 'flex';
         renderPlaylist(playlistData);
     });
 
-    document.getElementById('close-playlist').addEventListener('click', function() {
+    document.getElementById('close-playlist').addEventListener('click', () => {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
 }
 
+function togglePlayPause() {
+    if (isPlaying) {
+        player.pauseVideo();
+        this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
+    } else {
+        player.playVideo();
+        this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
+    }
+    isPlaying = !isPlaying;
+}
+
+function toggleRepeatShuffleMode() {
+    switch (mode) {
+        case 'repeat':
+            mode = 'repeat_one';
+            this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
+            break;
+        case 'repeat_one':
+            mode = 'shuffle';
+            this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
+            isShuffle = true;
+            break;
+        case 'shuffle':
+            mode = 'repeat';
+            this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
+            isShuffle = false;
+            break;
+    }
+}
+
 function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.ENDED) {
+    if (event.data === YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
         isPlaying = false;
 
         switch (mode) {
             case 'repeat_one':
                 player.seekTo(0);
-                player.playVideo();
-                break;
-            case 'shuffle':
-                const playlist = player.getPlaylist();
-                const nextIndex = Math.floor(Math.random() * playlist.length);
-                player.playVideoAt(nextIndex);
-                break;
-            case 'repeat':
-                const currentIndex = player.getPlaylistIndex();
-                if (currentIndex === player.getPlaylist().length - 1) {
-                    player.playVideoAt(0);
-                } else {
-                    player.nextVideo();
-                }
-                break;
-        }
-    }
-    updateTitleAndArtist();
-}
+                player.play
+// Lógica de autenticação e cadastro
+document.getElementById('register-button').addEventListener('click', function() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-function updateTitleAndArtist() {
-    const videoData = player.getVideoData();
-    document.getElementById('title').textContent = videoData.title;
-    document.getElementById('artist').textContent = videoData.author;
-}
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log('Usuário registrado:', user);
+            window.location.href = 'success.html';
+        })
+        .catch((error) => {
+            console.error('Erro ao registrar usuário:', error);
+            alert('Erro ao registrar usuário: ' + error.message);
+        });
+});
 
-function formatTime(seconds) {
-    const min = Math.floor(seconds / 60);
-    const sec = Math.floor(seconds % 60);
-    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
-}
+document.getElementById('login-button').addEventListener('click', function() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-async function fetchPlaylistData() {
-    const playlist = player.getPlaylist();
-    playlistData = playlist.map((videoId, index) => ({
-        videoId,
-        index,
-        title: '',
-        author: ''
-    }));
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log('Usuário autenticado:', user);
+            window.location.href = 'success.html';
+        })
+        .catch((error) => {
+            console.error('Erro ao autenticar usuário:', error);
+            alert('Erro ao autenticar usuário: ' + error.message);
+        });
+});
 
-    for (let i = 0; i < playlistData.length; i++) {
-        const videoId = playlistData[i].videoId;
-        try {
-            const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
-            const data = await response.json();
-            playlistData[i].title = data.title;
-            playlistData[i].author = data.author_name;
-        } catch (error) {
-            console.error('Error fetching video details:', error);
-        }
-    }
+document.getElementById('google-login-button').addEventListener('click', function() {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            const user = result.user;
+            console.log('Usuário autenticado com Google:', user);
+            window.location.href = 'success.html';
+        })
+        .catch((error) => {
+            console.error('Erro ao autenticar com Google:', error);
+            alert('Erro ao autenticar com Google: ' + error.message);
+        });
+});
 
-    renderPlaylist(playlistData);
-}
+// Mostra/esconde senha
+document.getElementById('toggle-password-visibility').addEventListener('click', function() {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.innerHTML = type === 'password' ? '<ion-icon name="eye-outline"></ion-icon>' : '<ion-icon name="eye-off-outline"></ion-icon>';
+});
 
-function renderPlaylist(playlist) {
-    const playlistContainer = document.getElementById('playlist-items');
-    playlistContainer.innerHTML = '';
-
-    playlist.forEach(video => {
-        const listItem = document.createElement('li');
-
-        const thumbnail = document.createElement('img');
-        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
-        listItem.appendChild(thumbnail);
-
-        const textContainer = document.createElement('div');
-        textContainer.className = 'text-container';
-
-        const titleText = document.createElement('span');
-        titleText.className = 'title';
-        titleText.textContent = video.title;
-        textContainer.appendChild(titleText);
-
-        const authorText = document.createElement('span');
-        authorText.className = 'author';
-        authorText.textContent = video.author;
-        textContainer.appendChild(authorText);
-
-        listItem.appendChild(textContainer);
-
-        listItem.addEventListener('click', () => {
-            if (isShuffle) {
-                // Encontrar o índice correspondente ao vídeo clicado na lista original
-                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
-                player.playVideoAt(originalIndex);
-            } else {
-                player.playVideoAt(video.index);
-            }
+// Função para renderizar itens da playlist
+function renderPlaylist(playlistData) {
+    const playlistElement = document.getElementById('playlist');
+    playlistElement.innerHTML = '';
+    playlistData.forEach((video) => {
+        const videoElement = document.createElement('div');
+        videoElement.className = 'playlist-item';
+        videoElement.innerHTML = `
+            <img src="${video.thumbnail}" alt="${video.title}">
+            <div class="playlist-item-details">
+                <h3>${video.title}</h3>
+            </div>
+        `;
+        videoElement.addEventListener('click', () => {
+            player.loadVideoById(video.videoId);
             document.getElementById('playlist-overlay').style.display = 'none';
         });
-
-        playlistContainer.appendChild(listItem);
+        playlistElement.appendChild(videoElement);
     });
 }
-// BUSCA CONFIG
 
-// Adicione o evento de keyup ao input de texto
-document.getElementById('search-input').addEventListener('keyup', function(event) {
-    const searchText = event.target.value.toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
+// Estilo e animações
+document.addEventListener('DOMContentLoaded', () => {
+    const elements = document.querySelectorAll('.animated');
+    elements.forEach(element => {
+        element.classList.add('fade-in');
+    });
 });
 
-// Crie a função que filtre a playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
-}
-
-// SHARE CONFIG
-
-document.getElementById('share-icon').addEventListener('click', async function() {
-    const videoData = player.getVideoData();
-    const videoId = videoData.video_id;
-    const longUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
-    const bitlyToken = '742eae33655dde134a9502bfcd95bc121f5d84e6'; // Substitua pelo seu token de acesso do Bitly
-
-    try {
-        const response = await fetch('https://api-ssl.bitly.com/v4/shorten', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${bitlyToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                long_url: longUrl
-            })
-        });
-
-        const data = await response.json();
-        const shareUrl = data.link;
-
-        if (navigator.share) {
-            navigator.share({
-                title: videoData.title,
-                text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
-                url: shareUrl,
-            }).then(() => {
-                console.log('Compartilhamento bem-sucedido');
-            }).catch((error) => {
-                console.error('Erro ao compartilhar:', error);
-            });
+function fadeOut(element) {
+    element.style.opacity = 1;
+    (function fade() {
+        if ((element.style.opacity -= 0.1) < 0) {
+            element.style.display = 'none';
         } else {
-            // Fallback para navegadores que não suportam a API de compartilhamento
-            alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+            requestAnimationFrame(fade);
         }
-    } catch (error) {
-        console.error('Erro ao encurtar a URL:', error);
-    }
-});
-///
-function isUserLoggedIn() {
-    return new Promise((resolve) => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            resolve(!!user); // Retorna true se o usuário estiver autenticado
-            unsubscribe(); // Limpa o listener após a verificação
-        });
-    });
+    })();
 }
 
+function fadeIn(element, display) {
+    element.style.opacity = 0;
+    element.style.display = display || 'block';
+    (function fade() {
+        let val = parseFloat(element.style.opacity);
+        if (!((val += 0.1) > 1)) {
+            element.style.opacity = val;
+            requestAnimationFrame(fade);
+        }
+    })();
+}
+
+// Funções adicionais de utilidade
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+}
+
+// Função para buscar dados da playlist do YouTube
+async function fetchPlaylistData() {
+    try {
+        const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5&key=AIzaSyBta-ZsOpOzhPiFjV-l8zFQbDj3JjZQ9Nw`);
+        const data = await response.json();
+        playlistData = data.items.map(item => ({
+            title: item.snippet.title,
+            thumbnail: item.snippet.thumbnails.default.url,
+            videoId: item.snippet.resourceId.videoId
+        }));
+        renderPlaylist(playlistData);
+    } catch (error) {
+        console.error('Erro ao buscar dados da playlist:', error);
+    }
+}
