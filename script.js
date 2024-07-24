@@ -312,4 +312,3 @@ document.getElementById('share-icon').addEventListener('click', async function()
         console.error('Erro ao encurtar a URL:', error);
     }
 });
-
