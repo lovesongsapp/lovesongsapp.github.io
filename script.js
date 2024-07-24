@@ -1,34 +1,54 @@
+// Inicialize o Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
+    authDomain: "lovesongs-1285e.firebaseapp.com",
+    projectId: "lovesongs-1285e",
+    storageBucket: "lovesongs-1285e.appspot.com",
+    messagingSenderId: "940749066428",
+    appId: "1:940749066428:web:4bc067e8721fa576fe40b9",
+    measurementId: "G-HLGV34NCB0"
+};
 
-let player;
-let maxQuality = 'large'; // Definir resolução máxima
-let minQuality = 'medium'; // Definir resolução mínima
-let isPlaying = false;
-let isShuffle = false;
-let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
-let progressBar, currentTimeDisplay, durationDisplay;
-let playlistData = [];
-let sharedVideoId = null;
+firebase.initializeApp(firebaseConfig);
 
-function setVideoQuality(quality) {
-    player.setPlaybackQuality(quality);
+// Função para verificar se o usuário está logado
+function isUserLoggedIn() {
+    return !!firebase.auth().currentUser;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Verifique se todos os elementos DOM necessários estão presentes
     progressBar = document.getElementById('progress');
     currentTimeDisplay = document.getElementById('current-time');
     durationDisplay = document.getElementById('duration');
     
-    // Verifique se todos os elementos DOM necessários estão presentes
     if (progressBar && currentTimeDisplay && durationDisplay) {
         onYouTubeIframeAPIReady();
     } else {
         console.error('Um ou mais elementos DOM não foram encontrados.');
     }
+
+    // Modifique o evento de clique no botão play para verificar a autenticação
+    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
+        if (!isUserLoggedIn()) {
+            window.location.href = 'login/login.html';
+            return;
+        }
+
+        if (isPlaying) {
+            player.pauseVideo();
+            this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
+        } else {
+            player.playVideo();
+            this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
+        }
+        isPlaying = !isPlaying;
+    });
 });
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc'; // ID padrão caso não haja um na URL
+    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc';
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -48,7 +68,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-    setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
+    setVideoQuality(minQuality);
     setupControlButtons();
 
     setInterval(() => {
@@ -77,7 +97,6 @@ function onPlayerReady(event) {
         document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
         metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
     } else {
-        // Apply dark theme by default
         document.documentElement.setAttribute('data-theme', 'dark');
         document.body.classList.add('dark-mode');
         document.getElementById('theme-toggle').innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
@@ -218,122 +237,32 @@ async function fetchPlaylistData() {
     renderPlaylist(playlistData);
 }
 
-function renderPlaylist(playlist) {
-    const playlistContainer = document.getElementById('playlist-items');
+function renderPlaylist(playlistData) {
+    const playlistContainer = document.getElementById('playlist-container');
     playlistContainer.innerHTML = '';
 
-    playlist.forEach(video => {
-        const listItem = document.createElement('li');
+    playlistData.forEach(video => {
+        const videoItem = document.createElement('div');
+        videoItem.className = 'video-item';
+        videoItem.dataset.videoId = video.videoId;
+        videoItem.dataset.index = video.index;
 
-        const thumbnail = document.createElement('img');
-        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
-        listItem.appendChild(thumbnail);
+        const thumbnail = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
+        videoItem.innerHTML = `
+            <img src="${thumbnail}" alt="${video.title}">
+            <div class="video-info">
+                <h3>${video.title}</h3>
+                <p>${video.author}</p>
+            </div>
+        `;
 
-        const textContainer = document.createElement('div');
-        textContainer.className = 'text-container';
-
-        const titleText = document.createElement('span');
-        titleText.className = 'title';
-        titleText.textContent = video.title;
-        textContainer.appendChild(titleText);
-
-        const authorText = document.createElement('span');
-        authorText.className = 'author';
-        authorText.textContent = video.author;
-        textContainer.appendChild(authorText);
-
-        listItem.appendChild(textContainer);
-
-        listItem.addEventListener('click', () => {
-            if (isShuffle) {
-                // Encontrar o índice correspondente ao vídeo clicado na lista original
-                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
-                player.playVideoAt(originalIndex);
-            } else {
-                player.playVideoAt(video.index);
-            }
+        videoItem.addEventListener('click', function() {
+            const videoId = this.dataset.videoId;
+            const index = parseInt(this.dataset.index);
+            player.playVideoAt(index);
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
-        playlistContainer.appendChild(listItem);
+        playlistContainer.appendChild(videoItem);
     });
 }
-// BUSCA CONFIG
-
-// Adicione o evento de keyup ao input de texto
-document.getElementById('search-input').addEventListener('keyup', function(event) {
-    const searchText = event.target.value.toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
-});
-
-// Crie a função que filtre a playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
-}
-
-// SHARE CONFIG
-
-document.getElementById('share-icon').addEventListener('click', async function() {
-    const videoData = player.getVideoData();
-    const videoId = videoData.video_id;
-    const longUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
-    const bitlyToken = '742eae33655dde134a9502bfcd95bc121f5d84e6'; // Substitua pelo seu token de acesso do Bitly
-
-    try {
-        const response = await fetch('https://api-ssl.bitly.com/v4/shorten', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${bitlyToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                long_url: longUrl
-            })
-        });
-
-        const data = await response.json();
-        const shareUrl = data.link;
-
-        if (navigator.share) {
-            navigator.share({
-                title: videoData.title,
-                text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
-                url: shareUrl,
-            }).then(() => {
-                console.log('Compartilhamento bem-sucedido');
-            }).catch((error) => {
-                console.error('Erro ao compartilhar:', error);
-            });
-        } else {
-            // Fallback para navegadores que não suportam a API de compartilhamento
-            alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
-        }
-    } catch (error) {
-        console.error('Erro ao encurtar a URL:', error);
-    }
-});
-////////////
-// Função para verificar se o usuário está logado
-function isUserLoggedIn() {
-    // Verifique a autenticação do usuário (exemplo usando Firebase)
-    return !!firebase.auth().currentUser;
-}
-
-// Modifique o evento de clique no botão play para verificar a autenticação
-document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
-    if (!isUserLoggedIn()) {
-        window.location.href = 'login/login.html';
-        return;
-    }
-
-    if (isPlaying) {
-        player.pauseVideo();
-        this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
-    } else {
-        player.playVideo();
-        this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
-    }
-    isPlaying = !isPlaying;
-});
-
