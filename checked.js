@@ -6,6 +6,7 @@ async function checkAuthentication() {
         showInvitation();
     } else {
         hideInvitation();
+        initializePlayer();
     }
 }
 
@@ -61,6 +62,21 @@ function hideInvitation() {
     const invitationDiv = document.getElementById('invitation');
     if (invitationDiv) {
         invitationDiv.style.display = 'none';
+    }
+}
+
+// Inicializa o player apenas se o usuário estiver autenticado
+function initializePlayer() {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof onYouTubeIframeAPIReady === 'function') {
+                onYouTubeIframeAPIReady();
+            }
+        });
+    } else {
+        if (typeof onYouTubeIframeAPIReady === 'function') {
+            onYouTubeIframeAPIReady();
+        }
     }
 }
 
