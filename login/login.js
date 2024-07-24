@@ -1,19 +1,24 @@
-// Firebase configuration and initialization
+// Importações do Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+// Configuração do Firebase
 const firebaseConfig = {
-  apiKey: "API_KEY",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-  projectId: "PROJECT_ID",
-  storageBucket: "PROJECT_ID.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID",
-  measurementId: "G-MEASUREMENT_ID"
+  apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
+  authDomain: "lovesongs-1285e.firebaseapp.com",
+  projectId: "lovesongs-1285e",
+  storageBucket: "lovesongs-1285e.appspot.com",
+  messagingSenderId: "940749066428",
+  appId: "1:940749066428:web:4bc067e8721fa576fe40b9",
+  measurementId: "G-HLGV34NCB0"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Registration function
+// Função para registrar usuário
 async function registerUser(email, password, username) {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -29,12 +34,11 @@ async function registerUser(email, password, username) {
     alert('User registered successfully!');
     window.location.href = 'sucesso.html';
   } catch (error) {
-    console.error('Error registering user:', error.message);
-    alert('Error registering user: ' + error.message);
+    displayErrorMessage(error.message);
   }
 }
 
-// Login function
+// Função para login do usuário
 async function loginUser(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -43,12 +47,11 @@ async function loginUser(email, password) {
     alert('User logged in successfully!');
     window.location.href = 'sucesso.html';
   } catch (error) {
-    console.error('Error logging in user:', error.message);
-    alert('Error logging in user: ' + error.message);
+    displayErrorMessage(error.message);
   }
 }
 
-// Google login function
+// Função para login com Google
 async function loginWithGoogle() {
   const provider = new GoogleAuthProvider();
   try {
@@ -58,12 +61,21 @@ async function loginWithGoogle() {
     alert('User logged in with Google successfully!');
     window.location.href = 'sucesso.html';
   } catch (error) {
-    console.error('Error logging in with Google:', error.message);
-    alert('Error logging in with Google: ' + error.message);
+    displayErrorMessage(error.message);
   }
 }
 
-// Event listeners for form submissions and button clicks
+// Função para redefinir senha
+async function resetPassword(email) {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert('Enviamos um link para redefinir sua senha. Verifique seu email.');
+  } catch (error) {
+    displayErrorMessage(error.message);
+  }
+}
+
+// Adiciona listeners para os formulários e botões
 document.getElementById('register-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   const username = document.getElementById('register-username').value;
@@ -83,42 +95,6 @@ document.getElementById('google-login').addEventListener('click', async () => {
   await loginWithGoogle();
 });
 
-document.getElementById('show-register').addEventListener('click', () => {
-  document.getElementById('login-form').style.display = 'none';
-  document.getElementById('register-form').style.display = 'block';
-});
-
-document.getElementById('show-login').addEventListener('click', () => {
-  document.getElementById('register-form').style.display = 'none';
-  document.getElementById('login-form').style.display = 'block';
-});
-
-function togglePasswordVisibility() {
-  const passwordInput = document.getElementById('register-password');
-  const eyeIcon = document.getElementById('eye-icon');
-
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    eyeIcon.name = 'eye-off-outline';
-  } else {
-    passwordInput.type = 'password';
-    eyeIcon.name = 'eye-outline';
-  }
-}
-
-document.getElementById('eye-icon').addEventListener('click', togglePasswordVisibility);
-
-// Password reset function
-async function resetPassword(email) {
-  try {
-    await sendPasswordResetEmail(auth, email);
-    alert('Enviamos um link para redefinir sua senha. Verifique seu email.');
-  } catch (error) {
-    console.error('Error resetting password:', error.message);
-    alert('Error resetting password: ' + error.message);
-  }
-}
-
 document.getElementById('reset-password').addEventListener('click', async () => {
   const email = document.getElementById('login-email').value;
   if (email) {
@@ -127,3 +103,40 @@ document.getElementById('reset-password').addEventListener('click', async () => 
     alert('Por favor, insira seu email para redefinir sua senha.');
   }
 });
+
+document.getElementById('show-register').addEventListener('click', (event) => {
+  event.preventDefault();
+  document.getElementById('login-form').style.display = 'none';
+  document.getElementById('register-form').style.display = 'block';
+  clearErrorMessage();
+});
+
+document.getElementById('show-login').addEventListener('click', (event) => {
+  event.preventDefault();
+  document.getElementById('register-form').style.display = 'none';
+  document.getElementById('login-form').style.display = 'block';
+  clearErrorMessage();
+});
+
+function togglePasswordVisibility(inputId, eyeIconId) {
+  const passwordInput = document.getElementById(inputId);
+  const eyeIcon = document.getElementById(eyeIconId);
+  eyeIcon.addEventListener('click', () => {
+    const isPasswordVisible = passwordInput.type === 'text';
+    passwordInput.type = isPasswordVisible ? 'password' : 'text';
+    eyeIcon.setAttribute('name', isPasswordVisible ? 'eye-outline' : 'eye-off-outline');
+  });
+}
+
+function displayErrorMessage(message) {
+  const errorMessageElement = document.getElementById('error-message');
+  errorMessageElement.textContent = message;
+}
+
+function clearErrorMessage() {
+  const errorMessageElement = document.getElementById('error-message');
+  errorMessageElement.textContent = '';
+}
+
+togglePasswordVisibility('register-password', 'register-eye-icon');
+togglePasswordVisibility('login-password', 'login-eye-icon');
