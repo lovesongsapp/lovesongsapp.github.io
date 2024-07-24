@@ -271,6 +271,81 @@ function filterPlaylist(searchText) {
     return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
 
+// Função para renderizar itens da playlist
+function renderPlaylist(playlistData) {
+    const playlistElement = document.getElementById('playlist');
+    playlistElement.innerHTML = '';
+    playlistData.forEach((video) => {
+        const videoElement = document.createElement('div');
+        videoElement.className = 'playlist-item';
+        videoElement.innerHTML = `
+            <img src="${video.thumbnail}" alt="${video.title}">
+            <div class="playlist-item-details">
+                <h3>${video.title}</h3>
+            </div>
+        `;
+        videoElement.addEventListener('click', () => {
+            player.loadVideoById(video.videoId);
+            document.getElementById('playlist-overlay').style.display = 'none';
+        });
+        playlistElement.appendChild(videoElement);
+    });
+}
+
+// Estilo e animações
+document.addEventListener('DOMContentLoaded', () => {
+    const elements = document.querySelectorAll('.animated');
+    elements.forEach(element => {
+        element.classList.add('fade-in');
+    });
+});
+
+function fadeOut(element) {
+    element.style.opacity = 1;
+    (function fade() {
+        if ((element.style.opacity -= 0.1) < 0) {
+            element.style.display = 'none';
+        } else {
+            requestAnimationFrame(fade);
+        }
+    })();
+}
+
+function fadeIn(element, display) {
+    element.style.opacity = 0;
+    element.style.display = display || 'block';
+    (function fade() {
+        let val = parseFloat(element.style.opacity);
+        if (!((val += 0.1) > 1)) {
+            element.style.opacity = val;
+            requestAnimationFrame(fade);
+        }
+    })();
+}
+
+// Funções adicionais de utilidade
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+}
+
+// Função para buscar dados da playlist do YouTube
+async function fetchPlaylistData() {
+    try {
+        const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5&key=AIzaSyBta-ZsOpOzhPiFjV-l8zFQbDj3JjZQ9Nw`);
+        const data = await response.json();
+        playlistData = data.items.map(item => ({
+            title: item.snippet.title,
+            thumbnail: item.snippet.thumbnails.default.url,
+            videoId: item.snippet.resourceId.videoId
+        }));
+        renderPlaylist(playlistData);
+    } catch (error) {
+        console.error('Erro ao buscar dados da playlist:', error);
+    }
+}
+
 // Compartilhamento com thumbnail
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
