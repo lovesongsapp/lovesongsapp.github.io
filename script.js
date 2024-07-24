@@ -1,4 +1,7 @@
-// Inicialize o Firebase
+// Adicione a configuração do Firebase e inicialização
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
+
 const firebaseConfig = {
     apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
     authDomain: "lovesongs-1285e.firebaseapp.com",
@@ -9,46 +12,83 @@ const firebaseConfig = {
     measurementId: "G-HLGV34NCB0"
 };
 
-firebase.initializeApp(firebaseConfig);
+// Inicializa o Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-// Função para verificar se o usuário está logado
+// Função para verificar se o usuário está autenticado
 function isUserLoggedIn() {
-    return !!firebase.auth().currentUser;
+    return new Promise((resolve) => {
+        onAuthStateChanged(auth, (user) => {
+            resolve(!!user); // Retorna true se o usuário estiver autenticado
+        });
+    });
+}
+
+////Atualize o botão de reprodução para verificar a autenticação antes de tocar o vídeo.
+document.querySelector('.control-button:nth-child(3)').addEventListener('click', async function() {
+    const isLoggedIn = await isUserLoggedIn();
+    if (!isLoggedIn) {
+        // Redireciona para a página de login se o usuário não estiver autenticado
+        window.location.href = 'login.html';
+        return;
+    }
+
+    if (isPlaying) {
+        player.pauseVideo();
+        this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
+    } else {
+        player.playVideo();
+        this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
+    }
+    isPlaying = !isPlaying;
+});
+
+//REDEFINE PASSWORD
+document.getElementById('reset-password-link').addEventListener('click', function() {
+    const email = document.getElementById('email-input').value;
+    auth.sendPasswordResetEmail(email)
+        .then(() => {
+            alert('Verifique seu e-mail para redefinir sua senha.');
+        })
+        .catch((error) => {
+            console.error('Erro ao enviar e-mail de redefinição de senha:', error);
+        });
+});
+
+
+/////// SCRIPT FULL
+
+let player;
+let maxQuality = 'large'; // Definir resolução máxima
+let minQuality = 'medium'; // Definir resolução mínima
+let isPlaying = false;
+let isShuffle = false;
+let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
+let progressBar, currentTimeDisplay, durationDisplay;
+let playlistData = [];
+let sharedVideoId = null;
+
+function setVideoQuality(quality) {
+    player.setPlaybackQuality(quality);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Verifique se todos os elementos DOM necessários estão presentes
     progressBar = document.getElementById('progress');
     currentTimeDisplay = document.getElementById('current-time');
     durationDisplay = document.getElementById('duration');
     
+    // Verifique se todos os elementos DOM necessários estão presentes
     if (progressBar && currentTimeDisplay && durationDisplay) {
         onYouTubeIframeAPIReady();
     } else {
         console.error('Um ou mais elementos DOM não foram encontrados.');
     }
-
-    // Modifique o evento de clique no botão play para verificar a autenticação
-    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
-        if (!isUserLoggedIn()) {
-            window.location.href = 'login/login.html';
-            return;
-        }
-
-        if (isPlaying) {
-            player.pauseVideo();
-            this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
-        } else {
-            player.playVideo();
-            this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
-        }
-        isPlaying = !isPlaying;
-    });
 });
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc';
+    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc'; // ID padrão caso não haja um na URL
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -68,7 +108,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-    setVideoQuality(minQuality);
+    setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     setupControlButtons();
 
     setInterval(() => {
@@ -97,6 +137,7 @@ function onPlayerReady(event) {
         document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
         metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
     } else {
+        // Apply dark theme by default
         document.documentElement.setAttribute('data-theme', 'dark');
         document.body.classList.add('dark-mode');
         document.getElementById('theme-toggle').innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
@@ -237,32 +278,99 @@ async function fetchPlaylistData() {
     renderPlaylist(playlistData);
 }
 
-function renderPlaylist(playlistData) {
-    const playlistContainer = document.getElementById('playlist-container');
+function renderPlaylist(playlist) {
+    const playlistContainer = document.getElementById('playlist-items');
     playlistContainer.innerHTML = '';
 
-    playlistData.forEach(video => {
-        const videoItem = document.createElement('div');
-        videoItem.className = 'video-item';
-        videoItem.dataset.videoId = video.videoId;
-        videoItem.dataset.index = video.index;
+    playlist.forEach(video => {
+        const listItem = document.createElement('li');
 
-        const thumbnail = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
-        videoItem.innerHTML = `
-            <img src="${thumbnail}" alt="${video.title}">
-            <div class="video-info">
-                <h3>${video.title}</h3>
-                <p>${video.author}</p>
-            </div>
-        `;
+        const thumbnail = document.createElement('img');
+        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
+        listItem.appendChild(thumbnail);
 
-        videoItem.addEventListener('click', function() {
-            const videoId = this.dataset.videoId;
-            const index = parseInt(this.dataset.index);
-            player.playVideoAt(index);
+        const textContainer = document.createElement('div');
+        textContainer.className = 'text-container';
+
+        const titleText = document.createElement('span');
+        titleText.className = 'title';
+        titleText.textContent = video.title;
+        textContainer.appendChild(titleText);
+
+        const authorText = document.createElement('span');
+        authorText.className = 'author';
+        authorText.textContent = video.author;
+        textContainer.appendChild(authorText);
+
+        listItem.appendChild(textContainer);
+
+        listItem.addEventListener('click', () => {
+            if (isShuffle) {
+                // Encontrar o índice correspondente ao vídeo clicado na lista original
+                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
+                player.playVideoAt(originalIndex);
+            } else {
+                player.playVideoAt(video.index);
+            }
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
-        playlistContainer.appendChild(videoItem);
+        playlistContainer.appendChild(listItem);
     });
 }
+// BUSCA CONFIG
+
+// Adicione o evento de keyup ao input de texto
+document.getElementById('search-input').addEventListener('keyup', function(event) {
+    const searchText = event.target.value.toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
+});
+
+// Crie a função que filtre a playlist
+function filterPlaylist(searchText) {
+    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
+}
+
+// SHARE CONFIG
+
+document.getElementById('share-icon').addEventListener('click', async function() {
+    const videoData = player.getVideoData();
+    const videoId = videoData.video_id;
+    const longUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
+    const bitlyToken = '742eae33655dde134a9502bfcd95bc121f5d84e6'; // Substitua pelo seu token de acesso do Bitly
+
+    try {
+        const response = await fetch('https://api-ssl.bitly.com/v4/shorten', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${bitlyToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                long_url: longUrl
+            })
+        });
+
+        const data = await response.json();
+        const shareUrl = data.link;
+
+        if (navigator.share) {
+            navigator.share({
+                title: videoData.title,
+                text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
+                url: shareUrl,
+            }).then(() => {
+                console.log('Compartilhamento bem-sucedido');
+            }).catch((error) => {
+                console.error('Erro ao compartilhar:', error);
+            });
+        } else {
+            // Fallback para navegadores que não suportam a API de compartilhamento
+            alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+        }
+    } catch (error) {
+        console.error('Erro ao encurtar a URL:', error);
+    }
+});
+
