@@ -82,12 +82,14 @@ document.getElementById('google-login').addEventListener('click', async () => {
   await loginWithGoogle();
 });
 
-document.getElementById('show-register').addEventListener('click', () => {
+document.getElementById('show-register').addEventListener('click', (event) => {
+  event.preventDefault();
   document.getElementById('login-form').style.display = 'none';
   document.getElementById('register-form').style.display = 'block';
 });
 
-document.getElementById('show-login').addEventListener('click', () => {
+document.getElementById('show-login').addEventListener('click', (event) => {
+  event.preventDefault();
   document.getElementById('register-form').style.display = 'none';
   document.getElementById('login-form').style.display = 'block';
 });
