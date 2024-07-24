@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+      background-color: #f0f0f0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,32 +18,41 @@
       background: #fff;
       padding: 2rem;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
       box-sizing: border-box;
-      text-align: center;
     }
     h1 {
       font-size: 2rem;
-      margin-bottom: 1.5rem;
-      color: #007bff;
+      margin-bottom: 1rem;
+      color: #333;
+      text-align: center;
     }
     form {
       display: flex;
       flex-direction: column;
-      align-items: center;
+    }
+    .input-wrapper {
+      position: relative;
     }
     input {
-      width: 100%;
       padding: 0.75rem;
       margin-bottom: 1rem;
       border: 1px solid #ddd;
       border-radius: 5px;
       font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      cursor: pointer;
     }
     button {
-      width: 100%;
       padding: 0.75rem;
       border: none;
       border-radius: 5px;
@@ -86,14 +95,9 @@
       background: #c33c2e;
     }
     .message {
-      margin-top: 1rem;
-      font-size: 1rem;
-    }
-    .error {
-      color: #d9534f;
-    }
-    .success {
-      color: #5cb85c;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: red;
     }
   </style>
   <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
@@ -106,11 +110,16 @@
   <div class="container">
     <h1>LoveSongs App</h1>
 
+    <div id="message" class="message"></div>
+
     <!-- Registration Form -->
     <form id="register-form" style="display: none;">
       <input type="text" id="register-username" placeholder="Username" required>
       <input type="email" id="register-email" placeholder="Email" required>
-      <input type="password" id="register-password" placeholder="Password" required>
+      <div class="input-wrapper">
+        <input type="password" id="register-password" placeholder="Password" required>
+        <span class="toggle-password" onclick="togglePasswordVisibility('register-password')">👁️</span>
+      </div>
       <button type="submit">Register</button>
       <div class="form-switch">
         Já tem uma conta? <a id="show-login">Login</a>
@@ -120,7 +129,10 @@
     <!-- Login Form -->
     <form id="login-form">
       <input type="email" id="login-email" placeholder="Email" required>
-      <input type="password" id="login-password" placeholder="Password" required>
+      <div class="input-wrapper">
+        <input type="password" id="login-password" placeholder="Password" required>
+        <span class="toggle-password" onclick="togglePasswordVisibility('login-password')">👁️</span>
+      </div>
       <button type="submit">Login</button>
       <div class="form-switch">
         Não tem uma conta? <a id="show-register">Register</a>
@@ -129,8 +141,6 @@
         <img src="https://img.icons8.com/color/16/000000/google-logo.png"/> Login com Google
       </button>
     </form>
-
-    <div id="message" class="message"></div>
   </div>
 
   <script type="module">
@@ -153,58 +163,71 @@
     const db = getFirestore(app);
 
     async function registerUser(email, password, username) {
-      const messageDiv = document.getElementById('message');
-      messageDiv.textContent = '';
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+
+        // Save user info to Firestore
         await setDoc(doc(collection(db, 'users'), user.uid), {
           username: username,
           email: email,
           createdAt: serverTimestamp()
         });
+
+        // Send email verification
         await sendEmailVerification(user);
-        messageDiv.textContent = 'Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua conta.';
-        messageDiv.className = 'message success';
+        document.getElementById('message').textContent = 'Registro bem-sucedido. Verifique seu e-mail.';
+
+        console.log('User registered successfully:', user);
       } catch (error) {
-        messageDiv.textContent = `Erro ao cadastrar: ${error.message}`;
-        messageDiv.className = 'message error';
+        document.getElementById('message').textContent = `Erro ao registrar usuário: ${error.message}`;
+        console.error('Error registering user:', error.message);
       }
     }
 
     async function loginUser(email, password) {
-      const messageDiv = document.getElementById('message');
-      messageDiv.textContent = '';
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        if (!user.emailVerified) {
-          messageDiv.textContent = 'Por favor, verifique seu e-mail antes de fazer login.';
-          messageDiv.className = 'message error';
-          return;
+
+        if (user.emailVerified) {
+          window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
+        } else {
+          document.getElementById('message').textContent = 'Por favor, verifique seu e-mail antes de fazer login.';
         }
-        messageDiv.textContent = 'Login realizado com sucesso!';
-        messageDiv.className = 'message success';
-        window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
+
+        console.log('User logged in successfully:', user);
       } catch (error) {
-        messageDiv.textContent = `Erro ao fazer login: ${error.message}`;
-        messageDiv.className = 'message error';
+        document.getElementById('message').textContent = `Erro ao fazer login: ${error.message}`;
+        console.error('Error logging in user:', error.message);
       }
     }
 
     async function loginWithGoogle() {
-      const messageDiv = document.getElementById('message');
-      messageDiv.textContent = '';
       const provider = new GoogleAuthProvider();
       try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
-        messageDiv.textContent = 'Login com Google realizado com sucesso!';
-        messageDiv.className = 'message success';
-        window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
+
+        if (user.emailVerified) {
+          window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
+        } else {
+          document.getElementById('message').textContent = 'Por favor, verifique seu e-mail antes de fazer login.';
+        }
+
+        console.log('User logged in with Google successfully:', user);
       } catch (error) {
-        messageDiv.textContent = `Erro ao fazer login com Google: ${error.message}`;
-        messageDiv.className = 'message error';
+        document.getElementById('message').textContent = `Erro ao fazer login com Google: ${error.message}`;
+        console.error('Error logging in with Google:', error.message);
+      }
+    }
+
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
       }
     }
 
@@ -234,8 +257,8 @@
     });
 
     document.getElementById('show-login').addEventListener('click', () => {
-      document.getElementById('login-form').style.display = 'block';
       document.getElementById('register-form').style.display = 'none';
+      document.getElementById('login-form').style.display = 'block';
       document.getElementById('message').textContent = '';
     });
   </script>
