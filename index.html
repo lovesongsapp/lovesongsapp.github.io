@@ -131,7 +131,47 @@
       <script src="script-sw.js"></script>
       <script src="media.js"></script>
       <script src="pro.js"></script>
-      
+
+<script>
+    // Sua configuração do Firebase
+    const firebaseConfig = {
+    const firebaseConfig = {
+    apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
+    authDomain: "lovesongs-1285e.firebaseapp.com",
+    projectId: "lovesongs-1285e",
+    storageBucket: "lovesongs-1285e.appspot.com",
+    messagingSenderId: "940749066428",
+    appId: "1:940749066428:web:4bc067e8721fa576fe40b9",
+    measurementId: "G-HLGV34NCB0"
+    };
+
+    // Inicialize o Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Função para verificar se o usuário está logado
+    function isUserLoggedIn() {
+        return !!firebase.auth().currentUser;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Modifique o evento de clique no botão play para verificar a autenticação
+        document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
+            if (!isUserLoggedIn()) {
+                window.location.href = 'login/login.html';
+                return;
+            }
+
+            if (isPlaying) {
+                player.pauseVideo();
+                this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
+            } else {
+                player.playVideo();
+                this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
+            }
+            isPlaying = !isPlaying;
+        });
+    });
+</script>
       
    </body>
 </html>
