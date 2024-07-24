@@ -18,7 +18,7 @@
       background: #fff;
       padding: 2rem;
       border-radius: 10px;
-      /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
       box-sizing: border-box;
@@ -85,6 +85,16 @@
     .google-button:hover {
       background: #c33c2e;
     }
+    .message {
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    .error {
+      color: #d9534f;
+    }
+    .success {
+      color: #5cb85c;
+    }
   </style>
   <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
@@ -94,7 +104,7 @@
 </head>
 <body>
   <div class="container">
-    <img src="icons/icon76.png" style="border-radius: 50px; margin-bottom: 2rem;">
+    <h1>LoveSongs App</h1>
 
     <!-- Registration Form -->
     <form id="register-form" style="display: none;">
@@ -119,11 +129,13 @@
         <img src="https://img.icons8.com/color/16/000000/google-logo.png"/> Login com Google
       </button>
     </form>
+
+    <div id="message" class="message"></div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
     import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
     
     const firebaseConfig = {
@@ -141,6 +153,8 @@
     const db = getFirestore(app);
 
     async function registerUser(email, password, username) {
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = '';
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
@@ -149,33 +163,48 @@
           email: email,
           createdAt: serverTimestamp()
         });
-        console.log('User registered successfully:', user);
-        window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
+        await sendEmailVerification(user);
+        messageDiv.textContent = 'Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua conta.';
+        messageDiv.className = 'message success';
       } catch (error) {
-        console.error('Error registering user:', error.message);
+        messageDiv.textContent = `Erro ao cadastrar: ${error.message}`;
+        messageDiv.className = 'message error';
       }
     }
 
     async function loginUser(email, password) {
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = '';
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        console.log('User logged in successfully:', user);
+        if (!user.emailVerified) {
+          messageDiv.textContent = 'Por favor, verifique seu e-mail antes de fazer login.';
+          messageDiv.className = 'message error';
+          return;
+        }
+        messageDiv.textContent = 'Login realizado com sucesso!';
+        messageDiv.className = 'message success';
         window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
       } catch (error) {
-        console.error('Error logging in user:', error.message);
+        messageDiv.textContent = `Erro ao fazer login: ${error.message}`;
+        messageDiv.className = 'message error';
       }
     }
 
     async function loginWithGoogle() {
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = '';
       const provider = new GoogleAuthProvider();
       try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
-        console.log('User logged in with Google successfully:', user);
+        messageDiv.textContent = 'Login com Google realizado com sucesso!';
+        messageDiv.className = 'message success';
         window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
       } catch (error) {
-        console.error('Error logging in with Google:', error.message);
+        messageDiv.textContent = `Erro ao fazer login com Google: ${error.message}`;
+        messageDiv.className = 'message error';
       }
     }
 
@@ -201,11 +230,13 @@
     document.getElementById('show-register').addEventListener('click', () => {
       document.getElementById('login-form').style.display = 'none';
       document.getElementById('register-form').style.display = 'block';
+      document.getElementById('message').textContent = '';
     });
 
     document.getElementById('show-login').addEventListener('click', () => {
       document.getElementById('login-form').style.display = 'block';
       document.getElementById('register-form').style.display = 'none';
+      document.getElementById('message').textContent = '';
     });
   </script>
 </body>
