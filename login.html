@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #f0f0f0;
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,22 +18,24 @@
       background: #fff;
       padding: 2rem;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
       box-sizing: border-box;
+      text-align: center;
     }
     h1 {
       font-size: 2rem;
-      margin-bottom: 1rem;
-      color: #333;
-      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #007bff;
     }
     form {
       display: flex;
       flex-direction: column;
+      align-items: center;
     }
     input {
+      width: 100%;
       padding: 0.75rem;
       margin-bottom: 1rem;
       border: 1px solid #ddd;
@@ -41,6 +43,7 @@
       font-size: 1rem;
     }
     button {
+      width: 100%;
       padding: 0.75rem;
       border: none;
       border-radius: 5px;
@@ -118,58 +121,10 @@
     </form>
   </div>
 
-<!DOCTYPE html>
-<html>
-<head>
-  <title>LoveSongs App - Login</title>
-  <style>
-    /* Estilos para a página de login */
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f0f0f0;
-    }
-    .login-container {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    button {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 5px;
-      background-color: #4285F4;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #357ae8;
-    }
-  </style>
-</head>
-<body>
-  <div class="login-container">
-    <h1>Login</h1>
-    <button id="google-login">Login with Google</button>
-  </div>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
     
     const firebaseConfig = {
       apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
@@ -183,6 +138,34 @@
     
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    async function registerUser(email, password, username) {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        await setDoc(doc(collection(db, 'users'), user.uid), {
+          username: username,
+          email: email,
+          createdAt: serverTimestamp()
+        });
+        console.log('User registered successfully:', user);
+        window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
+      } catch (error) {
+        console.error('Error registering user:', error.message);
+      }
+    }
+
+    async function loginUser(email, password) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        console.log('User logged in successfully:', user);
+        window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
+      } catch (error) {
+        console.error('Error logging in user:', error.message);
+      }
+    }
 
     async function loginWithGoogle() {
       const provider = new GoogleAuthProvider();
@@ -190,21 +173,40 @@
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         console.log('User logged in with Google successfully:', user);
-        // Redirecionar para a página principal após o login
-        window.location.href = 'https://lovesongsapp.github.io/sucesso.html'; // Altere para o URL da página para onde deseja redirecionar
+        window.location.href = 'https://lovesongsapp.github.io/sucesso.html';
       } catch (error) {
         console.error('Error logging in with Google:', error.message);
       }
     }
 
+    document.getElementById('register-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const username = document.getElementById('register-username').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      await registerUser(email, password, username);
+    });
+
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      await loginUser(email, password);
+    });
+
     document.getElementById('google-login').addEventListener('click', async () => {
       await loginWithGoogle();
     });
+
+    document.getElementById('show-register').addEventListener('click', () => {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('register-form').style.display = 'block';
+    });
+
+    document.getElementById('show-login').addEventListener('click', () => {
+      document.getElementById('login-form').style.display = 'block';
+      document.getElementById('register-form').style.display = 'none';
+    });
   </script>
-</body>
-</html>
-
-
-  
 </body>
 </html>
