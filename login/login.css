@@ -1,0 +1,98 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+  text-align: center;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+.password-container {
+  position: relative;
+  width: 100%;
+  align-items: center;
+  display: flex;
+}
+.password-container input {
+  padding-right: 2.5rem;
+}
+.password-container ion-icon {
+  position: absolute;
+  right: 1rem;
+  
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  background: #007bff;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-bottom: 1rem;
+}
+button:hover {
+  background: #0056b3;
+}
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  background: #eeeeee;
+  color: #000;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 1rem;
+}
+.google-button img {
+  margin-right: 0.5rem;
+}
+.google-button:hover {
+  background: #dddddd;
+}
+.form-switch {
+  margin-top: 1rem;
+  text-align: center;
+}
+.form-switch a {
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+}
