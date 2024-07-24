@@ -1,6 +1,6 @@
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #fafafa;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,7 +16,7 @@ body {
   background: #fff;
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  /*box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);*/
   width: 100%;
   max-width: 400px;
   text-align: center;
