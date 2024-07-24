@@ -44,7 +44,7 @@ async function loginUser(email, password) {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     console.log('User logged in successfully:', user);
-    alert('User logged in successfully!');
+    alert('Usuário logado com sucesso!');
     window.location.href = 'sucesso.html';
   } catch (error) {
     displayErrorMessage(error.message);
