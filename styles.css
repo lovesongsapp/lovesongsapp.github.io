@@ -103,11 +103,10 @@ font-weight: 400;
 input[type="range"] {
 -webkit-appearance: none;
 width: 100%;
-background: #ddd;
+background: #FFFFFF20;
 height: 3px;
 border-radius: 5px;
 outline: none;
-opacity: 0.7;
 transition: opacity .15s ease-in-out;
 }
 input[type="range"]:hover {
