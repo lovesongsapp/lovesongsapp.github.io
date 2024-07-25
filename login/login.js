@@ -30,8 +30,8 @@ async function registerUser(email, password, username) {
       createdAt: serverTimestamp()
     });
 
-    console.log('User registered successfully:', user);
-    alert('User registered successfully!');
+    console.log('Usuário cadastrado com sucesso:', user);
+    alert('Usuário cadastrado com sucesso!');
     window.location.href = '/login/sucesso.html';
   } catch (error) {
     displayErrorMessage(error.message);
@@ -43,9 +43,9 @@ async function loginUser(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    console.log('User logged in successfully:', user);
+    console.log('Usuário logado com sucesso:', user);
     alert('Usuário logado com sucesso!');
-    window.location.href = 'sucesso.html';
+    window.location.href = '/login/sucesso.html';
   } catch (error) {
     displayErrorMessage(error.message);
   }
@@ -57,8 +57,8 @@ async function loginWithGoogle() {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    console.log('User logged in with Google successfully:', user);
-    alert('User logged in with Google successfully!');
+    console.log('Usuário conectado com o Google com sucesso:', user);
+    alert('Usuário conectado com o Google com sucesso!');
     window.location.href = 'sucesso.html';
   } catch (error) {
     displayErrorMessage(error.message);
