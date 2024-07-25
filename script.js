@@ -273,6 +273,7 @@ function filterPlaylist(searchText) {
 
 // SHARE CONFIG
 // Compartilhamento com link da thumbnail
+// Compartilhamento com link da thumbnail
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
     const videoId = videoData.video_id;
