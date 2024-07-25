@@ -274,6 +274,7 @@ function filterPlaylist(searchText) {
 // SHARE CONFIG
 
 // Compartilhamento com thumbnail
+// Compartilhamento com link da thumbnail
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
     const videoId = videoData.video_id;
@@ -283,11 +284,8 @@ document.getElementById('share-icon').addEventListener('click', function() {
     if (navigator.share) {
         navigator.share({
             title: videoData.title,
-            text: `Confira este vídeo: ${videoData.title}`,
-            url: shareUrl,
-            files: [
-                new File([thumbnailUrl], `${videoId}.jpg`, {type: 'image/jpeg'})
-            ]
+            text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\nThumbnail: ${thumbnailUrl}`,
+            url: shareUrl
         }).then(() => {
             console.log('Compartilhamento bem-sucedido');
         }).catch((error) => {
@@ -295,6 +293,6 @@ document.getElementById('share-icon').addEventListener('click', function() {
         });
     } else {
         // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`Confira este vídeo: ${videoData.title}\n${shareUrl}\nThumbnail: ${thumbnailUrl}`);
+        alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}\nThumbnail: ${thumbnailUrl}`);
     }
 });
