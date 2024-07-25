@@ -273,7 +273,6 @@ function filterPlaylist(searchText) {
 
 // SHARE CONFIG
 // Compartilhamento com link da thumbnail
-// Compartilhamento com link da thumbnail
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
     const videoId = videoData.video_id;
@@ -282,7 +281,7 @@ document.getElementById('share-icon').addEventListener('click', function() {
 
     const shareData = {
         title: videoData.title,
-        text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n\nThumbnail: ${thumbnailUrl}\n`,
+        text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n`,
         url: shareUrl
     };
 
