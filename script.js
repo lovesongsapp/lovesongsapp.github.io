@@ -272,45 +272,24 @@ function filterPlaylist(searchText) {
 }
 
 // SHARE CONFIG
-document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoId = urlParams.get('videoId');
+// Compartilhamento
+document.getElementById('share-icon').addEventListener('click', function() {
+    const videoData = player.getVideoData();
+    const videoId = videoData.video_id;
+    const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
 
-            if (videoId) {
-                document.querySelector('meta[property="og:image"]').setAttribute('content', `https://img.youtube.com/vi/${videoId}/0.jpg`);
-                document.querySelector('meta[property="og:url"]').setAttribute('content', `https://lovesongsapp.github.io/?videoId=${videoId}`);
-            }
+    if (navigator.share) {
+        navigator.share({
+            title: videoData.title,
+            text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
+            url: shareUrl,
+        }).then(() => {
+            console.log('Compartilhamento bem-sucedido');
+        }).catch((error) => {
+            console.error('Erro ao compartilhar:', error);
         });
-
-        // Função para compartilhar vídeo
-        document.getElementById('share-icon').addEventListener('click', function() {
-            const videoData = player.getVideoData();
-            const videoId = videoData.video_id;
-            const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
-            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
-
-            // Atualizar metatags dinamicamente
-            document.querySelector('meta[property="og:image"]').setAttribute('content', thumbnailUrl);
-            document.querySelector('meta[property="og:url"]').setAttribute('content', shareUrl);
-
-            const shareData = {
-                title: videoData.title,
-                text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
-                url: shareUrl
-            };
-
-            if (navigator.share) {
-                navigator.share(shareData)
-                .then(() => {
-                    console.log('Compartilhamento bem-sucedido');
-                })
-                .catch((error) => {
-                    console.error('Erro ao compartilhar:', error);
-                    // Fallback para navegadores que não suportam a API de compartilhamento
-                    alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
-                });
-            } else {
-                // Fallback para navegadores que não suportam a API de compartilhamento
-                alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
-            }
-        });
+    } else {
+        // Fallback para navegadores que não suportam a API de compartilhamento
+        alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+    }
+});
