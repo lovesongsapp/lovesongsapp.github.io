@@ -285,30 +285,18 @@ document.getElementById('share-icon').addEventListener('click', function() {
         url: shareUrl
     };
 
-    if (navigator.canShare && navigator.canShare({ files: [] })) {
-        fetch(thumbnailUrl)
-            .then(response => response.blob())
-            .then(blob => {
-                const filesArray = [new File([blob], 'thumbnail.jpg', { type: blob.type })];
-                shareData.files = filesArray;
-
-                return navigator.share(shareData);
-            })
-            .then(() => {
-                console.log('Compartilhamento bem-sucedido');
-            })
-            .catch(error => {
-                console.error('Erro ao compartilhar:', error);
-                // Fallback para navegadores que não suportam a API de compartilhamento com arquivos
-                alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}\nThumbnail: ${thumbnailUrl}`);
-            });
-    } else {
-        // Fallback para navegadores que não suportam a API de compartilhamento ou compartilhamento com arquivos
-        navigator.share(shareData).then(() => {
+    if (navigator.share) {
+        navigator.share(shareData)
+        .then(() => {
             console.log('Compartilhamento bem-sucedido');
-        }).catch(error => {
+        })
+        .catch((error) => {
             console.error('Erro ao compartilhar:', error);
+            // Fallback para navegadores que não suportam a API de compartilhamento
             alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}\nThumbnail: ${thumbnailUrl}`);
         });
+    } else {
+        // Fallback para navegadores que não suportam a API de compartilhamento
+        alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}\nThumbnail: ${thumbnailUrl}`);
     }
 });
