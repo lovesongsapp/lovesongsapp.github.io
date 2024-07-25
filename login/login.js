@@ -28,7 +28,7 @@ function showSuccessMessage(message) {
   setTimeout(() => {
     successMessageElement.classList.remove('show');
     successMessageElement.classList.add('hidden');
-  }, 3000); // Ocultar mensagem após 3 segundos
+  }, 5000); // Ocultar mensagem após 3 segundos
 }
 
 // Função para login com Google
