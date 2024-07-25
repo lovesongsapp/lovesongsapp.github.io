@@ -172,6 +172,21 @@
         });
     });
 </script>
+
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoId = urlParams.get('videoId');
+
+            if (videoId) {
+                document.querySelector('meta[property="og:image"]').setAttribute('content', `https://img.youtube.com/vi/${videoId}/0.jpg`);
+                document.querySelector('meta[property="og:url"]').setAttribute('content', `https://lovesongsapp.github.io/?videoId=${videoId}`);
+            }
+        });
+    </script>
+
+
       
    </body>
 </html>
