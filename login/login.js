@@ -18,6 +18,35 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Função para mostrar mensagem de sucesso
+function showSuccessMessage(message) {
+  const successMessageElement = document.getElementById('success-message');
+  successMessageElement.textContent = message;
+  successMessageElement.classList.remove('hidden');
+  successMessageElement.classList.add('show');
+  
+  setTimeout(() => {
+    successMessageElement.classList.remove('show');
+    successMessageElement.classList.add('hidden');
+  }, 3000); // Ocultar mensagem após 3 segundos
+}
+
+// Função para login com Google
+async function loginWithGoogle() {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    console.log('Usuário conectado com o Google com sucesso:', user);
+    showSuccessMessage('Usuário conectado com o Google com sucesso!');
+    setTimeout(() => {
+      window.location.href = '/login/sucesso.html';
+    }, 3500); // Redirecionar após a mensagem ser exibida
+  } catch (error) {
+    displayErrorMessage(error.message);
+  }
+}
+
 // Função para registrar usuário
 async function registerUser(email, password, username) {
   try {
@@ -31,8 +60,10 @@ async function registerUser(email, password, username) {
     });
 
     console.log('Usuário cadastrado com sucesso:', user);
-    alert('Usuário cadastrado com sucesso!');
-    window.location.href = '/login/sucesso.html';
+    showSuccessMessage('Usuário cadastrado com sucesso!');
+    setTimeout(() => {
+      window.location.href = '/login/sucesso.html';
+    }, 3500); // Redirecionar após a mensagem ser exibida
   } catch (error) {
     displayErrorMessage(error.message);
   }
@@ -44,22 +75,10 @@ async function loginUser(email, password) {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     console.log('Usuário logado com sucesso:', user);
-    alert('Usuário logado com sucesso!');
-    window.location.href = '/login/sucesso.html';
-  } catch (error) {
-    displayErrorMessage(error.message);
-  }
-}
-
-// Função para login com Google
-async function loginWithGoogle() {
-  const provider = new GoogleAuthProvider();
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    console.log('Usuário conectado com o Google com sucesso:', user);
-    alert('Usuário conectado com o Google com sucesso!');
-    window.location.href = '/login/sucesso.html';
+    showSuccessMessage('Usuário logado com sucesso!');
+    setTimeout(() => {
+      window.location.href = '/login/sucesso.html';
+    }, 3500); // Redirecionar após a mensagem ser exibida
   } catch (error) {
     displayErrorMessage(error.message);
   }
@@ -69,7 +88,7 @@ async function loginWithGoogle() {
 async function resetPassword(email) {
   try {
     await sendPasswordResetEmail(auth, email);
-    alert('Enviamos um link para redefinir sua senha. Verifique seu email.');
+    showSuccessMessage('Enviamos um link para redefinir sua senha. Verifique seu email.');
   } catch (error) {
     displayErrorMessage(error.message);
   }
