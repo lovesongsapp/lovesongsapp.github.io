@@ -54,7 +54,9 @@ input {
 .password-container ion-icon {
   position: absolute;
   right: 1rem;
-  top: 50%;
+  top: 40%;
+  color: #999;
+  fobt-size: 24px;
   transform: translateY(-50%);
   cursor: pointer;
 }
