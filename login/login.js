@@ -152,9 +152,12 @@ function togglePasswordVisibility(inputId, eyeIconId) {
   });
 }
 
-function displayErrorMessage(message) {
+function displayErrorMessage(errorCode) {
   const errorMessageElement = document.getElementById('error-message');
+  const message = errorMessages[errorCode] || 'Ocorreu um erro. Por favor, tente novamente.';
   errorMessageElement.textContent = message;
+  errorMessageElement.classList.remove('hidden');
+  errorMessageElement.classList.add('show');
 }
 
 function clearErrorMessage() {
