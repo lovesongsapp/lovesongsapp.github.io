@@ -281,7 +281,7 @@ document.getElementById('share-icon').addEventListener('click', function() {
     if (navigator.share) {
         navigator.share({
             title: videoData.title,
-            text: `Confira este vídeo: ${videoData.title}`,
+            text: `🩷💚 Confira este vídeo: ${videoData.title}`,
             url: shareUrl,
         }).then(() => {
             console.log('Compartilhamento bem-sucedido');
@@ -290,6 +290,6 @@ document.getElementById('share-icon').addEventListener('click', function() {
         });
     } else {
         // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+        alert(`🩷💚 Confira este vídeo: ${videoData.title}\n${shareUrl}`);
     }
 });
