@@ -272,8 +272,6 @@ function filterPlaylist(searchText) {
 }
 
 // SHARE CONFIG
-
-// Compartilhamento com thumbnail
 // Compartilhamento com link da thumbnail
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
@@ -281,18 +279,36 @@ document.getElementById('share-icon').addEventListener('click', function() {
     const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
     const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
 
-    if (navigator.share) {
-        navigator.share({
-            title: videoData.title,
-            text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\nThumbnail: ${thumbnailUrl}`,
-            url: shareUrl
-        }).then(() => {
-            console.log('Compartilhamento bem-sucedido');
-        }).catch((error) => {
-            console.error('Erro ao compartilhar:', error);
-        });
+    const shareData = {
+        title: videoData.title,
+        text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n\nThumbnail: ${thumbnailUrl}\n`,
+        url: shareUrl
+    };
+
+    if (navigator.canShare && navigator.canShare({ files: [] })) {
+        fetch(thumbnailUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                const filesArray = [new File([blob], 'thumbnail.jpg', { type: blob.type })];
+                shareData.files = filesArray;
+
+                return navigator.share(shareData);
+            })
+            .then(() => {
+                console.log('Compartilhamento bem-sucedido');
+            })
+            .catch(error => {
+                console.error('Erro ao compartilhar:', error);
+                // Fallback para navegadores que não suportam a API de compartilhamento com arquivos
+                alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}\nThumbnail: ${thumbnailUrl}`);
+            });
     } else {
-        // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}\nThumbnail: ${thumbnailUrl}`);
+        // Fallback para navegadores que não suportam a API de compartilhamento ou compartilhamento com arquivos
+        navigator.share(shareData).then(() => {
+            console.log('Compartilhamento bem-sucedido');
+        }).catch(error => {
+            console.error('Erro ao compartilhar:', error);
+            alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}\nThumbnail: ${thumbnailUrl}`);
+        });
     }
 });
