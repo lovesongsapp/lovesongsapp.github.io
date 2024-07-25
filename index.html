@@ -30,16 +30,15 @@
       <link rel="mask-icon" href="https://lovesongsapp.github.io/icons/safari-pinned-tab.svg" color="#fc6700" />
       <!-- SEO | OG -->
       <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="keywords" content="love songs, músicas internacionais anos 80 e 90" />
-      <meta property="og:title" content="LoveSongs App" />
-      <meta property="og:description" content="A trilha sonora do amor" />
-      <!--<meta property="og:image" content="https://lovesongsapp.github.io/og-image.jpg" />-->
-      <meta content='website' property='og:type' />
-      <meta property="og:site_name" content="LoveSongs App" />
-      <meta name="mobile-web-app-capable" content="yes" />
-
-      <meta property="og:image" content="https://img.youtube.com/vi/${videoId}/0.jpg">
-    <meta property="og:url" content="https://lovesongsapp.github.io/?videoId=${videoId}">
+    <meta name="keywords" content="love songs, músicas internacionais anos 80 e 90" />
+    <meta property="og:title" content="LoveSongs App" />
+    <meta property="og:description" content="A trilha sonora do amor" />
+    <meta property="og:image" content="https://lovesongsapp.github.io/og-image.jpg" />
+    <meta content='website' property='og:type' />
+    <meta property="og:site_name" content="LoveSongs App" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta property="og:url" content="https://lovesongsapp.github.io/" />
+    
    </head>
    <body>
       
@@ -135,48 +134,6 @@
       <script src="proo.js"></script>
 
 <script>
-    // Sua configuração do Firebase
-    const firebaseConfig = {
-    const firebaseConfig = {
-    apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
-    authDomain: "lovesongs-1285e.firebaseapp.com",
-    projectId: "lovesongs-1285e",
-    storageBucket: "lovesongs-1285e.appspot.com",
-    messagingSenderId: "940749066428",
-    appId: "1:940749066428:web:4bc067e8721fa576fe40b9",
-    measurementId: "G-HLGV34NCB0"
-    };
-
-    // Inicialize o Firebase
-    firebase.initializeApp(firebaseConfig);
-
-    // Função para verificar se o usuário está logado
-    function isUserLoggedIn() {
-        return !!firebase.auth().currentUser;
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Modifique o evento de clique no botão play para verificar a autenticação
-        document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
-            if (!isUserLoggedIn()) {
-                window.location.href = 'login/login.html';
-                return;
-            }
-
-            if (isPlaying) {
-                player.pauseVideo();
-                this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
-            } else {
-                player.playVideo();
-                this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
-            }
-            isPlaying = !isPlaying;
-        });
-    });
-</script>
-
-
-<script>
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const videoId = urlParams.get('videoId');
@@ -184,6 +141,39 @@
             if (videoId) {
                 document.querySelector('meta[property="og:image"]').setAttribute('content', `https://img.youtube.com/vi/${videoId}/0.jpg`);
                 document.querySelector('meta[property="og:url"]').setAttribute('content', `https://lovesongsapp.github.io/?videoId=${videoId}`);
+            }
+        });
+
+        // Função para compartilhar vídeo
+        document.getElementById('share-icon').addEventListener('click', function() {
+            const videoData = player.getVideoData();
+            const videoId = videoData.video_id;
+            const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
+            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
+
+            // Atualizar metatags dinamicamente
+            document.querySelector('meta[property="og:image"]').setAttribute('content', thumbnailUrl);
+            document.querySelector('meta[property="og:url"]').setAttribute('content', shareUrl);
+
+            const shareData = {
+                title: videoData.title,
+                text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
+                url: shareUrl
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData)
+                .then(() => {
+                    console.log('Compartilhamento bem-sucedido');
+                })
+                .catch((error) => {
+                    console.error('Erro ao compartilhar:', error);
+                    // Fallback para navegadores que não suportam a API de compartilhamento
+                    alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+                });
+            } else {
+                // Fallback para navegadores que não suportam a API de compartilhamento
+                alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
             }
         });
     </script>
