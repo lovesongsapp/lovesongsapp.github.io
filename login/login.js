@@ -32,7 +32,7 @@ async function registerUser(email, password, username) {
 
     console.log('User registered successfully:', user);
     alert('User registered successfully!');
-    window.location.href = 'sucesso.html';
+    window.location.href = '/login/sucesso.html';
   } catch (error) {
     displayErrorMessage(error.message);
   }
