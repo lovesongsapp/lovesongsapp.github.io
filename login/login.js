@@ -95,46 +95,51 @@ async function resetPassword(email) {
 }
 
 // Adiciona listeners para os formulários e botões
-document.getElementById('register-form').addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const username = document.getElementById('register-username').value;
-  const email = document.getElementById('register-email').value;
-  const password = document.getElementById('register-password').value;
-  await registerUser(email, password, username);
-});
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('register-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const username = document.getElementById('register-username').value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    await registerUser(email, password, username);
+  });
 
-document.getElementById('login-form').addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
-  await loginUser(email, password);
-});
+  document.getElementById('login-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    await loginUser(email, password);
+  });
 
-document.getElementById('google-login').addEventListener('click', async () => {
-  await loginWithGoogle();
-});
+  document.getElementById('google-login').addEventListener('click', async () => {
+    await loginWithGoogle();
+  });
 
-document.getElementById('reset-password').addEventListener('click', async () => {
-  const email = document.getElementById('login-email').value;
-  if (email) {
-    await resetPassword(email);
-  } else {
-    alert('Por favor, insira seu email para redefinir sua senha.');
-  }
-});
+  document.getElementById('reset-password').addEventListener('click', async () => {
+    const email = document.getElementById('login-email').value;
+    if (email) {
+      await resetPassword(email);
+    } else {
+      alert('Por favor, insira seu email para redefinir sua senha.');
+    }
+  });
 
-document.getElementById('show-register').addEventListener('click', (event) => {
-  event.preventDefault();
-  document.getElementById('login-form').style.display = 'none';
-  document.getElementById('register-form').style.display = 'block';
-  clearErrorMessage();
-});
+  document.getElementById('show-register').addEventListener('click', (event) => {
+    event.preventDefault();
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+    clearErrorMessage();
+  });
 
-document.getElementById('show-login').addEventListener('click', (event) => {
-  event.preventDefault();
-  document.getElementById('register-form').style.display = 'none';
-  document.getElementById('login-form').style.display = 'block';
-  clearErrorMessage();
+  document.getElementById('show-login').addEventListener('click', (event) => {
+    event.preventDefault();
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+    clearErrorMessage();
+  });
+
+  togglePasswordVisibility('register-password', 'register-eye-icon');
+  togglePasswordVisibility('login-password', 'eye-icon');
 });
 
 function togglePasswordVisibility(inputId, eyeIconId) {
@@ -156,6 +161,3 @@ function clearErrorMessage() {
   const errorMessageElement = document.getElementById('error-message');
   errorMessageElement.textContent = '';
 }
-
-togglePasswordVisibility('register-password', 'register-eye-icon');
-togglePasswordVisibility('login-password', 'login-eye-icon');
