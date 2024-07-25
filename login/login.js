@@ -161,3 +161,11 @@ function clearErrorMessage() {
   const errorMessageElement = document.getElementById('error-message');
   errorMessageElement.textContent = '';
 }
+//mapeamento de mensagens de erro
+const errorMessages = {
+  'auth/invalid-credential': 'Credenciais inválidas. Por favor, verifique e tente novamente.',
+  'auth/user-not-found': 'Usuário não encontrado. Por favor, verifique o email e tente novamente.',
+  'auth/wrong-password': 'Senha incorreta. Por favor, tente novamente.',
+  'auth/email-already-in-use': 'Este email já está em uso. Por favor, use outro email.',
+  // Adicione outras mensagens de erro conforme necessário
+};
