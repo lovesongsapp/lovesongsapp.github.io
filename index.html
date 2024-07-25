@@ -126,58 +126,13 @@
          // Inicialize o valor da variável
          rangeInput.style.setProperty('--slider-value', `${rangeInput.value}%`);
       </script>
+      
       <script src="add-home.js"></script>
       <script src="https://www.youtube.com/iframe_api"></script>
       <script src="script.js"></script>
       <script src="script-sw.js"></script>
       <script src="media.js"></script>
       <script src="proo.js"></script>
-
-<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoId = urlParams.get('videoId');
-
-            if (videoId) {
-                document.querySelector('meta[property="og:image"]').setAttribute('content', `https://img.youtube.com/vi/${videoId}/0.jpg`);
-                document.querySelector('meta[property="og:url"]').setAttribute('content', `https://lovesongsapp.github.io/?videoId=${videoId}`);
-            }
-        });
-
-        // Função para compartilhar vídeo
-        document.getElementById('share-icon').addEventListener('click', function() {
-            const videoData = player.getVideoData();
-            const videoId = videoData.video_id;
-            const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
-            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
-
-            // Atualizar metatags dinamicamente
-            document.querySelector('meta[property="og:image"]').setAttribute('content', thumbnailUrl);
-            document.querySelector('meta[property="og:url"]').setAttribute('content', shareUrl);
-
-            const shareData = {
-                title: videoData.title,
-                text: `Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}`,
-                url: shareUrl
-            };
-
-            if (navigator.share) {
-                navigator.share(shareData)
-                .then(() => {
-                    console.log('Compartilhamento bem-sucedido');
-                })
-                .catch((error) => {
-                    console.error('Erro ao compartilhar:', error);
-                    // Fallback para navegadores que não suportam a API de compartilhamento
-                    alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
-                });
-            } else {
-                // Fallback para navegadores que não suportam a API de compartilhamento
-                alert(`Permita que essa música toque sua alma! Confira este vídeo: ${videoData.title}\n${shareUrl}`);
-            }
-        });
-    </script>
-
 
       
    </body>
