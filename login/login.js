@@ -59,7 +59,7 @@ async function loginWithGoogle() {
     const user = result.user;
     console.log('Usuário conectado com o Google com sucesso:', user);
     alert('Usuário conectado com o Google com sucesso!');
-    window.location.href = 'sucesso.html';
+    window.location.href = '/login/sucesso.html';
   } catch (error) {
     displayErrorMessage(error.message);
   }
