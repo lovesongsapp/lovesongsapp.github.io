@@ -33,12 +33,19 @@ function checkAuthAndInitializePlayer() {
     onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log('Usuário autenticado:', user);
-            onYouTubeIframeAPIReady();
+            loadYouTubeAPI();
         } else {
             console.log('Nenhum usuário autenticado. Redirecionando para a página de login...');
             window.location.href = '/login/login.html';
         }
     });
+}
+
+function loadYouTubeAPI() {
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
 
 function onYouTubeIframeAPIReady() {
@@ -234,11 +241,12 @@ async function fetchPlaylistData() {
 }
 
 function renderPlaylist(playlist) {
-    const playlistContainer = document.getElementById('playlist-items');
+    const playlistContainer = document.querySelector('.playlist-items');
     playlistContainer.innerHTML = '';
 
     playlist.forEach(video => {
-        const listItem = document.createElement('li');
+        const listItem = document.createElement('div');
+        listItem.className = 'playlist-item';
 
         const thumbnail = document.createElement('img');
         thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
@@ -274,17 +282,9 @@ document.getElementById('google-login').addEventListener('click', function() {
         .then((result) => {
             const user = result.user;
             console.log('Usuário logado:', user);
-            window.location.href = '/login/successo.html';
+            window.location.href = 'success.html';
         })
         .catch((error) => {
             console.error('Erro ao fazer login com o Google:', error);
         });
-});
-
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log('Usuário autenticado:', user);
-    } else {
-        console.log('Nenhum usuário autenticado.');
-    }
 });
