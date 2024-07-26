@@ -1,3 +1,7 @@
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+
+const auth = getAuth();
+
 let player;
 let maxQuality = 'large'; // Definir resolução máxima
 let minQuality = 'medium'; // Definir resolução mínima
@@ -19,11 +23,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Verifique se todos os elementos DOM necessários estão presentes
     if (progressBar && currentTimeDisplay && durationDisplay) {
-        onYouTubeIframeAPIReady();
+        checkAuthAndInitializePlayer();
     } else {
         console.error('Um ou mais elementos DOM não foram encontrados.');
     }
 });
+
+function checkAuthAndInitializePlayer() {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log('Usuário autenticado:', user);
+            onYouTubeIframeAPIReady();
+        } else {
+            console.log('Nenhum usuário autenticado. Redirecionando para a página de login...');
+            window.location.href = '/login/login.html';
+        }
+    });
+}
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -229,67 +245,46 @@ function renderPlaylist(playlist) {
         listItem.appendChild(thumbnail);
 
         const textContainer = document.createElement('div');
-        textContainer.className = 'text-container';
+        textContainer.className = 'playlist-item-text';
 
-        const titleText = document.createElement('span');
-        titleText.className = 'title';
-        titleText.textContent = video.title;
-        textContainer.appendChild(titleText);
+        const title = document.createElement('span');
+        title.className = 'playlist-item-title';
+        title.textContent = video.title;
+        textContainer.appendChild(title);
 
-        const authorText = document.createElement('span');
-        authorText.className = 'author';
-        authorText.textContent = video.author;
-        textContainer.appendChild(authorText);
+        const author = document.createElement('span');
+        author.className = 'playlist-item-artist';
+        author.textContent = video.author;
+        textContainer.appendChild(author);
 
         listItem.appendChild(textContainer);
 
-        listItem.addEventListener('click', () => {
-            if (isShuffle) {
-                // Encontrar o índice correspondente ao vídeo clicado na lista original
-                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
-                player.playVideoAt(originalIndex);
-            } else {
-                player.playVideoAt(video.index);
-            }
+        listItem.addEventListener('click', function() {
+            player.playVideoAt(video.index);
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
         playlistContainer.appendChild(listItem);
     });
 }
-// BUSCA CONFIG
 
-// Adicione o evento de keyup ao input de texto
-document.getElementById('search-input').addEventListener('keyup', function(event) {
-    const searchText = event.target.value.toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
+document.getElementById('google-login').addEventListener('click', function() {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            const user = result.user;
+            console.log('Usuário logado:', user);
+            window.location.href = '/login/successo.html';
+        })
+        .catch((error) => {
+            console.error('Erro ao fazer login com o Google:', error);
+        });
 });
 
-// Crie a função que filtre a playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
-}
-
-// SHARE CONFIG
-// Compartilhamento
-document.getElementById('share-icon').addEventListener('click', function() {
-    const videoData = player.getVideoData();
-    const videoId = videoData.video_id;
-    const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
-
-    if (navigator.share) {
-        navigator.share({
-            title: videoData.title,
-            text: `🩷💚 Confira este vídeo: ${videoData.title}`,
-            url: shareUrl,
-        }).then(() => {
-            console.log('Compartilhamento bem-sucedido');
-        }).catch((error) => {
-            console.error('Erro ao compartilhar:', error);
-        });
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log('Usuário autenticado:', user);
     } else {
-        // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`🩷💚 Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+        console.log('Nenhum usuário autenticado.');
     }
 });
