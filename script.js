@@ -1,6 +1,6 @@
 let player;
-let maxQuality = 'large'; // Definir resolução máxima
-let minQuality = 'medium'; // Definir resolução mínima
+let maxQuality = 'medium'; // Definir resolução máxima
+let minQuality = 'low'; // Definir resolução mínima
 let isPlaying = false;
 let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
