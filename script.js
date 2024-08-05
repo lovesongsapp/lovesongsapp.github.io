@@ -34,10 +34,13 @@ function onYouTubeIframeAPIReady() {
         width: '100%',
         videoId: videoId,
         playerVars: {
-            listType: 'playlist',
-            list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
-            autoplay: 0,
-            controls: 0
+            'listType': 'playlist',
+            'list': 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
+            'autoplay': 0,
+            'controls': 0,
+            'iv_load_policy': 3,
+            'modestbranding': 1,
+            'rel': 0 // Evita mostrar vídeos relacionados ao final
         },
         events: {
             'onReady': onPlayerReady,
