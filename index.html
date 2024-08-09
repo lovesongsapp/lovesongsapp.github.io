@@ -1,6 +1,33 @@
 <!DOCTYPE html>
 <html lang="pt-br">
    <head>
+<!-- BREAVE assíncrona START -->
+      <script>
+  function isBrave() {
+    return navigator.brave && typeof navigator.brave.isBrave === 'function' ? navigator.brave.isBrave() : false;
+  }
+
+  async function checkBrowser() {
+    const isBraveBrowser = await isBrave();
+
+    if (!isBraveBrowser) {
+      // Verifica o sistema operacional e redireciona para a loja correta
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      if (/android/i.test(userAgent)) {
+        window.location.href = "https://play.google.com/store/apps/details?id=com.brave.browser";
+      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        window.location.href = "https://apps.apple.com/us/app/brave-private-web-browser/id1052879175";
+      } else {
+        alert("Por favor, instale o navegador Brave para acessar esta página.");
+      }
+    }
+  }
+
+  // Chama a função ao carregar a página
+  window.onload = checkBrowser;
+</script>
+<!-- BREAVE assíncrona END -->
       <link href="//www.youtube.com" rel="dns-prefetch"/>
       <link href="//www.youtube.com" rel="preconnect" crossorigin/>
       <meta charset="UTF-8">
