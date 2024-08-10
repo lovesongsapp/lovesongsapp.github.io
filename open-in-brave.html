@@ -1,77 +1,41 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrir no Brave</title>
+    <script>
+      function openInBrave() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+        const braveUrl = "brave://open-url?url=https://lovesongsapp.github.io";
 
-<script>
-  function openInBrave() {
-    const userAgent = navigator.userAgent.toLowerCase();
-    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-    const braveUrl = "brave://open-url?url=https://lovesongsapp.github.io";
+        if (isMobile) {
+          // Tenta abrir o Brave no celular usando o esquema intent
+          window.location.href = "intent://lovesongsapp.github.io#Intent;scheme=https;package=com.brave.browser;end";
+          
+          setTimeout(() => {
+            if (!document.hidden) {
+              // Redireciona para uma página de instruções se o Brave não for aberto
+              alert("Parece que o Brave não foi aberto. Por favor, abra o Brave manualmente e acesse o site.");
+            }
+          }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
+        } else {
+          // Tenta abrir o Brave no PC
+          window.location.href = braveUrl;
 
-    if (isMobile) {
-      // Tenta abrir o Brave no celular usando o esquema intent
-      window.location.href = "intent://lovesongsapp.github.io#Intent;scheme=https;package=com.brave.browser;end";
-      
-      setTimeout(() => {
-        if (!document.hidden) {
-          // Redireciona para a página de instruções se o Brave não for aberto
-          alert("Parece que o Brave não foi aberto. Por favor, abra o Brave manualmente e acesse o site.");
+          setTimeout(() => {
+            if (!document.hidden) {
+              // Redireciona para uma página de instruções se o Brave não for aberto
+              alert("Parece que o Brave não foi aberto. Por favor, abra o Brave manualmente e acesse o site.");
+            }
+          }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
         }
-      }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
-    } else {
-      // Tenta abrir o Brave no PC
-      window.location.href = braveUrl;
-
-      setTimeout(() => {
-        if (!document.hidden) {
-          // Redireciona para a página de instruções se o Brave não for aberto
-          alert("Parece que o Brave não foi aberto. Por favor, abra o Brave manualmente e acesse o site.");
-        }
-      }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
-    }
-  }
-</script>
-
-
-
-  
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instruções para Abrir no Brave</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      padding: 20px;
-    }
-    .container {
-      max-width: 500px;
-    }
-    button {
-      background-color: #f37231;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-  </style>
+      }
+    </script>
 </head>
 <body>
-  <div class="container">
-    <h1>Instale o Navegador Brave</h1>
-    <p>Você foi redirecionado para instalar o navegador Brave Após a instalação, abra o Brave e acesse novamente o nosso app.</p>
-    <p>Ou clique no botão abaixo para abrir nosso App no Brave, caso você já tenha o navegador instalado.</p>
+    <h1>Abra o site no Brave</h1>
     <button onclick="openInBrave()">Abrir no Brave</button>
-
-  Abrir no Brave
-</button>
-  </div>
 </body>
 </html>
