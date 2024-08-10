@@ -122,8 +122,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Verifica se o botão "Pular Anúncio" está disponível a cada 500ms
         const checkForSkipButton = setInterval(function() {
-            // Seleciona o botão de pular anúncio corretamente com base nas informações fornecidas
-            const skipButton = document.querySelector('.ytp-ad-skip-button-modern.ytp-button');
+            // Primeiro, tentamos selecionar usando o seletor completo
+            let skipButton = document.querySelector('.ytp-ad-skip-button-slot button.ytp-ad-skip-button-modern');
+
+            // Se o botão não for encontrado, tentamos uma abordagem mais genérica
+            if (!skipButton) {
+                skipButton = document.querySelector('.ytp-ad-skip-button, .ytp-ad-skip-button-container-detached button');
+            }
 
             if (skipButton) {
                 console.log("Botão de pular anúncio detectado.");
@@ -138,6 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 
 
 
