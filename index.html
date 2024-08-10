@@ -110,7 +110,9 @@
          <p class="message">Adicionar o aplicativo a sua tela inicial?</p>
          <button class="install-btn-app" id="installButton">Adicionar</button>
       </div>
+      
 <!-- SKIP ADS--> 
+      
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const skipIcon = document.getElementById('skip-icon');
@@ -118,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     skipIcon.addEventListener('click', function() {
         // Verifica se o botão "Pular Anúncio" está disponível a cada 500ms
         const checkForSkipButton = setInterval(function() {
-            const skipButton = document.querySelector('ytp-ad-skip-button-modern ytp-button ytp-ad-text');
+            const skipButton = document.querySelector('.ytp-ad-skip-button');
 
             if (skipButton) {
                 // Se o botão for encontrado, simula um clique nele e para a verificação
@@ -132,11 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
-
-
-
-      
+ 
       <script>
          const rangeInput = document.querySelector('input[type="range"]');
          
