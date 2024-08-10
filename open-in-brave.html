@@ -1,6 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
+<script>
+  function openInBrave() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    const braveUrl = "brave://open-url?url=https://lovesongsapp.github.io";
+
+    if (isMobile) {
+      // Tenta abrir o Brave no celular usando o esquema intent
+      window.location.href = "intent://lovesongsapp.github.io#Intent;scheme=https;package=com.brave.browser;end";
+      
+      setTimeout(() => {
+        if (!document.hidden) {
+          // Redireciona para a página de instruções se o Brave não for aberto
+          alert("Parece que o Brave não foi aberto. Por favor, abra o Brave manualmente e acesse o site.");
+        }
+      }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
+    } else {
+      // Tenta abrir o Brave no PC
+      window.location.href = braveUrl;
+
+      setTimeout(() => {
+        if (!document.hidden) {
+          // Redireciona para a página de instruções se o Brave não for aberto
+          alert("Parece que o Brave não foi aberto. Por favor, abra o Brave manualmente e acesse o site.");
+        }
+      }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
+    }
+  }
+</script>
+
+
+
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Instruções para Abrir no Brave</title>
