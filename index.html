@@ -4,34 +4,17 @@
 <!-- BRAVE assíncrona START -->
       
 <script>
-  function openInBrave() {
+  function detectAndRedirect() {
     const userAgent = navigator.userAgent.toLowerCase();
-    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-    const braveUrl = "brave://open-url?url=https://lovesongsapp.github.io";
-
-    if (isMobile) {
-      // Tenta abrir o Brave no celular usando o esquema intent
-      window.location.href = "intent://lovesongsapp.github.io#Intent;scheme=https;package=com.brave.browser;end";
-      
-      setTimeout(() => {
-        if (!document.hidden) {
-          // Redireciona para a página de instruções se o Brave não for aberto
-          window.location.href = "https://lovesongsapp.github.io/open-in-brave.html";
-        }
-      }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
-    } else {
-      // Tenta abrir o Brave no PC
-      window.location.href = braveUrl;
-
-      setTimeout(() => {
-        if (!document.hidden) {
-          // Redireciona para a página de instruções se o Brave não for aberto
-          window.location.href = "https://lovesongsapp.github.io/open-in-brave.html";
-        }
-      }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
+    if (!userAgent.includes('brave')) {
+      // Se o navegador não for Brave, redireciona para a página open-in-brave.html
+      window.location.href = "https://lovesongsapp.github.io/open-in-brave.html";
     }
   }
+  
+  detectAndRedirect();
 </script>
+
 
 
 <!-- BRAVE assíncrona END -->
