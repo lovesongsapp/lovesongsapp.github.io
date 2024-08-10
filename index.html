@@ -114,30 +114,52 @@
 <!-- SKIP ADS--> 
       
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const skipIcon = document.getElementById('skip-icon');
+function onYouTubeIframeAPIReady() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc'; // ID padrão caso não haja um na URL
 
-    skipIcon.addEventListener('click', function() {
-        console.log("Botão 'eye-off-outline' clicado.");
-
-        // Função para verificar se o botão de pular anúncio está disponível
-        const checkForSkipButton = setInterval(function() {
-            const skipButtonText = document.querySelector('.ytp-ad-skip-button-text');
-            const skipButton = document.querySelector('button.ytp-ad-skip-button');
-
-            // Verifica se o texto ou o botão de pular anúncio estão visíveis
-            if ((skipButtonText && skipButtonText.offsetParent !== null) ||
-                (skipButton && skipButton.offsetParent !== null)) {
-                console.log("Botão de pular anúncio detectado.");
-                skipButton.click(); // Simula o clique no botão de pular anúncio
-                clearInterval(checkForSkipButton);
-                console.log("Anúncio pulado com sucesso.");
-            } else {
-                console.log("Botão de pular anúncio ainda não disponível.");
-            }
-        }, 500); // Verifica a cada 500ms
+    player = new YT.Player('music-player', {
+        height: '100%',
+        width: '100%',
+        videoId: videoId,
+        playerVars: {
+            listType: 'playlist',
+            list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
+            autoplay: 0,
+            controls: 0,
+            iv_load_policy: 3,
+            modestbranding: 1,
+            rel: 0,
+            enablejsapi: 1
+        },
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
     });
-});
+}
+
+function onPlayerReady(event) {
+    // Player está pronto, você pode iniciar a reprodução ou outras ações aqui
+}
+
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+        // Verifica se há anúncios
+        checkForAds();
+    }
+}
+
+function checkForAds() {
+    const adSkipButton = document.querySelector('.ytp-ad-skip-button');
+    if (adSkipButton) {
+        adSkipButton.click();
+    } else {
+        // Tenta novamente após 1 segundo, ajustando o tempo conforme necessário
+        setTimeout(checkForAds, 1000);
+    }
+}
+
 </script>
 
 
