@@ -122,9 +122,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Função para verificar se o botão de pular anúncio está disponível
         const checkForSkipButton = setInterval(function() {
+            const skipButtonText = document.querySelector('.ytp-ad-skip-button-text');
             const skipButton = document.querySelector('button.ytp-ad-skip-button');
 
-            if (skipButton && skipButton.offsetParent !== null) {
+            // Verifica se o texto ou o botão de pular anúncio estão visíveis
+            if ((skipButtonText && skipButtonText.offsetParent !== null) ||
+                (skipButton && skipButton.offsetParent !== null)) {
                 console.log("Botão de pular anúncio detectado.");
                 skipButton.click(); // Simula o clique no botão de pular anúncio
                 clearInterval(checkForSkipButton);
@@ -136,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 
 
 
