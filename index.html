@@ -3,20 +3,35 @@
    <head>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Lista de seletores comuns para anúncios
-    const adSelectors = [
-      'div[class*="sponsor"]',
-      'div[class*="banner"]'
-    ];
+  // Intercepta as requisições de rede e bloqueia scripts de publicidade
+  const blockedHosts = [
+    'googlesyndication.com',
+    'doubleclick.net',
+    'adservice.google.com',
+    'adsbygoogle.js'
+  ];
 
-    // Loop através dos seletores e remove os elementos correspondentes
-    adSelectors.forEach(selector => {
-      const ads = document.querySelectorAll(selector);
-      ads.forEach(ad => ad.remove());
-    });
-  });
+  (function() {
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+      if (blockedHosts.some(host => args[0].includes(host))) {
+        return Promise.reject(new Error('Blocked ad request'));
+      }
+      return originalFetch.apply(this, args);
+    };
+  })();
+
+  // Bloqueia scripts carregados via tag <script>
+  const originalCreateElement = document.createElement;
+  document.createElement = function(tagName, ...args) {
+    const element = originalCreateElement.call(document, tagName, ...args);
+    if (tagName === 'script' && blockedHosts.some(host => element.src.includes(host))) {
+      element.src = ''; // Bloqueia o carregamento do script
+    }
+    return element;
+  };
 </script>
+
 
       
       <link href="//www.youtube.com" rel="dns-prefetch"/>
