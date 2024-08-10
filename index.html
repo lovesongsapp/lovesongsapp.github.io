@@ -3,36 +3,29 @@
    <head>
 <!-- BRAVE assíncrona START -->
       <script>
-  function isBrave() {
-    return navigator.brave && typeof navigator.brave.isBrave === 'function' ? navigator.brave.isBrave() : false;
-  }
-
-  async function checkBrowser() {
-    const isBraveBrowser = await isBrave();
-
-    if (!isBraveBrowser) {
-      // Verifica o sistema operacional e redireciona para a loja correta
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-      if (/android/i.test(userAgent)) {
-        // Redireciona para Play Store
-        window.location.href = "https://play.google.com/store/apps/details?id=com.brave.browser";
-      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        // Redireciona para App Store
-        window.location.href = "https://apps.apple.com/us/app/brave-private-web-browser/id1052879175";
-      } else {
-        alert("Por favor, instale o navegador Brave para acessar esta página.");
-      }
-
-      // Instruções para abrir o site após instalação
+  function openInBrave() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    const braveUrl = "brave://open-url?url=https://lovesongsapp.github.io";
+    
+    if (isMobile) {
+      // Abre o Brave no celular usando o esquema intent
+      window.location.href = "intent://lovesongsapp.github.io#Intent;scheme=https;package=com.brave.browser;end";
+    } else {
+      // Tenta abrir o Brave no PC
+      window.location.href = braveUrl;
+      
+      // Verifica se o Brave foi aberto e redireciona se necessário
       setTimeout(() => {
-        window.location.href = "https://lovesongsapp.github.io/open-in-brave.html";
-      }, 3000);  // Espera 3 segundos antes de redirecionar para a página de instruções
+        if (!document.hidden) {
+          // Caso o Brave não tenha sido aberto, sugere ao usuário para instalá-lo
+          if (confirm("Não foi possível abrir o Brave. Deseja instalá-lo?")) {
+            window.location.href = "https://brave.com/download";
+          }
+        }
+      }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
     }
   }
-
-  // Chama a função ao carregar a página
-  window.onload = checkBrowser;
 </script>
 
 <!-- BRAVE assíncrona END -->
