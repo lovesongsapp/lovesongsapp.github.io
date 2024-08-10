@@ -19,11 +19,33 @@
   detectAndRedirect();
 
 </script>-->
-
-
-
 <!-- BRAVE assíncrona END -->
 
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Lista de seletores comuns para anúncios
+    const adSelectors = [
+      'iframe[src*="ads"]',
+      'div[class*="ad"]',
+      'div[id*="ad"]',
+      'div[class*="sponsor"]',
+      'div[class*="banner"]'
+    ];
+
+    // Loop através dos seletores e remove os elementos correspondentes
+    adSelectors.forEach(selector => {
+      const ads = document.querySelectorAll(selector);
+      ads.forEach(ad => ad.remove());
+    });
+  });
+</script>
+
+
+
+
+
+
+      
       <link href="//www.youtube.com" rel="dns-prefetch"/>
       <link href="//www.youtube.com" rel="preconnect" crossorigin/>
       <meta charset="UTF-8">
