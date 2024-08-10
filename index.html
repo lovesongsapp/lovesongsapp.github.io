@@ -15,18 +15,26 @@
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
       if (/android/i.test(userAgent)) {
+        // Redireciona para Play Store
         window.location.href = "https://play.google.com/store/apps/details?id=com.brave.browser";
       } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        // Redireciona para App Store
         window.location.href = "https://apps.apple.com/us/app/brave-private-web-browser/id1052879175";
       } else {
         alert("Por favor, instale o navegador Brave para acessar esta página.");
       }
+
+      // Instruções para abrir o site após instalação
+      setTimeout(() => {
+        window.location.href = "https://lovesongsapp.github.io/open-in-brave.html";
+      }, 3000);  // Espera 3 segundos antes de redirecionar para a página de instruções
     }
   }
 
   // Chama a função ao carregar a página
   window.onload = checkBrowser;
 </script>
+
 <!-- BREAVE assíncrona END -->
       <link href="//www.youtube.com" rel="dns-prefetch"/>
       <link href="//www.youtube.com" rel="preconnect" crossorigin/>
