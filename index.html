@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-br">
    <head>
+
+<!-- script block url-->      
 <script>
 (function() {
+    // Lista de URLs a serem bloqueadas
+    const blockedUrls = [
+        "ad.doubleclick.net",
+        "doubleclick.net",
+        "googleadservices.com",
+        "www.googleadservices.com"
+    ];
+
     // Interceptando chamadas de fetch
     const originalFetch = window.fetch;
     window.fetch = function() {
         const url = arguments[0];
-        if (url.includes("https://googleads.g.doubleclick.net/pagead/id")) {
-            console.log("Bloqueado:", url);
+        if (blockedUrls.some(blockedUrl => url.includes(blockedUrl))) {
+            console.log("Bloqueado (fetch):", url);
             return Promise.resolve(new Response(null, { status: 204 }));
         }
         return originalFetch.apply(this, arguments);
@@ -17,16 +27,16 @@
     // Interceptando chamadas de XMLHttpRequest
     const originalXhrOpen = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(method, url) {
-        if (url.includes("https://googleads.g.doubleclick.net/pagead/id")) {
-            console.log("Bloqueado:", url);
+        if (blockedUrls.some(blockedUrl => url.includes(blockedUrl))) {
+            console.log("Bloqueado (XHR):", url);
             this.abort();
         } else {
             originalXhrOpen.apply(this, arguments);
         }
     };
 })();
-
 </script>
+
       
       <link href="//www.youtube.com" rel="dns-prefetch"/>
       <link href="//www.youtube.com" rel="preconnect" crossorigin/>
