@@ -120,20 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
     skipIcon.addEventListener('click', function() {
         console.log("Botão 'eye-off-outline' clicado.");
 
-        // Verifica se o botão "Pular Anúncio" está disponível a cada 500ms
+        // Função para verificar se o botão de pular anúncio está disponível
         const checkForSkipButton = setInterval(function() {
-            // Primeiro, tentamos selecionar usando o seletor completo
-            let skipButton = document.querySelector('.ytp-ad-skip-button-slot button.ytp-ad-skip-button-modern');
+            const skipButton = document.querySelector('button.ytp-ad-skip-button');
 
-            // Se o botão não for encontrado, tentamos uma abordagem mais genérica
-            if (!skipButton) {
-                skipButton = document.querySelector('skip-button');
-            }
-
-            if (skipButton) {
+            if (skipButton && skipButton.offsetParent !== null) {
                 console.log("Botão de pular anúncio detectado.");
-                // Forçar o clique no botão de pular anúncio
-                skipButton.click();
+                skipButton.click(); // Simula o clique no botão de pular anúncio
                 clearInterval(checkForSkipButton);
                 console.log("Anúncio pulado com sucesso.");
             } else {
@@ -143,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 
 
 
