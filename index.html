@@ -149,13 +149,13 @@
       </div>
 <!-- SKIP ADS--> 
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const skipIcon = document.getElementById('skip-icon');
 
     skipIcon.addEventListener('click', function() {
         // Verifica se o botão "Pular Anúncio" está disponível a cada 500ms
         const checkForSkipButton = setInterval(function() {
-            const skipButton = document.querySelector('.ytp-ad-skip-button');
+            const skipButton = document.querySelector('.ytp-ad-skip-button-modern');
 
             if (skipButton) {
                 // Se o botão for encontrado, simula um clique nele e para a verificação
@@ -168,8 +168,8 @@
         }, 500); // Verifica a cada 500ms
     });
 });
-
 </script>
+
 
 
 
