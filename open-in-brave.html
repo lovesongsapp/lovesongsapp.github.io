@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrir no Brave</title>
-    <script>
+
+
+<script>
       function openInBrave() {
         const userAgent = navigator.userAgent.toLowerCase();
         const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
@@ -33,9 +32,42 @@
         }
       }
     </script>
+
+    
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+    }
+    button {
+      background-color: #f37231;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Abra o site no Brave</h1>
+  <div class="container">
+    <h1>Instale o Navegador Brave</h1>
+    <p>Você foi redirecionado para instalar o navegador Brave. Após a instalação, abra o Brave e acesse novamente o nosso site.</p>
+    <p>Ou clique no botão abaixo para abrir nosso site no Brave, caso você já tenha o navegador instalado.</p>
+    <button onclick="window.location.href='brave://open-url?url=https://lovesongsapp.github.io'">Abrir no Brave</button>
+    <br>
     <button onclick="openInBrave()">Abrir no Brave</button>
+
+  </div>
 </body>
 </html>
