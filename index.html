@@ -1,33 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-br">
    <head>
-<!-- Yandex assíncrona START -->
+<!-- BRAVE assíncrona START -->
       <script>
-  function isYandex() {
-    // Verifica se o navegador é Yandex
-    return /YaBrowser/i.test(navigator.userAgent);
+  function isBrave() {
+    return navigator.brave && typeof navigator.brave.isBrave === 'function' ? navigator.brave.isBrave() : false;
   }
 
   async function checkBrowser() {
-    const isYandexBrowser = isYandex();
+    const isBraveBrowser = await isBrave();
 
-    if (!isYandexBrowser) {
+    if (!isBraveBrowser) {
       // Verifica o sistema operacional e redireciona para a loja correta
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
       if (/android/i.test(userAgent)) {
-        // Redireciona para a Play Store para instalar o Yandex
-        window.location.href = "https://play.google.com/store/apps/details?id=com.yandex.browser";
+        // Redireciona para Play Store
+        window.location.href = "https://play.google.com/store/apps/details?id=com.brave.browser";
       } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        // Redireciona para a App Store para instalar o Yandex
-        window.location.href = "https://apps.apple.com/us/app/yandex-browser/id483693909";
+        // Redireciona para App Store
+        window.location.href = "https://apps.apple.com/us/app/brave-private-web-browser/id1052879175";
       } else {
-        alert("Por favor, instale o navegador Yandex para acessar esta página.");
+        alert("Por favor, instale o navegador Brave para acessar esta página.");
       }
 
-      // Instruções para abrir o site após a instalação
+      // Instruções para abrir o site após instalação
       setTimeout(() => {
-        window.location.href = "https://lovesongsapp.github.io/open-in-yandex.html";
+        window.location.href = "https://lovesongsapp.github.io/open-in-brave.html";
       }, 3000);  // Espera 3 segundos antes de redirecionar para a página de instruções
     }
   }
@@ -35,7 +34,8 @@
   // Chama a função ao carregar a página
   window.onload = checkBrowser;
 </script>
-<!-- YANDEX assíncrona END -->
+
+<!-- BRAVE assíncrona END -->
 
       <link href="//www.youtube.com" rel="dns-prefetch"/>
       <link href="//www.youtube.com" rel="preconnect" crossorigin/>
