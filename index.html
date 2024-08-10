@@ -3,110 +3,30 @@
    <head>
 <script>
 (function() {
-    // 1. Filtragem de conteúdo: Bloqueio de URLs de anúncios conhecidos
-    const adDomains = [
-        "googlesyndication.com",
-        "doubleclick.net",
-        "adservice.google.com"
-    ];
-
-    // Interceptar requisições de rede e bloquear anúncios
+    // Interceptando chamadas de fetch
     const originalFetch = window.fetch;
     window.fetch = function() {
         const url = arguments[0];
-        if (adDomains.some(domain => url.includes(domain))) {
+        if (url.includes("https://googleads.g.doubleclick.net/pagead/id")) {
             console.log("Bloqueado:", url);
             return Promise.resolve(new Response(null, { status: 204 }));
         }
         return originalFetch.apply(this, arguments);
     };
 
+    // Interceptando chamadas de XMLHttpRequest
     const originalXhrOpen = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(method, url) {
-        if (adDomains.some(domain => url.includes(domain))) {
+        if (url.includes("https://googleads.g.doubleclick.net/pagead/id")) {
             console.log("Bloqueado:", url);
             this.abort();
         } else {
             originalXhrOpen.apply(this, arguments);
         }
     };
-
-    // 2. Manipulação de Scripts: Bloquear scripts específicos de anúncios
-    const scriptBlockList = [
-        "ads.js",
-        "ads_iframe.js",
-        "ima3.js"
-    ];
-
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach(mutation => {
-            mutation.addedNodes.forEach(node => {
-                if (node.tagName === "SCRIPT" && scriptBlockList.some(src => node.src.includes(src))) {
-                    node.remove();
-                    console.log("Script de anúncio removido:", node.src);
-                }
-            });
-        });
-    });
-
-    observer.observe(document, { childList: true, subtree: true });
-
-    // 3. Injeção de Código JavaScript: Substituir funções que carregam anúncios
-    const adSelectors = [
-        ".ad-container",  // Exemplo de contêiner de anúncios
-        ".ytp-ad-module", // Módulo de anúncios do YouTube
-        "#ad_unit"        // Exemplo de ID de anúncio
-    ];
-
-    function removeAds() {
-        adSelectors.forEach(selector => {
-            document.querySelectorAll(selector).forEach(ad => {
-                ad.remove();
-                console.log("Elemento de anúncio removido:", ad);
-            });
-        });
-    }
-
-    // 4. Monitorar mudanças no DOM para remover anúncios dinâmicos
-    const domObserver = new MutationObserver((mutations) => {
-        removeAds();
-    });
-
-    domObserver.observe(document.body, { childList: true, subtree: true });
-
-    // 5. Injeção de CSS para ocultar elementos de anúncios
-    const style = document.createElement('style');
-    style.innerHTML = `
-        .ad-container, 
-        .ytp-ad-module, 
-        #ad_unit {
-            display: none !important;
-        }
-    `;
-    document.head.appendChild(style);
-
-    // 6. Detectar e pular anúncios em vídeos do YouTube
-    function skipYouTubeAds() {
-        const video = document.querySelector("video");
-        if (video) {
-            const currentTime = video.currentTime;
-            const duration = video.duration;
-            if (duration - currentTime < 5 && document.querySelector(".ytp-ad-skip-button")) {
-                document.querySelector(".ytp-ad-skip-button").click();
-                console.log("Anúncio pulado.");
-            }
-        }
-    }
-
-    setInterval(skipYouTubeAds, 1000);
-
-    // 7. Inicializar remoção de anúncios no carregamento da página
-    window.addEventListener('load', () => {
-        removeAds();
-    });
-
 })();
-            </script>
+
+</script>
       
       <link href="//www.youtube.com" rel="dns-prefetch"/>
       <link href="//www.youtube.com" rel="preconnect" crossorigin/>
