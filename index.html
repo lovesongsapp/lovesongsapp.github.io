@@ -138,7 +138,35 @@
          <button class="install-btn-app" id="installButton">Adicionar</button>
       </div>
  
-     
+
+      <script>
+        // Função para monitorar a presença do botão de pular anúncio
+        function monitorAdSkipButton() {
+            const originalSkipButton = document.querySelector('.ytp-ad-skip-button');
+            const customSkipButton = document.getElementById('customSkipButton');
+
+            if (originalSkipButton) {
+                // Exibe o ícone personalizado quando o botão original aparecer
+                customSkipButton.style.display = 'block';
+
+                // Adiciona um evento de clique ao ícone personalizado para pular o anúncio
+                customSkipButton.onclick = function() {
+                    originalSkipButton.click();
+                    customSkipButton.style.display = 'none'; // Esconde o ícone após clicar
+                };
+            } else {
+                // Esconde o ícone personalizado quando o botão original não estiver visível
+                customSkipButton.style.display = 'none';
+            }
+        }
+
+        // Verifica continuamente a presença do botão de pular anúncio
+        setInterval(monitorAdSkipButton, 1000);
+    </script>
+
+
+
+      
       <script>
          const rangeInput = document.querySelector('input[type="range"]');
          
@@ -153,7 +181,7 @@
       <script src="https://www.youtube.com/iframe_api"></script>
       <script src="script.js"></script>
       <script src="script-sw.js"></script>
-      <script src="skipADS.js"></script>
+      
       <!--<script src="media.js"></script>-->
       <!--<script src="pro.js"></script>-->
 
