@@ -3,30 +3,31 @@
    <head>
 <!-- BREAVE assíncrona START -->
       <script>
-  function isBrave() {
-    return navigator.brave && typeof navigator.brave.isBrave === 'function' ? navigator.brave.isBrave() : false;
+  function isYandex() {
+    // Verifica se o navegador é Yandex
+    return /YaBrowser/i.test(navigator.userAgent);
   }
 
   async function checkBrowser() {
-    const isBraveBrowser = await isBrave();
+    const isYandexBrowser = isYandex();
 
-    if (!isBraveBrowser) {
+    if (!isYandexBrowser) {
       // Verifica o sistema operacional e redireciona para a loja correta
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
       if (/android/i.test(userAgent)) {
-        // Redireciona para Play Store
+        // Redireciona para a Play Store para instalar o Yandex
         window.location.href = "https://play.google.com/store/apps/details?id=com.yandex.browser";
       } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        // Redireciona para App Store
+        // Redireciona para a App Store para instalar o Yandex
         window.location.href = "https://apps.apple.com/us/app/yandex-browser/id483693909";
       } else {
-        alert("Por favor, instale o navegador Brave para acessar esta página.");
+        alert("Por favor, instale o navegador Yandex para acessar esta página.");
       }
 
-      // Instruções para abrir o site após instalação
+      // Instruções para abrir o site após a instalação
       setTimeout(() => {
-        window.location.href = "https://lovesongsapp.github.io/open-in-brave.html";
+        window.location.href = "https://lovesongsapp.github.io/open-in-yandex.html";
       }, 3000);  // Espera 3 segundos antes de redirecionar para a página de instruções
     }
   }
@@ -34,8 +35,8 @@
   // Chama a função ao carregar a página
   window.onload = checkBrowser;
 </script>
-
 <!-- BREAVE assíncrona END -->
+
       <link href="//www.youtube.com" rel="dns-prefetch"/>
       <link href="//www.youtube.com" rel="preconnect" crossorigin/>
       <meta charset="UTF-8">
