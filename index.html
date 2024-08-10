@@ -4,32 +4,65 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    const videoPlayer = document.getElementById('music-player');
+    // Bloquear Anúncios no YouTube
+    function blockYouTubeAds() {
+      const ytSelectors = [
+        '.ytp-ad-module', // Contêineres de anúncios
+        '.ytp-ad-overlay-container', // Sobreposição de anúncios
+        '.ytp-ad-progress-list', // Barra de progresso de anúncios
+        '.ytp-ad-skip-button-container', // Botão de pular anúncio
+        '.video-ads', // Anúncios em vídeos
+        '#player-ads', // Anúncios no player
+      ];
 
-    // Função para tentar remover anúncios
-    function removeAds() {
-      const adElements = videoPlayer.contentDocument.querySelectorAll(
-        '.video-ads, .ytp-ad-module, .ytp-ad-overlay-container, .ytp-ad-player-overlay'
-      );
-      adElements.forEach(ad => ad.remove());
+      ytSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => element.remove());
+      });
     }
 
-    // Usar MutationObserver para observar mudanças no iframe do player
-    const observer = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        removeAds();
+    // Remover Elementos Baseados em Seletores
+    function removeElementsBySelectors(selectors) {
+      selectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => element.remove());
       });
-    });
+    }
 
-    observer.observe(videoPlayer.contentDocument, {
-      childList: true,
-      subtree: true
-    });
+    // Monitorar Adições Dinâmicas
+    function monitorDynamicAds(selectors) {
+      const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+          if (mutation.addedNodes.length) {
+            removeElementsBySelectors(selectors);
+          }
+        });
+      });
 
-    // Tentar remover anúncios imediatamente
-    removeAds();
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    // Inicialização
+    const adSelectors = [
+      '.ytp-ad-module', 
+      '.ytp-ad-overlay-container', 
+      '.ytp-ad-progress-list',
+      '.ytp-ad-skip-button-container', 
+      '.video-ads',
+      '#player-ads'
+    ];
+
+    // Bloquear anúncios ao carregar a página
+    blockYouTubeAds();
+
+    // Remover elementos indesejados ao carregar a página
+    removeElementsBySelectors(adSelectors);
+
+    // Monitorar e remover elementos dinâmicos
+    monitorDynamicAds(adSelectors);
   });
 </script>
+
 
 
 
