@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
     skipIcon.addEventListener('click', function() {
         // Verifica se o botão "Pular Anúncio" está disponível a cada 500ms
         const checkForSkipButton = setInterval(function() {
-            const skipButton = document.querySelector('.ytp-ad-skip-button-modern');
+            const skipButton = document.querySelector('.ytp-ad-skip-button-modern ytp-button ytp-ad-text');
 
             if (skipButton) {
                 // Se o botão for encontrado, simula um clique nele e para a verificação
