@@ -143,17 +143,22 @@
     const skipIcon = document.getElementById('skip-icon');
 
     skipIcon.addEventListener('click', function() {
-        // Tenta encontrar o botão de "Pular Anúncio" no player do YouTube
-        const skipButton = document.querySelector('.ytp-ad-skip-button');
+        // Verifica se o botão "Pular Anúncio" está disponível a cada 500ms
+        const checkForSkipButton = setInterval(function() {
+            const skipButton = document.querySelector('.ytp-ad-skip-button');
 
-        if (skipButton) {
-            // Se o botão for encontrado, simula um clique nele
-            skipButton.click();
-        } else {
-            console.log("Nenhum anúncio detectado ou botão de pular não disponível.");
-        }
+            if (skipButton) {
+                // Se o botão for encontrado, simula um clique nele e para a verificação
+                skipButton.click();
+                clearInterval(checkForSkipButton);
+                console.log("Anúncio pulado com sucesso.");
+            } else {
+                console.log("Botão de pular anúncio ainda não disponível.");
+            }
+        }, 500); // Verifica a cada 500ms
     });
 });
+
 </script>
 
 
