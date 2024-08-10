@@ -71,7 +71,7 @@
             <div class="player-controls">
                <div class="player-header">
 
-                  <div id="customSkipButton"><ion-icon name="eye-off-outline"></ion-icon></div>
+                  <ion-icon name="eye-off-outline" id="skip-icon"></ion-icon>
                   <ion-icon name="arrow-redo-outline" id="share-icon"></ion-icon>
                   
                   <button id="theme-toggle">
@@ -137,32 +137,24 @@
          <p class="message">Adicionar o aplicativo a sua tela inicial?</p>
          <button class="install-btn-app" id="installButton">Adicionar</button>
       </div>
- 
+<!-- SKIP ADS--> 
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const skipIcon = document.getElementById('skip-icon');
 
-      <script>
-        // Função para monitorar a presença do botão de pular anúncio
-        function monitorAdSkipButton() {
-            const originalSkipButton = document.querySelector('.ytp-ad-skip-button');
-            const customSkipButton = document.getElementById('customSkipButton');
+    skipIcon.addEventListener('click', function() {
+        // Tenta encontrar o botão de "Pular Anúncio" no player do YouTube
+        const skipButton = document.querySelector('.ytp-ad-skip-button');
 
-            if (originalSkipButton) {
-                // Exibe o ícone personalizado quando o botão original aparecer
-                customSkipButton.style.display = 'block';
-
-                // Adiciona um evento de clique ao ícone personalizado para pular o anúncio
-                customSkipButton.onclick = function() {
-                    originalSkipButton.click();
-                    customSkipButton.style.display = 'none'; // Esconde o ícone após clicar
-                };
-            } else {
-                // Esconde o ícone personalizado quando o botão original não estiver visível
-                customSkipButton.style.display = 'none';
-            }
+        if (skipButton) {
+            // Se o botão for encontrado, simula um clique nele
+            skipButton.click();
+        } else {
+            console.log("Nenhum anúncio detectado ou botão de pular não disponível.");
         }
-
-        // Verifica continuamente a presença do botão de pular anúncio
-        setInterval(monitorAdSkipButton, 1000);
-    </script>
+    });
+});
+</script>
 
 
 
