@@ -3,34 +3,24 @@
    <head>
 
 <script>
-  // Intercepta as requisições de rede e bloqueia scripts de publicidade
-  const blockedHosts = [
-    'googlesyndication.com',
-    'doubleclick.net',
-    'adservice.google.com',
-    'adsbygoogle.js'
-  ];
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      mutation.addedNodes.forEach(node => {
+        if (node.nodeType === 1) { // Node.ELEMENT_NODE
+          if (node.matches('iframe[src*="ads"], div[class*="ad"], div[id*="ad"]')) {
+            node.remove();
+          }
+        }
+      });
+    });
+  });
 
-  (function() {
-    const originalFetch = window.fetch;
-    window.fetch = function(...args) {
-      if (blockedHosts.some(host => args[0].includes(host))) {
-        return Promise.reject(new Error('Blocked ad request'));
-      }
-      return originalFetch.apply(this, args);
-    };
-  })();
-
-  // Bloqueia scripts carregados via tag <script>
-  const originalCreateElement = document.createElement;
-  document.createElement = function(tagName, ...args) {
-    const element = originalCreateElement.call(document, tagName, ...args);
-    if (tagName === 'script' && blockedHosts.some(host => element.src.includes(host))) {
-      element.src = ''; // Bloqueia o carregamento do script
-    }
-    return element;
-  };
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
 </script>
+
 
 
       
