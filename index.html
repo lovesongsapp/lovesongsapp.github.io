@@ -118,21 +118,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const skipIcon = document.getElementById('skip-icon');
 
     skipIcon.addEventListener('click', function() {
+        console.log("Botão 'eye-off-outline' clicado.");
+
         // Verifica se o botão "Pular Anúncio" está disponível a cada 500ms
         const checkForSkipButton = setInterval(function() {
             const skipButton = document.querySelector('.ytp-ad-skip-button');
 
             if (skipButton) {
-                // Simula um clique programaticamente no botão
-                const rect = skipButton.getBoundingClientRect();
-                const clickEvent = new MouseEvent('click', {
-                    view: window,
-                    bubbles: true,
-                    cancelable: true,
-                    clientX: rect.left + rect.width / 2,
-                    clientY: rect.top + rect.height / 2
-                });
-                skipButton.dispatchEvent(clickEvent);
+                console.log("Botão de pular anúncio detectado.");
+                // Simula um clique no botão de pular anúncio
+                skipButton.click();
                 clearInterval(checkForSkipButton);
                 console.log("Anúncio pulado com sucesso.");
             } else {
@@ -142,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 
  
       <script>
