@@ -2,34 +2,33 @@
 <html lang="pt-br">
    <head>
 <!-- BRAVE assíncrona START -->
-      <script>
+      
+<script>
   function openInBrave() {
     const userAgent = navigator.userAgent.toLowerCase();
     const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-    
+    const braveUrl = "brave://open-url?url=https://lovesongsapp.github.io";
+
     if (isMobile) {
       // Tenta abrir o Brave no celular usando o esquema intent
       window.location.href = "intent://lovesongsapp.github.io#Intent;scheme=https;package=com.brave.browser;end";
       
       setTimeout(() => {
-        // Caso não tenha redirecionado, sugere a instalação
         if (!document.hidden) {
-          alert("Parece que o Brave não foi aberto. Vamos redirecioná-lo para instalá-lo.");
-          window.location.href = "https://play.google.com/store/apps/details?id=com.brave.browser";
+          // Redireciona para a página de instruções se o Brave não for aberto
+          window.location.href = "https://lovesongsapp.github.io/open-in-brave.html";
         }
-      }, 3000); // Espera 3 segundos para verificar
+      }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
     } else {
       // Tenta abrir o Brave no PC
-      window.location.href = "brave://open-url?url=https://lovesongsapp.github.io";
-      
+      window.location.href = braveUrl;
+
       setTimeout(() => {
-        // Verifica se o Brave foi aberto no desktop e redireciona se necessário
         if (!document.hidden) {
-          if (confirm("Não foi possível abrir o Brave. Deseja instalá-lo?")) {
-            window.location.href = "https://brave.com/download";
-          }
+          // Redireciona para a página de instruções se o Brave não for aberto
+          window.location.href = "https://lovesongsapp.github.io/open-in-brave.html";
         }
-      }, 3000); // Espera 3 segundos para verificar
+      }, 3000); // Espera 3 segundos para verificar se o Brave foi aberto
     }
   }
 </script>
