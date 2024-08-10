@@ -3,23 +3,35 @@
    <head>
 
 <script>
-  const observer = new MutationObserver(mutations => {
-    mutations.forEach(mutation => {
-      mutation.addedNodes.forEach(node => {
-        if (node.nodeType === 1) { // Node.ELEMENT_NODE
-          if (node.matches('iframe[src*="ads"], div[class*="ad"], div[id*="ad"]')) {
-            node.remove();
-          }
-        }
+  document.addEventListener("DOMContentLoaded", function() {
+    const videoPlayer = document.getElementById('music-player');
+
+    // Função para tentar remover anúncios
+    function removeAds() {
+      const adElements = videoPlayer.contentDocument.querySelectorAll(
+        '.video-ads, .ytp-ad-module, .ytp-ad-overlay-container, .ytp-ad-player-overlay'
+      );
+      adElements.forEach(ad => ad.remove());
+    }
+
+    // Usar MutationObserver para observar mudanças no iframe do player
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        removeAds();
       });
     });
-  });
 
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
+    observer.observe(videoPlayer.contentDocument, {
+      childList: true,
+      subtree: true
+    });
+
+    // Tentar remover anúncios imediatamente
+    removeAds();
   });
 </script>
+
+
 
 
 
