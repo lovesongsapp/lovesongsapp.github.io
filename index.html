@@ -45,7 +45,6 @@
                <div class="player-header">
 
                   <ion-icon name="eye-off-outline" id="skip-icon"></ion-icon>
-                  <button id="skip-ad-btn">Pular Anúncio</button>
                   <ion-icon name="arrow-redo-outline" id="share-icon"></ion-icon>
                   
                   <button id="theme-toggle">
@@ -113,29 +112,7 @@
       </div>
       
 <!-- SKIP ADS--> 
-      
-<script>
-// Função para simular o clique no botão de pular anúncio
-function skipAd() {
-    const adSkipButton = document.querySelector('.ytp-ad-skip-button');
-    if (adSkipButton) {
-        adSkipButton.click();
-    } else {
-        console.log('Botão de pular anúncio não encontrado.');
-    }
-}
-
-// Adicionar evento ao botão de pular anúncio
-document.getElementById('skip-ad-btn').addEventListener('click', skipAd);
-
-
-</script>
-
-
-
-
-
-
+<!-- SKIP ADS--> 
  
       <script>
          const rangeInput = document.querySelector('input[type="range"]');
