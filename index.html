@@ -110,22 +110,6 @@
          <p class="message">Adicionar o aplicativo a sua tela inicial?</p>
          <button class="install-btn-app" id="installButton">Adicionar</button>
       </div>
-      
-<!-- SKIP ADS-->
-      // Função para simular o clique no botão de pular anúncio
-function skipAd() {
-    const adSkipButton = document.querySelector('.ytp-ad-skip-button');
-    if (adSkipButton) {
-        adSkipButton.click();
-    } else {
-        console.log('Botão de pular anúncio não encontrado.');
-    }
-}
-
-// Adicionar evento ao botão de pular anúncio
-document.getElementById('skip-ad-btn').addEventListener('click', skipAd);
-
-<!-- SKIP ADS--> 
  
       <script>
          const rangeInput = document.querySelector('input[type="range"]');
