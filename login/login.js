@@ -1,6 +1,6 @@
 // Importações do Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
 // Configuração do Firebase
@@ -18,6 +18,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Função para verificar o estado da autenticação
+function checkAuthState() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Se o usuário já estiver autenticado, redireciona para a página de sucesso
+      console.log('Usuário já autenticado:', user);
+      window.location.href = '/login/sucesso.html';
+    }
+  });
+}
+
+// Chame a função para verificar a autenticação quando a página carregar
+checkAuthState();
+
 // Função para mostrar mensagem de sucesso
 function showSuccessMessage(message) {
   const successMessageElement = document.getElementById('success-message');
@@ -28,7 +42,7 @@ function showSuccessMessage(message) {
   setTimeout(() => {
     successMessageElement.classList.remove('show');
     successMessageElement.classList.add('hidden');
-  }, 5000); // Ocultar mensagem após 3 segundos
+  }, 5000); // Ocultar mensagem após 5 segundos
 }
 
 // Função para login com Google
@@ -93,6 +107,9 @@ async function resetPassword(email) {
     displayErrorMessage(error.message);
   }
 }
+//END FIREBASE AUTHENTICATION
+// O restante do código permanece o mesmo, para controle de formulários e interações do usuário.
+
 
 // Adiciona listeners para os formulários e botões
 document.addEventListener('DOMContentLoaded', () => {
