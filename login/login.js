@@ -196,7 +196,7 @@ function checkAuthState() {
     } else {
       // Se o usuário NÃO estiver autenticado, redireciona para a página de login
       console.log('Usuário não autenticado, redirecionando para a página de login.');
-      window.location.href = '/login.html'; // Altere para o caminho correto da página de login
+      window.location.href = '/login/login.html'; // Altere para o caminho correto da página de login
     }
   });
 }
