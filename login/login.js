@@ -186,3 +186,20 @@ const errorMessages = {
   'auth/email-already-in-use': 'Este email já está em uso. Por favor, use outro email.',
   // Adicione outras mensagens de erro conforme necessário
 };
+
+// Função para verificar o estado da autenticação
+function checkAuthState() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Se o usuário já estiver autenticado, continua na página principal
+      console.log('Usuário já autenticado:', user);
+    } else {
+      // Se o usuário NÃO estiver autenticado, redireciona para a página de login
+      console.log('Usuário não autenticado, redirecionando para a página de login.');
+      window.location.href = '/login.html'; // Altere para o caminho correto da página de login
+    }
+  });
+}
+
+// Exporta a função para que possa ser usada em outras páginas
+export { checkAuthState };
