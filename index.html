@@ -121,12 +121,33 @@
          // Inicialize o valor da variável
          rangeInput.style.setProperty('--slider-value', `${rangeInput.value}%`);
       </script>
-     
+
+      <!--Função para verificar o estado da autenticação-->
+      
+      <script>
+      // Função para verificar o estado da autenticação
+function checkAuthState() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Se o usuário já estiver autenticado, continua na página principal
+      console.log('Usuário já autenticado:', user);
+    } else {
+      // Se o usuário NÃO estiver autenticado, redireciona para a página de login
+      console.log('Usuário não autenticado, redirecionando para a página de login.');
+      window.location.href = '/login/login.html'; // Altere para o caminho correto da página de login
+    }
+  });
+}
+
+// Chame a função para verificar a autenticação quando a página carregar
+checkAuthState();
+      </script>
+
       
       <script src="add-home.js"></script>
       <script src="https://www.youtube.com/iframe_api"></script>
       <script src="script.js"></script>
       <script src="script-sw.js"></script>
-      <script src="/login/login.js"></script>
+      
    </body>
 </html>
