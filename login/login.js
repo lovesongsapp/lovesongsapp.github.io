@@ -107,9 +107,6 @@ async function resetPassword(email) {
     displayErrorMessage(error.message);
   }
 }
-//END FIREBASE AUTHENTICATION
-// O restante do código permanece o mesmo, para controle de formulários e interações do usuário.
-
 
 // Adiciona listeners para os formulários e botões
 document.addEventListener('DOMContentLoaded', () => {
