@@ -487,12 +487,15 @@ font-size: 0.9em;
 }
 
 .busca{
-width: 200px;
-    height: 30px;
-    background: rgba(0, 0, 0, 0.5);
-    color: #FFF;
-    border: none;
-    border-radius: 3px;
-    padding: 2px;
-    display: flex;
+font-size: 18px;
+font-weight: 500;
+text-transform: uppercase;
+width: 90%;
+height: 30px;
+background: #310453;
+color: #00ffbf;
+border: none;
+border-radius: 3px;
+padding: 2px;
+display: flex;
 }
