@@ -1,0 +1,14 @@
+/* Estilize o botão de pular anúncio como preferir */
+.skip-ad-btn {
+    position: fixed;
+    bottom: 10%;
+    right: 5%;
+    padding: 10px 20px;
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    display: none;
+}
