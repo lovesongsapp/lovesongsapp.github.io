@@ -1,15 +1,18 @@
-// video.js
-let isAdPlaying = false;
+// Referência ao botão
 const skipAdButton = document.querySelector('.skip-ad-btn');
+let isAdPlaying = false;
 
+// Função para verificar se é anúncio
 function checkIfAdPlaying() {
-    // Verifica se o vídeo é um anúncio e se está tocando
-    if (player.getPlayerState() === 1 && player.getAdState()) {
+    const videoDuration = player.getDuration();
+
+    // Exibe o botão se a duração for menor que 30 segundos (suposição para anúncios)
+    if (videoDuration > 0 && videoDuration <= 30) {
         isAdPlaying = true;
-        skipAdButton.style.display = 'block'; // Exibe o botão
+        skipAdButton.style.display = 'block';
     } else {
         isAdPlaying = false;
-        skipAdButton.style.display = 'none'; // Oculta o botão
+        skipAdButton.style.display = 'none';
     }
 }
 
@@ -25,6 +28,22 @@ function skipAd() {
 skipAdButton.addEventListener('click', skipAd);
 
 // Evento para monitorar mudanças no estado do player
-player.addEventListener('onStateChange', function(event) {
-    checkIfAdPlaying();
-});
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+        checkIfAdPlaying(); // Verifica se é anúncio quando o vídeo começa
+    } else if (event.data === YT.PlayerState.ENDED) {
+        skipAdButton.style.display = 'none'; // Oculta o botão ao término do vídeo
+    }
+}
+
+// Inicializa o player com o evento de mudança de estado
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('music-player', {
+        height: '100%',
+        width: '100%',
+        videoId: 'xiN4EOqpvwc', // ID padrão
+        events: {
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
