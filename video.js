@@ -1,35 +1,15 @@
 // video.js
 let isAdPlaying = false;
-let skipAdButton;
+const skipAdButton = document.querySelector('.skip-ad-btn');
 
-// Função para verificar se o vídeo atual é um anúncio
 function checkIfAdPlaying() {
-    // Estado 1 significa "playing" e getAdState() verifica se é um anúncio
+    // Verifica se o vídeo é um anúncio e se está tocando
     if (player.getPlayerState() === 1 && player.getAdState()) {
         isAdPlaying = true;
-        showSkipAdButton();
+        skipAdButton.style.display = 'block'; // Exibe o botão
     } else {
         isAdPlaying = false;
-        hideSkipAdButton();
-    }
-}
-
-// Exibir o botão de "Pular Anúncio"
-function showSkipAdButton() {
-    if (!skipAdButton) {
-        skipAdButton = document.createElement('button');
-        skipAdButton.innerText = "Pular Anúncio";
-        skipAdButton.classList.add('skip-ad-btn');
-        skipAdButton.onclick = skipAd;
-        document.body.appendChild(skipAdButton); // Ou posicione onde preferir no app
-    }
-    skipAdButton.style.display = 'block';
-}
-
-// Ocultar o botão de "Pular Anúncio"
-function hideSkipAdButton() {
-    if (skipAdButton) {
-        skipAdButton.style.display = 'none';
+        skipAdButton.style.display = 'none'; // Oculta o botão
     }
 }
 
@@ -41,7 +21,10 @@ function skipAd() {
     }
 }
 
-// Event listener para o estado do player (executar a cada mudança de estado)
+// Adiciona o evento de clique ao botão
+skipAdButton.addEventListener('click', skipAd);
+
+// Evento para monitorar mudanças no estado do player
 player.addEventListener('onStateChange', function(event) {
     checkIfAdPlaying();
 });
