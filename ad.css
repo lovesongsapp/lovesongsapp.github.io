@@ -1,7 +1,7 @@
 .skip-ad-btn {
-    display: none;
+    /*display: none;*/
     position: absolute;
-    bottom: 20px;
+    bottom: 120px;
     right: 20px;
     padding: 10px 15px;
     background-color: rgba(0, 0, 0, 0.7);
