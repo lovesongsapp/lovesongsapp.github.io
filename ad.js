@@ -7,7 +7,7 @@ function checkForAd() {
     const currentTime = player.getCurrentTime();
     const duration = player.getDuration();
 
-    // Supondo que anúncios são vídeos curtos, exibir o botão se a duração for inferior a 30 segundos
+    // Exibe o botão se o vídeo tiver uma duração de até 30 segundos (suposição de anúncio)
     if (duration > 0 && duration <= 30 && currentTime < duration) {
         skipAdButton.style.display = 'block'; // Exibe o botão
     } else {
@@ -15,16 +15,20 @@ function checkForAd() {
     }
 }
 
-// Função para pular o anúncio
+// Função para simular o pulo do anúncio
 function skipAd() {
-    player.stopVideo(); // Interrompe o vídeo atual
-    player.playVideo(); // Retoma o próximo vídeo na lista
+    const duration = player.getDuration();
+
+    // Avança o vídeo para o fim, simulando o pulo do anúncio
+    if (duration > 0 && duration <= 30) {
+        player.seekTo(duration, true); // Avança até o final do anúncio
+    }
 }
 
-// Evento de clique para pular o anúncio
+// Adiciona evento de clique para o botão
 skipAdButton.addEventListener('click', skipAd);
 
-// Inicializa o player do YouTube com intervalo para detectar anúncios
+// Inicializa o player com intervalo de verificação
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('music-player', {
         height: '100%',
@@ -32,7 +36,7 @@ function onYouTubeIframeAPIReady() {
         videoId: 'xiN4EOqpvwc', // ID padrão
         events: {
             'onReady': (event) => {
-                // Inicia o intervalo ao carregar o player
+                // Inicia o intervalo para detectar anúncio
                 adCheckInterval = setInterval(checkForAd, 1000); // Verifica a cada segundo
             },
             'onStateChange': (event) => {
