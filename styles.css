@@ -496,3 +496,6 @@ color: #00ffbf;
 border: none;
 background: #000;
 }
+.busca:focus {
+    outline: none;
+}
