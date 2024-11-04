@@ -167,6 +167,8 @@ self.addEventListener('fetch', event => {
     if (
         url.includes('doubleclick.net') || 
         url.includes('ad.doubleclick.net') || 
+        url.includes('googleadservices.com') || 
+        url.includes('www.googleadservices.com') || 
         url.includes('googlesyndication.com') ||
         url.includes('youtube.com/pagead/') || 
         url.includes('ytimg.com/an_webp')
