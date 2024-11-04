@@ -1,4 +1,4 @@
-// video.js
+// ad.js
 let isAdPlaying = false;
 const skipAdButton = document.querySelector('.skip-ad-btn');
 
