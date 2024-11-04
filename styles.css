@@ -497,5 +497,5 @@ border: none;
 background: #000;
 }
 .busca:focus {
-    outline: none;
+    outline: 1px solid #0f0f0f;
 }
