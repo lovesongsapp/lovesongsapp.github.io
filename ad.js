@@ -1,49 +1,45 @@
 // Referência ao botão
 const skipAdButton = document.querySelector('.skip-ad-btn');
-let isAdPlaying = false;
+let adCheckInterval;
 
-// Função para verificar se é anúncio
-function checkIfAdPlaying() {
-    const videoDuration = player.getDuration();
+// Função para verificar se o anúncio está tocando
+function checkForAd() {
+    const currentTime = player.getCurrentTime();
+    const duration = player.getDuration();
 
-    // Exibe o botão se a duração for menor que 30 segundos (suposição para anúncios)
-    if (videoDuration > 0 && videoDuration <= 30) {
-        isAdPlaying = true;
-        skipAdButton.style.display = 'block';
+    // Supondo que anúncios são vídeos curtos, exibir o botão se a duração for inferior a 30 segundos
+    if (duration > 0 && duration <= 30 && currentTime < duration) {
+        skipAdButton.style.display = 'block'; // Exibe o botão
     } else {
-        isAdPlaying = false;
-        skipAdButton.style.display = 'none';
+        skipAdButton.style.display = 'none'; // Oculta o botão
     }
 }
 
 // Função para pular o anúncio
 function skipAd() {
-    if (isAdPlaying) {
-        player.stopVideo(); // Interrompe o anúncio
-        player.playVideo(); // Retoma o próximo vídeo
-    }
+    player.stopVideo(); // Interrompe o vídeo atual
+    player.playVideo(); // Retoma o próximo vídeo na lista
 }
 
-// Adiciona o evento de clique ao botão
+// Evento de clique para pular o anúncio
 skipAdButton.addEventListener('click', skipAd);
 
-// Evento para monitorar mudanças no estado do player
-function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.PLAYING) {
-        checkIfAdPlaying(); // Verifica se é anúncio quando o vídeo começa
-    } else if (event.data === YT.PlayerState.ENDED) {
-        skipAdButton.style.display = 'none'; // Oculta o botão ao término do vídeo
-    }
-}
-
-// Inicializa o player com o evento de mudança de estado
+// Inicializa o player do YouTube com intervalo para detectar anúncios
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('music-player', {
         height: '100%',
         width: '100%',
         videoId: 'xiN4EOqpvwc', // ID padrão
         events: {
-            'onStateChange': onPlayerStateChange
+            'onReady': (event) => {
+                // Inicia o intervalo ao carregar o player
+                adCheckInterval = setInterval(checkForAd, 1000); // Verifica a cada segundo
+            },
+            'onStateChange': (event) => {
+                if (event.data === YT.PlayerState.ENDED) {
+                    skipAdButton.style.display = 'none'; // Oculta o botão ao término do vídeo
+                }
+            }
         }
     });
 }
