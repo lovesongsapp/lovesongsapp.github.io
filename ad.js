@@ -36,14 +36,3 @@ function onPlayerStateChange(event) {
     }
 }
 
-// Inicializa o player com o evento de mudança de estado
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('music-player', {
-        height: '100%',
-        width: '100%',
-        videoId: 'xiN4EOqpvwc', // ID padrão
-        events: {
-            'onStateChange': onPlayerStateChange
-        }
-    });
-}
