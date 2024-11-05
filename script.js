@@ -309,43 +309,46 @@ function loadPlaylistData() {
 }
 */
 //buscar 3
+// Função para renderizar a playlist
+function renderPlaylist(videos) {
+    const playlistContainer = document.getElementById('playlist-items');
+    playlistContainer.innerHTML = ''; // Limpa a lista atual
 
-const searchInput = document.getElementById('search-input');
-const fullPlaylist = [...playlistData]; // Uma cópia da playlist completa para facilitar a restauração
-
-// Evento de entrada na barra de busca
-searchInput.addEventListener('input', () => {
-    const searchText = searchInput.value.trim().toLowerCase();
-
-    // Verifica se o campo de busca está vazio
-    const filteredPlaylist = searchText ? filterPlaylist(searchText) : fullPlaylist;
-
-    // Renderiza a playlist filtrada ou a lista completa
-    renderPlaylist(filteredPlaylist);
-});
-
-// Função de filtragem da playlist com verificações de segurança
-function filterPlaylist(searchText) {
-    return fullPlaylist.filter(video => {
-        const titleMatch = video.title?.toLowerCase().includes(searchText) ?? false;
-        const authorMatch = video.author?.toLowerCase().includes(searchText) ?? false;
-        return titleMatch || authorMatch;
-    });
-}
-
-// Função para renderizar a playlist na interface do usuário
-function renderPlaylist(playlist) {
-    // Limpeza e renderização dos itens da playlist
-    const playlistContainer = document.getElementById('playlist-container');
-    playlistContainer.innerHTML = '';
-
-    playlist.forEach(video => {
-        const videoElement = document.createElement('div');
-        videoElement.className = 'video-item';
+    videos.forEach(video => {
+        const videoElement = document.createElement('li'); // Usar <li> para a lista
         videoElement.textContent = `${video.title} - ${video.author}`;
         playlistContainer.appendChild(videoElement);
     });
 }
+
+// Renderiza a playlist completa ao carregar
+renderPlaylist(playlistData);
+
+// Configuração da busca
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', () => {
+    const searchText = searchInput.value.trim().toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
+});
+
+// Função de filtragem da playlist
+function filterPlaylist(searchText) {
+    if (!searchText) {
+        return playlistData; // Retorna a lista completa se não houver texto
+    }
+
+    return playlistData.filter(video => {
+        const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
+        const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
+        return titleMatch || authorMatch;
+    });
+}
+
+// Opcional: fechar a playlist ao clicar no botão
+document.getElementById('close-playlist').addEventListener('click', () => {
+    document.getElementById('playlist-overlay').style.display = 'none'; // ou qualquer lógica que você use para ocultar a playlist
+});
 
 
 // Compartilhamento
