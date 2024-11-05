@@ -309,6 +309,8 @@ function loadPlaylistData() {
 }
 */
 //buscar 3
+// SUPONDO QUE VOCÊ TENHA OS DADOS DA PLAYLIST
+
 // Função para renderizar a playlist
 function renderPlaylist(videos) {
     const playlistContainer = document.getElementById('playlist-items');
@@ -317,8 +319,23 @@ function renderPlaylist(videos) {
     videos.forEach(video => {
         const videoElement = document.createElement('li'); // Usar <li> para a lista
         videoElement.textContent = `${video.title} - ${video.author}`;
+        videoElement.dataset.videoId = video.videoId; // Armazena o ID do vídeo no elemento
+
+        // Adiciona evento de clique
+        videoElement.addEventListener('click', () => {
+            playVideo(video.videoId); // Chama a função que toca o vídeo
+        });
+
         playlistContainer.appendChild(videoElement);
     });
+}
+
+// Função para tocar o vídeo
+function playVideo(videoId) {
+    const player = document.getElementById('music-player'); // Supondo que você tenha um elemento de player no HTML
+    if (player) {
+        player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`; // Define a fonte do player para o vídeo e inicia a reprodução
+    }
 }
 
 // Renderiza a playlist completa ao carregar
@@ -349,7 +366,6 @@ function filterPlaylist(searchText) {
 document.getElementById('close-playlist').addEventListener('click', () => {
     document.getElementById('playlist-overlay').style.display = 'none'; // ou qualquer lógica que você use para ocultar a playlist
 });
-
 
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
