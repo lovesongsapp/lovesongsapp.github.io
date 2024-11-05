@@ -220,32 +220,40 @@ async function fetchPlaylistData() {
     renderPlaylist(playlistData);
 }
 
-function renderPlaylist(playlist) {
-    const playlistContainer = document.getElementById('playlist-items');
-    playlistContainer.innerHTML = '';
+// inicio
 
-    playlist.forEach(video => {
+function renderPlaylist(videos) {
+    const playlistContainer = document.getElementById('playlist-items');
+    playlistContainer.innerHTML = ''; // Limpa a lista atual
+
+    videos.forEach(video => {
         const listItem = document.createElement('li');
 
+        // Cria a miniatura do vídeo
         const thumbnail = document.createElement('img');
         thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
         listItem.appendChild(thumbnail);
 
+        // Cria um contêiner para o texto
         const textContainer = document.createElement('div');
         textContainer.className = 'text-container';
 
+        // Cria e adiciona o título
         const titleText = document.createElement('span');
         titleText.className = 'title';
         titleText.textContent = video.title;
         textContainer.appendChild(titleText);
 
+        // Cria e adiciona o autor
         const authorText = document.createElement('span');
         authorText.className = 'author';
         authorText.textContent = video.author;
         textContainer.appendChild(authorText);
 
+        // Adiciona o contêiner de texto ao item da lista
         listItem.appendChild(textContainer);
 
+        // Adiciona o evento de clique
         listItem.addEventListener('click', () => {
             if (isShuffle) {
                 // Encontrar o índice correspondente ao vídeo clicado na lista original
@@ -257,19 +265,8 @@ function renderPlaylist(playlist) {
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
+        // Adiciona o item configurado à lista de reprodução
         playlistContainer.appendChild(listItem);
-    });
-}
-
-// BUSCA CONFIG (BACK-UP)
-function renderPlaylist(videos) {
-    const playlistContainer = document.getElementById('playlist-items');
-    playlistContainer.innerHTML = ''; // Limpa a lista atual
-
-    videos.forEach(video => {
-        const videoElement = document.createElement('li'); // Cria um elemento de lista
-        videoElement.textContent = `${video.title} - ${video.author}`;
-        playlistContainer.appendChild(videoElement);
     });
 }
 
@@ -292,7 +289,6 @@ searchInput.addEventListener('input', () => {
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
-
 
 
 // Compartilhamento
