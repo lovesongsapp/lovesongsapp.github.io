@@ -264,19 +264,24 @@ function renderPlaylist(playlist) {
 // BUSCA CONFIG (BACK-UP)
 
 // Configuração da busca
+document.getElementById('search-input').addEventListener('keyup', function(event) {
+    const searchText = event.target.value.toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
+});
+
+// Crie a função que filtre a playlist
+function filterPlaylist(searchText) {
+    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
+}
+
+// Configuração da busca ADICIONAL
 const searchInput = document.getElementById('search-input');
 searchInput.addEventListener('input', () => {
     const searchText = searchInput.value.trim().toLowerCase();
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
-
-//FILTER
- return playlistData.filter(video => {
-        const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
-        const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
-        return titleMatch || authorMatch;
-    });
 
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
