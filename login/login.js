@@ -15,8 +15,8 @@ const firebaseConfig = {
 };
 
 //const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+//const auth = getAuth(app);
+//const db = getFirestore(app);
 
 // Função para mostrar mensagem de sucesso
 function showSuccessMessage(message) {
