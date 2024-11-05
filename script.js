@@ -261,54 +261,31 @@ function renderPlaylist(playlist) {
     });
 }
 
-
-// Função para tocar o vídeo
-function playVideo(videoId) {
-    const player = document.getElementById('music-player'); // Supondo que você tenha um elemento de player no HTML
-    if (player) {
-        player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`; // Define a fonte do player para o vídeo e inicia a reprodução
-    }
-}
+// BUSCA CONFIG (BACK-UP)
 
 // Configuração da busca
-async function fetchPlaylistData() {
-    const playlist = player.getPlaylist();
-    playlistData = await Promise.all(playlist.map(async (videoId) => {
-        const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
-        const data = await response.json();
-        return {
-            videoId,
-            title: data.title,
-            author: data.author_name
-        };
-    }));
-    renderPlaylist(playlistData); // Renderiza a playlist após obter os dados
-}
-
-function renderPlaylist(videos) {
-    const playlistContainer = document.getElementById('playlist-items');
-    playlistContainer.innerHTML = ''; // Limpa a lista atual
-
-    videos.forEach(video => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${video.title} - ${video.author}`;
-        listItem.addEventListener('click', () => {
-            player.playVideoAt(video.index);
-            document.getElementById('playlist-overlay').style.display = 'none';
-        });
-        playlistContainer.appendChild(listItem);
-    });
-}
-
-// Função de busca
-document.querySelector('#search-button').addEventListener('click', () => {
-    const searchTerm = document.querySelector('#search-input').value.toLowerCase();
-    const filteredVideos = playlistData.filter(video =>
-        video.title.toLowerCase().includes(searchTerm) ||
-        video.author.toLowerCase().includes(searchTerm)
-    );
-    renderPlaylist(filteredVideos); // Atualiza a lista filtrada
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', () => {
+    const searchText = searchInput.value.trim().toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
 });
+
+// Crie a função que filtre a playlist
+function filterPlaylist(searchText) {
+    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Compartilhamento
