@@ -262,7 +262,34 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG (BACK-UP)
+// Função para renderizar a playlist
+function renderPlaylist(videos) {
+    const playlistContainer = document.getElementById('playlist-items');
+    playlistContainer.innerHTML = ''; // Limpa a lista atual
 
+    videos.forEach(video => {
+        const videoElement = document.createElement('li'); // Usar <li> para a lista
+        videoElement.textContent = `${video.title} - ${video.author}`;
+        videoElement.dataset.videoId = video.videoId; // Armazena o ID do vídeo no elemento
+
+        // Adiciona evento de clique
+        videoElement.addEventListener('click', () => {
+            playVideo(video.videoId); // Chama a função que toca o vídeo
+        });
+
+        playlistContainer.appendChild(videoElement);
+    });
+}
+
+// Função para tocar o vídeo
+function playVideo(videoId) {
+    const player = document.getElementById('music-player'); // Supondo que você tenha um elemento de player no HTML
+    if (player) {
+        player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`; // Define a fonte do player para o vídeo e inicia a reprodução
+    }
+}
+
+// Configuração da busca
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const searchText = event.target.value.toLowerCase();
     const filteredPlaylist = filterPlaylist(searchText);
@@ -271,8 +298,23 @@ document.getElementById('search-input').addEventListener('keyup', function(event
 
 // Crie a função que filtre a playlist
 function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
+    if (!searchText) {
+        return playlistData; // Retorna a lista completa se não houver texto
+    }
+    
+    return playlistData.filter(video => 
+        video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText)
+    );
 }
+
+// Renderiza a playlist completa ao carregar
+renderPlaylist(playlistData);
+
+// Opcional: fechar a playlist ao clicar no botão
+document.getElementById('close-playlist').addEventListener('click', () => {
+    document.getElementById('playlist-overlay').style.display = 'none'; // ou qualquer lógica que você use para ocultar a playlist
+});
+
 
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
