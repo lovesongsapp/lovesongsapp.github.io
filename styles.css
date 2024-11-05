@@ -4,13 +4,19 @@
 margin: 0;
 padding: 0;
 }
+@media (orientation: portrait) {
+    .playlist-header {
+        right: 10px;
+        width: 90% !important;
+    }
+}
 .playlist-header{
 display: flex;
 align-items: center;
 justify-content: space-between;
 height: 35px;
-position: absolute;
-width: 90%;
+position: fixed;
+width: 45%;
 background: rgba(0, 0, 0, 0.7);
 top: 5px;
 border-radius: 20px;
