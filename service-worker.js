@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my-site-cache-v1.1';
+const CACHE_NAME = 'my-site-cache-v1.2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -12,7 +12,7 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME).then(cache => {
       console.log('Cached offline page during install');
       return cache.addAll(urlsToCache);
-    }).then(() => self.skipWaiting())
+    }).then(() => self.skipWaiting()) // Força o novo SW a assumir o controle
   );
 });
 
@@ -23,11 +23,11 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request).then(response => {
       if (response) {
-        console.log('Serving from cache: ', event.request.url);
+        console.log('Serving from cache:', event.request.url);
         return response;
       }
 
-      console.log('Fetching from network: ', event.request.url);
+      console.log('Fetching from network:', event.request.url);
       return fetch(event.request).then(networkResponse => {
         if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
           return networkResponse;
@@ -58,11 +58,12 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (!cacheWhitelist.includes(cacheName)) {
+            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
-    }).then(() => self.clients.claim())
+    }).then(() => self.clients.claim()) // Garante que o novo SW controle os clientes imediatamente
   );
 });
 
@@ -116,47 +117,15 @@ self.addEventListener('push', event => {
   );
 });
 
+// Notificação de clique
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(clients.openWindow('/'));
 });
 
-// Atualizações do Service Worker
-let newWorker;
-
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(urlsToCache);
-    }).then(() => {
-      self.skipWaiting();
-    })
-  );
-});
-
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cache => {
-          if (cache !== CACHE_NAME) {
-            return caches.delete(cache);
-          }
-        })
-      );
-    }).then(() => {
-      return self.clients.claim();
-    })
-  );
-});
-
+// Recebe mensagem para ativar imediatamente o novo service worker
 self.addEventListener('message', event => {
   if (event.data && event.data.action === 'skipWaiting') {
     self.skipWaiting();
   }
-});
-//MEDIA SESSION
-self.addEventListener('notificationclick', function(event) {
-    event.notification.close();
-    event.waitUntil(clients.openWindow('/'));
 });
