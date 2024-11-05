@@ -160,22 +160,3 @@ self.addEventListener('notificationclick', function(event) {
     event.notification.close();
     event.waitUntil(clients.openWindow('/'));
 });
-//LOGIC FOR BLOCK ADS - REMOVER SE NAO EFICIENTE
-self.addEventListener('fetch', event => {
-    const url = event.request.url;
-    // Verifica URLs de servidores conhecidos de anúncios do YouTube e DoubleClick
-    if (
-        url.includes('doubleclick.net') || 
-        url.includes('ad.doubleclick.net') || 
-        url.includes('googleadservices.com') || 
-        url.includes('www.googleadservices.com') || 
-        url.includes('googlesyndication.com') ||
-        url.includes('youtube.com/pagead/') || 
-        url.includes('ytimg.com/an_webp')
-    ) {
-        console.log('Requisição de anúncio bloqueada para:', url);
-        
-        // Responde com uma resposta em branco, efetivamente bloqueando o anúncio
-        event.respondWith(new Response('', { status: 204 }));
-    }
-});
