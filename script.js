@@ -262,21 +262,21 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG (BACK-UP)
-// Variáveis de controle
-let debounceTimeout;
-const DEBOUNCE_DELAY = 300; // Ajuste o tempo de atraso conforme necessário
+// Função debounce para limitar a frequência de execução da busca
+function debounce(func, delay) {
+    let debounceTimeout;
+    return function(...args) {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
 
 // Adiciona evento de escuta no input de busca com debounce
-document.getElementById('search-input').addEventListener('keyup', function(event) {
+document.getElementById('search-input').addEventListener('keyup', debounce(function(event) {
     const searchText = event.target.value.trim().toLowerCase();
-    
-    // Limpa o timeout anterior (se houver) e define um novo
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-        const filteredPlaylist = filterPlaylist(searchText);
-        renderPlaylist(filteredPlaylist);
-    }, DEBOUNCE_DELAY);
-});
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
+}, 300));
 
 // Função de filtragem da playlist
 function filterPlaylist(searchText) {
@@ -285,6 +285,7 @@ function filterPlaylist(searchText) {
         video.author.toLowerCase().includes(searchText)
     );
 }
+
 
 
 // Compartilhamento
