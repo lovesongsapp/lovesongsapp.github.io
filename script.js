@@ -262,41 +262,36 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG (BACK-UP)
-// Seletor direto do campo de busca
-const searchInput = document.querySelector('#search-input');
+function renderPlaylist(videos) {
+    const playlistContainer = document.getElementById('playlist-items');
+    playlistContainer.innerHTML = ''; // Limpa a lista atual
 
-// Verifica se o input foi encontrado
-if (searchInput) {
-    // Adiciona um listener de evento de input
-    searchInput.addEventListener('input', (event) => {
-        const searchText = event.target.value.trim().toLowerCase();
-
-        // Filtra a playlist e exibe no console o resultado filtrado
-        const filteredPlaylist = filterPlaylist(searchText);
-        console.log("Playlist filtrada:", filteredPlaylist);
-
-        // Renderiza a playlist filtrada
-        renderPlaylist(filteredPlaylist);
+    videos.forEach(video => {
+        const videoElement = document.createElement('li'); // Cria um elemento de lista
+        videoElement.textContent = `${video.title} - ${video.author}`;
+        playlistContainer.appendChild(videoElement);
     });
-} else {
-    console.error("Elemento de input de busca não encontrado no Chrome.");
 }
 
-// Função de filtragem da playlist
+// Renderiza a playlist completa ao carregar a página
+renderPlaylist(playlistData);
+
+// Função para filtrar a playlist
 function filterPlaylist(searchText) {
-    // Retorna uma lista filtrada com base no texto de busca
-    return playlistData.filter(video => 
-        video.title.toLowerCase().includes(searchText) || 
-        video.author.toLowerCase().includes(searchText)
-    );
+    return playlistData.filter(video => {
+        const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
+        const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
+        return titleMatch || authorMatch;
+    });
 }
 
-// Função para renderizar a playlist (substitua pela lógica de renderização do seu projeto)
-function renderPlaylist(filteredPlaylist) {
-    // Exemplo de renderização
-    console.log("Renderizando a playlist filtrada:", filteredPlaylist);
-    // Aqui, insira sua lógica real de renderização de elementos no DOM
-}
+// Configuração da busca
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', () => {
+    const searchText = searchInput.value.trim().toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
+});
 
 
 
