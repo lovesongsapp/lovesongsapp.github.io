@@ -262,19 +262,24 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG (BACK-UP)
-// Adiciona evento de escuta direto no input de busca, sem debounce
-const searchInput = document.getElementById('search-input');
+// Certifique-se de que o elemento de input está carregado e disponível
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search-input');
 
-if (searchInput) {
-    searchInput.addEventListener('keyup', function(event) {
-        const searchText = event.target.value.trim().toLowerCase();
-        console.log("Texto de busca:", searchText); // Verifique se o log aparece no Chrome
-        const filteredPlaylist = filterPlaylist(searchText);
-        renderPlaylist(filteredPlaylist);
-    });
-} else {
-    console.warn("Elemento de input de busca não encontrado.");
-}
+    if (searchInput) {
+        // Adiciona o evento 'input' para capturar mudanças em tempo real
+        searchInput.addEventListener('input', function (event) {
+            const searchText = event.target.value.trim().toLowerCase();
+            console.log("Texto de busca:", searchText); // Verifique se o log aparece no Chrome
+
+            // Filtra e renderiza a playlist
+            const filteredPlaylist = filterPlaylist(searchText);
+            renderPlaylist(filteredPlaylist);
+        });
+    } else {
+        console.warn("Elemento de input de busca não encontrado.");
+    }
+});
 
 // Função de filtragem da playlist
 function filterPlaylist(searchText) {
@@ -283,6 +288,8 @@ function filterPlaylist(searchText) {
         video.author.toLowerCase().includes(searchText)
     );
 }
+
+
 
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
