@@ -13,6 +13,9 @@ position: absolute;
 width: 95%;
 background: rgba(0, 0, 0, 0.7);
 top: 5px;
+border-radius: 20px;
+border: 1px solid #555;
+padding-left: 20px;
 }
 body {
 background: #fdefff;
@@ -266,10 +269,10 @@ font-size: 32px;
 .dark-mode .player{
 background: linear-gradient(0deg, rgba(87,32,162,1) 0%, rgba(19,5,31,1) 49%);
 }
-.dark-mode{
-}
 .dark-mode #close-playlist {
 color: #00ffbf;
+display: flex;
+align-items: center;    
 }
 .dark-mode .player-controls {
 color: #f1f1f1;
@@ -497,5 +500,5 @@ border: none;
 background: #000;
 }
 .busca:focus {
-    outline: 1px solid #0f0f0f;
+    outline: 1px solid #000;
 }
