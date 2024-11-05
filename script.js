@@ -262,30 +262,31 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG (BACK-UP)
+// Variáveis de controle
+let debounceTimeout;
+const DEBOUNCE_DELAY = 300; // Ajuste o tempo de atraso conforme necessário
 
-// Configuração da busca
+// Adiciona evento de escuta no input de busca com debounce
 document.getElementById('search-input').addEventListener('keyup', function(event) {
-    const searchText = event.target.value.toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
+    const searchText = event.target.value.trim().toLowerCase();
+    
+    // Limpa o timeout anterior (se houver) e define um novo
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+        const filteredPlaylist = filterPlaylist(searchText);
+        renderPlaylist(filteredPlaylist);
+    }, DEBOUNCE_DELAY);
 });
 
-// Crie a função que filtre a playlist
+// Função de filtragem da playlist
 function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
-    const searchText = searchInput.value.trim().toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
+    return playlistData.filter(video => 
+        video.title.toLowerCase().includes(searchText) || 
+        video.author.toLowerCase().includes(searchText)
+    );
 }
-/*
-// Configuração da busca ADICIONAL
-const searchInput = document.getElementById('search-input');
-searchInput.addEventListener('input', () => {
-    const searchText = searchInput.value.trim().toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
-});
-*/
+
+
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
