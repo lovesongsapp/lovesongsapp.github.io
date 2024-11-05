@@ -262,24 +262,22 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG (BACK-UP)
-// Certifique-se de que o elemento de input está carregado e disponível
-document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('search-input');
+// Recupera o elemento de entrada diretamente
+const searchInput = document.querySelector('#search-input');
 
-    if (searchInput) {
-        // Adiciona o evento 'input' para capturar mudanças em tempo real
-        searchInput.addEventListener('input', function (event) {
-            const searchText = event.target.value.trim().toLowerCase();
-            console.log("Texto de busca:", searchText); // Verifique se o log aparece no Chrome
+// Verifica se o elemento foi encontrado e adiciona o evento 'input'
+if (searchInput) {
+    searchInput.oninput = function(event) {
+        const searchText = event.target.value.trim().toLowerCase();
+        console.log("Texto de busca:", searchText); // Para verificar se o log aparece no Chrome
 
-            // Filtra e renderiza a playlist
-            const filteredPlaylist = filterPlaylist(searchText);
-            renderPlaylist(filteredPlaylist);
-        });
-    } else {
-        console.warn("Elemento de input de busca não encontrado.");
-    }
-});
+        // Filtra e renderiza a playlist
+        const filteredPlaylist = filterPlaylist(searchText);
+        renderPlaylist(filteredPlaylist);
+    };
+} else {
+    console.error("Elemento de input de busca não encontrado.");
+}
 
 // Função de filtragem da playlist
 function filterPlaylist(searchText) {
@@ -288,6 +286,7 @@ function filterPlaylist(searchText) {
         video.author.toLowerCase().includes(searchText)
     );
 }
+
 
 
 
