@@ -260,9 +260,8 @@ function renderPlaylist(playlist) {
         playlistContainer.appendChild(listItem);
     });
 }
-/*
-// BUSCA CONFIG (BACK-UP)
-// Adicione o evento de keyup ao input de texto
+
+// BUSCA
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const searchText = event.target.value.toLowerCase();
     const filteredPlaylist = filterPlaylist(searchText);
@@ -273,44 +272,6 @@ document.getElementById('search-input').addEventListener('keyup', function(event
 function filterPlaylist(searchText) {
     return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
-*/
-/*
-// BUSCA 2
-let debounceTimer;
-document.getElementById('search-input').addEventListener('keyup', function(event) {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-        const searchText = event.target.value.toLowerCase();
-        
-        // Verifica se a playlist está carregada antes de buscar
-        if (playlistData && playlistData.length > 0) {
-            const filteredPlaylist = filterPlaylist(searchText);
-            renderPlaylist(filteredPlaylist);
-        } else {
-            console.warn("A lista de reprodução não está disponível. Tentando recarregar...");
-            loadPlaylistData(); // Tente recarregar a lista de reprodução se necessário
-        }
-    }, 300); // Ajuste o tempo de debounce conforme necessário
-});
-
-// Função para filtrar a playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => 
-        video.title.toLowerCase().includes(searchText) || 
-        video.author.toLowerCase().includes(searchText)
-    );
-}
-
-// Função para garantir que a playlist esteja carregada
-function loadPlaylistData() {
-    // Insira a lógica para carregar ou recarregar a `playlistData` aqui, 
-    // caso a lista de reprodução esteja indisponível em dispositivos específicos.
-    // Isso pode envolver uma nova chamada à API ou um carregamento local.
-}
-*/
-//buscar 3
-// SUPONDO QUE VOCÊ TENHA OS DADOS DA PLAYLIST
-
 // Função para renderizar a playlist
 function renderPlaylist(videos) {
     const playlistContainer = document.getElementById('playlist-items');
