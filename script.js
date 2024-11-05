@@ -273,8 +273,11 @@ document.getElementById('search-input').addEventListener('keyup', function(event
 // Crie a função que filtre a playlist
 function filterPlaylist(searchText) {
     return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
+    const searchText = searchInput.value.trim().toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
 }
-
+/*
 // Configuração da busca ADICIONAL
 const searchInput = document.getElementById('search-input');
 searchInput.addEventListener('input', () => {
@@ -282,7 +285,7 @@ searchInput.addEventListener('input', () => {
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
-
+*/
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
