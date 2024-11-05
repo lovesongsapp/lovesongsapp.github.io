@@ -270,15 +270,13 @@ searchInput.addEventListener('input', () => {
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
+
 //FILTER
-return playlistData.filter(video => {
+ return playlistData.filter(video => {
         const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
         const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
         return titleMatch || authorMatch;
     });
-
-
-
 
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
