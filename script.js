@@ -270,20 +270,12 @@ searchInput.addEventListener('input', () => {
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
-
-// Crie a função que filtre a playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
-}
-
-
-
-
-
-
-
-
-
+//FILTER
+return playlistData.filter(video => {
+        const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
+        const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
+        return titleMatch || authorMatch;
+    });
 
 
 
