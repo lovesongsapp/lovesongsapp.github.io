@@ -1,7 +1,7 @@
 // Importações do Firebase
-//import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-//import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-//import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
 // Configuração do Firebase
 const firebaseConfig = {
@@ -14,9 +14,9 @@ const firebaseConfig = {
   measurementId: "G-HLGV34NCB0"
 };
 
-//const app = initializeApp(firebaseConfig);
-//const auth = getAuth(app);
-//const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 // Função para mostrar mensagem de sucesso
 function showSuccessMessage(message) {
