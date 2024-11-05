@@ -284,7 +284,8 @@ align-items: center;
 }
 .dark-mode .player-controls {
 color: #f1f1f1;
-background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg-controls.jpg) no-repeat center center;
+background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.9) 80%, #000000 100%), url(https://lovesongsapp.github.io/bg-controls.jpg) no-repeat center center;
+/*background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg-controls.jpg) no-repeat center center;*/
 background-size: cover;
 }
 .dark-mode .player-header button {
