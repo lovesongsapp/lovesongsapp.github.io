@@ -228,6 +228,8 @@ padding: 10px;
 border-radius: 10px;
 text-align: left;
 height: 95%;
+    top: 20px;
+    position: absolute;
 }
 #playlist h2 {
 margin-top: 0;
