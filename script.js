@@ -262,21 +262,16 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG (BACK-UP)
-// Função debounce para limitar a frequência de execução da busca
-function debounce(func, delay) {
-    let debounceTimeout;
-    return function(...args) {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(() => func.apply(this, args), delay);
+// Função debounce simplificada para Chrome
+function debounce(callback, delay) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            callback.apply(this, args);
+        }, delay);
     };
 }
-
-// Adiciona evento de escuta no input de busca com debounce
-document.getElementById('search-input').addEventListener('keyup', debounce(function(event) {
-    const searchText = event.target.value.trim().toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
-}, 300));
 
 // Função de filtragem da playlist
 function filterPlaylist(searchText) {
@@ -286,6 +281,19 @@ function filterPlaylist(searchText) {
     );
 }
 
+// Adiciona evento de escuta no input de busca com debounce
+const searchInput = document.getElementById('search-input');
+
+if (searchInput) {
+    searchInput.addEventListener('keyup', debounce(function(event) {
+        const searchText = event.target.value.trim().toLowerCase();
+        console.log("Texto de busca:", searchText); // Log para verificar entrada
+        const filteredPlaylist = filterPlaylist(searchText);
+        renderPlaylist(filteredPlaylist);
+    }, 300));
+} else {
+    console.warn("Elemento de input de busca não encontrado.");
+}
 
 
 // Compartilhamento
