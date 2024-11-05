@@ -262,15 +262,18 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG (BACK-UP)
-// Função debounce simplificada para Chrome
-function debounce(callback, delay) {
-    let timeout;
-    return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            callback.apply(this, args);
-        }, delay);
-    };
+// Adiciona evento de escuta direto no input de busca, sem debounce
+const searchInput = document.getElementById('search-input');
+
+if (searchInput) {
+    searchInput.addEventListener('keyup', function(event) {
+        const searchText = event.target.value.trim().toLowerCase();
+        console.log("Texto de busca:", searchText); // Verifique se o log aparece no Chrome
+        const filteredPlaylist = filterPlaylist(searchText);
+        renderPlaylist(filteredPlaylist);
+    });
+} else {
+    console.warn("Elemento de input de busca não encontrado.");
 }
 
 // Função de filtragem da playlist
@@ -280,21 +283,6 @@ function filterPlaylist(searchText) {
         video.author.toLowerCase().includes(searchText)
     );
 }
-
-// Adiciona evento de escuta no input de busca com debounce
-const searchInput = document.getElementById('search-input');
-
-if (searchInput) {
-    searchInput.addEventListener('keyup', debounce(function(event) {
-        const searchText = event.target.value.trim().toLowerCase();
-        console.log("Texto de busca:", searchText); // Log para verificar entrada
-        const filteredPlaylist = filterPlaylist(searchText);
-        renderPlaylist(filteredPlaylist);
-    }, 300));
-} else {
-    console.warn("Elemento de input de busca não encontrado.");
-}
-
 
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
