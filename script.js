@@ -300,7 +300,7 @@ document.getElementById('share-icon').addEventListener('click', function() {
     if (navigator.share) {
         navigator.share({
             title: videoData.title,
-            text: `🩷💚 Confira este vídeo: ${videoData.title}`,
+            text: `🥰 LoveSongs: ${videoData.title}`,
             url: shareUrl,
         }).then(() => {
             console.log('Compartilhamento bem-sucedido');
