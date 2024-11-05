@@ -262,29 +262,23 @@ function renderPlaylist(playlist) {
 }
 
 // BUSCA CONFIG (BACK-UP)
-// Recupera o elemento de entrada diretamente
+// Seletor direto do campo de busca
 const searchInput = document.querySelector('#search-input');
 
-// Verifica se o elemento foi encontrado e adiciona o evento 'input'
+// Verifica se o input foi encontrado
 if (searchInput) {
-    searchInput.oninput = function(event) {
+    // Adiciona um listener de evento de input
+    searchInput.addEventListener('input', (event) => {
         const searchText = event.target.value.trim().toLowerCase();
-        console.log("Texto de busca:", searchText); // Para verificar se o log aparece no Chrome
-
-        // Filtra e renderiza a playlist
-        const filteredPlaylist = filterPlaylist(searchText);
-        renderPlaylist(filteredPlaylist);
-    };
+        
+        // Log para depurar no Chrome
+        console.log("Texto digitado no Chrome:", searchText);
+        
+        // Apenas para teste, vamos evitar filtrar e apenas logar o texto digitado
+        // Assim, isolamos o problema para ver se o evento está funcionando
+    });
 } else {
-    console.error("Elemento de input de busca não encontrado.");
-}
-
-// Função de filtragem da playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => 
-        video.title.toLowerCase().includes(searchText) || 
-        video.author.toLowerCase().includes(searchText)
-    );
+    console.error("Elemento de input de busca não encontrado no Chrome.");
 }
 
 
