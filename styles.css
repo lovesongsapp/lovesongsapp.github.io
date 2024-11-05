@@ -103,7 +103,8 @@ left: 0;
 }
 .info .title {
 font-size: 18px;
-font-weight: 600;
+font-weight: 500;
+font-family: 'Montserrat', sans-serif;
 }
 .info .artist {
 font-size: 16px;
