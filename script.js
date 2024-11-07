@@ -70,39 +70,40 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
-    const savedTheme = localStorage.getItem('theme');
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+ const savedTheme = localStorage.getItem('theme');
+const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
 
-    if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-        document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
-        metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
+if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+    themeToggleIcon.setAttribute('name', savedTheme === 'dark' ? 'sunny-outline' : 'moon-outline');
+    metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
+} else {
+    // Apply dark theme by default
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.body.classList.add('dark-mode');
+    themeToggleIcon.setAttribute('name', 'sunny-outline');
+    metaThemeColor.setAttribute('content', '#13051f');
+    localStorage.setItem('theme', 'dark');
+}
+
+document.getElementById('theme-toggle').addEventListener('click', function() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.body.classList.remove('dark-mode');
+        themeToggleIcon.setAttribute('name', 'moon-outline');
+        metaThemeColor.setAttribute('content', '#f0f4f9');
+        localStorage.setItem('theme', 'light');
     } else {
-        // Apply dark theme by default
         document.documentElement.setAttribute('data-theme', 'dark');
         document.body.classList.add('dark-mode');
-        document.getElementById('theme-toggle').innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
+        themeToggleIcon.setAttribute('name', 'sunny-outline');
         metaThemeColor.setAttribute('content', '#13051f');
         localStorage.setItem('theme', 'dark');
     }
-
-    document.getElementById('theme-toggle').addEventListener('click', function() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.body.classList.remove('dark-mode');
-            this.innerHTML = '<ion-icon name="moon-outline"></ion-icon>';
-            metaThemeColor.setAttribute('content', '#f0f4f9');
-            localStorage.setItem('theme', 'light');
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.body.classList.add('dark-mode');
-            this.innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
-            metaThemeColor.setAttribute('content', '#13051f');
-            localStorage.setItem('theme', 'dark');
-        }
-    });
+});
 
     fetchPlaylistData();
 }
