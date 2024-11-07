@@ -1,134 +1,144 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-   <head>
-      <link href="//www.youtube.com" rel="dns-prefetch"/>
-      <link href="//www.youtube.com" rel="preconnect" crossorigin/>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-      <title>LoveSongs App</title>
-                  
-      <meta name="description" content="A trilha sonora do amor">
-      <meta name="theme-color" content="#ffffff">
-      <link rel="stylesheet" href="styles.css" />
-      <link rel="stylesheet" href="add-home.css" />
-      <link rel="manifest" href="manifest.json"/>
-      <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-      <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-      
-      <link rel="shortcut icon" href="https://lovesongsapp.github.io/icons/favicon32.png" />
-      <link rel="shortcut icon" href="https://lovesongsapp.github.io/icons/favicon.ico" />
-      <link rel="icon" type="image/png" sizes="32x32" href="https://lovesongsapp.github.io/icons/favicon32.png" />
-      <link rel="icon" type="image/png" sizes="16x16" href="https://lovesongsapp.github.io/icons/favicon16.png" />
-      <!--AppleTouchIcon-->
-      <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon76.png" sizes="76x76">
-      <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon120.png" sizes="120x120">
-      <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon152.png" sizes="152x152">
-      <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon180.png" sizes="180x180">
-      <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon512.png" sizes="512x512">
-      <link rel="mask-icon" href="https://lovesongsapp.github.io/icons/safari-pinned-tab.svg" color="#fc6700" />
-      <!-- SEO | OG -->
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="keywords" content="love songs, músicas internacionais anos 80 e 90" />
-      <meta property="og:title" content="LoveSongs App" />
-      <meta property="og:description" content="A trilha sonora do amor" />
-      <meta property="og:image" content="https://lovesongsapp.github.io/og-image.jpg" />
-      <meta content='website' property='og:type' />
-      <meta property="og:site_name" content="LoveSongs App" />
-      <meta name="mobile-web-app-capable" content="yes" />
-     
-   </head>
-   <body>
-      
-      <div class="player-container">
-         <div class="player">
+
+<head>
+   <link href="//www.youtube.com" rel="dns-prefetch" />
+   <link href="//www.youtube.com" rel="preconnect" crossorigin />
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <title>LoveSongs App</title>
+
+   <meta name="description" content="A trilha sonora do amor">
+   <meta name="theme-color" content="#ffffff">
+   <link rel="stylesheet" href="styles.css" />
+   <link rel="stylesheet" href="add-home.css" />
+   <link rel="manifest" href="manifest.json" />
+   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+   <link rel="shortcut icon" href="https://lovesongsapp.github.io/icons/favicon32.png" />
+   <link rel="shortcut icon" href="https://lovesongsapp.github.io/icons/favicon.ico" />
+   <link rel="icon" type="image/png" sizes="32x32" href="https://lovesongsapp.github.io/icons/favicon32.png" />
+   <link rel="icon" type="image/png" sizes="16x16" href="https://lovesongsapp.github.io/icons/favicon16.png" />
+   <!--AppleTouchIcon-->
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon76.png" sizes="76x76">
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon120.png" sizes="120x120">
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon152.png" sizes="152x152">
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon180.png" sizes="180x180">
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon512.png" sizes="512x512">
+   <link rel="mask-icon" href="https://lovesongsapp.github.io/icons/safari-pinned-tab.svg" color="#fc6700" />
+   <!-- SEO | OG -->
+   <meta name="apple-mobile-web-app-capable" content="yes" />
+   <meta name="keywords" content="love songs, músicas internacionais anos 80 e 90" />
+   <meta property="og:title" content="LoveSongs App" />
+   <meta property="og:description" content="A trilha sonora do amor" />
+   <meta property="og:image" content="https://lovesongsapp.github.io/og-image.jpg" />
+   <meta content='website' property='og:type' />
+   <meta property="og:site_name" content="LoveSongs App" />
+   <meta name="mobile-web-app-capable" content="yes" />
+
+</head>
+
+<body>
+
+   <div class="player-container">
+      <div class="player">
          <div id="music-player"></div>
-            <div class="player-controls">
-               <div class="player-header">
-
+         <div class="player-controls">
+            <div class="player-header">
+               <div class="player-header-items">
                   <ion-icon id="" name="log-in-outline"></ion-icon>
+                  <a href="./login/login.html" class="login-link">Entrar</a>
+               </div>
+
+               <div class="player-header-items">
                   <ion-icon name="arrow-redo-outline" id="share-icon"></ion-icon>
-                  
-                  <button id="theme-toggle">
+                  Compartilhe
+               </div>
+
+               <div class="player-header-items" id="theme-toggle">
                   <ion-icon name="moon-outline"></ion-icon>
-                  </button>
+                  Tema
                </div>
-               <div class="info">
-                  <p id="title" class="title">Título</p>
-                  <p id="artist" class="artist">Artista</p>
+            </div>
+            <div class="info">
+               <p id="title" class="title">Título</p>
+               <p id="artist" class="artist">Artista</p>
+            </div>
+            <div class="progress-container">
+               <span id="current-time">0:00</span>
+               <input type="range" id="progress" value="0">
+               <span id="duration">0:00</span>
+            </div>
+            <div class="controls">
+               <div class="control-button" id="repeat-button">
+                  <ion-icon name="repeat-outline"></ion-icon>
                </div>
-               <div class="progress-container">
-                  <span id="current-time">0:00</span>
-                  <input type="range" id="progress" value="0">
-                  <span id="duration">0:00</span>
+               <div class="control-button">
+                  <ion-icon name="play-skip-back-outline"></ion-icon>
                </div>
-               <div class="controls">
-                  <div class="control-button" id="repeat-button">
-                     <ion-icon name="repeat-outline"></ion-icon>
-                  </div>
-                  <div class="control-button">
-                     <ion-icon name="play-skip-back-outline"></ion-icon>
-                  </div>
-                  <div class="control-button">
-                     <ion-icon name="play-circle-outline" class="play-outline"></ion-icon>
-                  </div>
-                  <div class="control-button">
-                     <ion-icon name="play-skip-forward-outline"></ion-icon>
-                  </div>
-                  <div class="control-button">
-                     <ion-icon name="list-outline"></ion-icon>
-                  </div>
+               <div class="control-button">
+                  <ion-icon name="play-circle-outline" class="play-outline"></ion-icon>
+               </div>
+               <div class="control-button">
+                  <ion-icon name="play-skip-forward-outline"></ion-icon>
+               </div>
+               <div class="control-button">
+                  <ion-icon name="list-outline"></ion-icon>
                </div>
             </div>
          </div>
       </div>
+   </div>
 
-<!-- PLAYLIST -->
-<div id="playlist-overlay">
-    <div id="playlist">
-       <div class="playlist-header">
-          <input id="search-input" type="text" placeholder="Buscar..." class="busca">
-          <button id="close-playlist">
-             <ion-icon name="close-outline"></ion-icon>
-          </button>
-       </div>   
-              <ul id="playlist-items"></ul>
-    </div>
-</div>
-
-      <!-- ADD HOME-SCREEN -->
-      <div class="app" id="InstallBanner" style="display:none;">
-         <div class="logo-app"></div>
-         <div class="header-app">
-            <div>
-               <p class="app-title">LoveSongs App</p>
-               <p class="app-subtitle">A trilha sonora do amor!</p>
-               <p class="add-info">Não contém anúncios ⭐ v1.1</p>
-            </div>
-            <div class="close-button">
-               <ion-icon name="close-outline" onclick="closeApp()"></ion-icon>
-            </div>
+   <!-- PLAYLIST -->
+   <div id="playlist-overlay">
+      <div id="playlist">
+         <div class="playlist-header">
+            <input id="search-input" type="text" placeholder="Buscar..." class="busca">
+            <button id="close-playlist">
+               <ion-icon name="close-outline"></ion-icon>
+            </button>
          </div>
-         <p class="message">Adicionar o aplicativo a sua tela inicial?</p>
-         <button class="install-btn-app" id="installButton">Adicionar</button>
+         <ul id="playlist-items"></ul>
       </div>
- 
-      <script>
-         const rangeInput = document.querySelector('input[type="range"]');
-         
-         rangeInput.addEventListener('input', function() {
-             this.style.setProperty('--slider-value', `${this.value}%`);
-         });
-         
-         // Inicialize o valor da variável
-         rangeInput.style.setProperty('--slider-value', `${rangeInput.value}%`);
-      </script>
-      
-      
-      <script src="add-home.js"></script>
-      <script src="https://www.youtube.com/iframe_api"></script>
-      <script src="script.js"></script>
-      <script src="script-sw.js"></script>
-      <script src="/login/login.js"></script>
-      
-   </body>
+   </div>
+
+   <!-- ADD HOME-SCREEN -->
+   <div class="app" id="InstallBanner" style="display:none;">
+      <div class="logo-app"></div>
+      <div class="header-app">
+         <div>
+            <p class="app-title">LoveSongs App</p>
+            <p class="app-subtitle">A trilha sonora do amor!</p>
+            <p class="add-info">Não contém anúncios ⭐ v1.1</p>
+         </div>
+         <div class="close-button">
+            <ion-icon name="close-outline" onclick="closeApp()"></ion-icon>
+         </div>
+      </div>
+      <p class="message">Adicionar o aplicativo a sua tela inicial?</p>
+      <button class="install-btn-app" id="installButton">Adicionar</button>
+   </div>
+
+   <script>
+      const rangeInput = document.querySelector('input[type="range"]');
+
+      rangeInput.addEventListener('input', function () {
+         this.style.setProperty('--slider-value', `${this.value}%`);
+      });
+
+      // Inicialize o valor da variável
+      rangeInput.style.setProperty('--slider-value', `${rangeInput.value}%`);
+   </script>
+
+
+   <script src="add-home.js"></script>
+   <script src="https://www.youtube.com/iframe_api"></script>
+   <script src="script.js"></script>
+   <script src="script-sw.js"></script>
+   <script src="/login/login.js"></script>
+
+</body>
+
 </html>
