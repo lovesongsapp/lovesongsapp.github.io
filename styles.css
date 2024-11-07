@@ -300,10 +300,10 @@ background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0
 background-size: cover;
 }
 .dark-mode .player-header-items {
-color: #fff;
+color: #bbb;
 }
 .dark-mode .player-header-items a {
-color: #fff;
+color: #bbb;
 }
 .dark-mode .player-header button {
 color: #00FFBF;
