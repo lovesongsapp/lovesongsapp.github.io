@@ -108,6 +108,7 @@ button:hover {
 }
 .google-button:hover {
   background: #0056b3;
+  color: #fff;
 }
 .form-switch {
   margin-top: 1rem;
