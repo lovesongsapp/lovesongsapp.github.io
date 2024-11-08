@@ -137,7 +137,7 @@ input[type="range"]::-webkit-slider-thumb {
 appearance: none;
 width: 15px;
 height: 15px;
-background: #5400f7;
+background: #4e1099;
 cursor: pointer;
 border-radius: 50%;
 border: 1px solid #00ffbf;
