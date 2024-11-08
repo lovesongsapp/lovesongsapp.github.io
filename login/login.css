@@ -1,16 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 a{
   font-weight: 500;
-  color: #007bff;
+  color: #00FFBF;
 }
 body {
   font-family: 'Open Sans', sans-serif;
-  background-color: #fff;
+  background-color: #0f0f0f;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   margin: 0;
+  color: #aaa;
 }
 .logo {
   border-radius: 50px;
@@ -18,10 +19,9 @@ body {
   width: 50px;
 }
 .container {
-  background: #fff;
+  
   padding: 2rem;
   border-radius: 1rem;
-  /*box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);*/
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -30,7 +30,7 @@ body {
 h1 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  color: #333;
+  color: #00FFBF;
   text-align: center;
   font-weight: 500;
 }
@@ -43,10 +43,13 @@ input {
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 1px solid #333;
+  border-radius: 20px;
   font-size: 1rem;
   box-sizing: border-box;
+  background: #0f0f0f;
+  color: #00FFBF;
+  
 }
 .password-container {
   position: relative;
@@ -54,6 +57,7 @@ input {
 }
 .password-container input {
   padding-right: 2.5rem;
+  
 }
 .password-container ion-icon {
   position: absolute;
@@ -69,7 +73,7 @@ button {
   padding: 0.75rem;
   border: none;
   border-radius: 50px;
-  background: #007bff;
+  background: #47256E;
   color: #fff;
   font-size: 1rem;
   cursor: pointer;
@@ -86,9 +90,9 @@ button:hover {
   padding: 0.75rem;
   border: none;
   border-radius: 50px;
-  background: #fff;
-  color: #000;
-  border: 1px solid #ccc;
+  background: #0f0f0f;
+  color: #aaa;
+  border: 1px solid #0f0f0f;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -96,16 +100,17 @@ button:hover {
 }
 .google-button img {
   margin-right: 0.5rem;
+  border-radius: 100%;
 }
 .google-button:hover {
-  background: #dddddd;
+  background: #0056b3;
 }
 .form-switch {
   margin-top: 1rem;
   text-align: center;
 }
 .form-switch a {
-  color: #007bff;
+  color: #00FFBF;
   text-decoration: none;
   cursor: pointer;
 }
