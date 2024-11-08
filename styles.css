@@ -357,6 +357,11 @@ color: #f1f1f1;
 color: #AAAAAA;
 font-size: 0.9em;
 }
+.darck-mode input[type="range"]::-webkit-slider-runnable-track {
+background: linear-gradient(to right, #00FFBF, #00FFBF) 0% / var(--slider-value) 100% no-repeat, #311E56;
+height: 3px;
+border-radius: 5px;
+}
 /* PREENCHIMENTO DINAMICO */
 input[type="range"]::-webkit-slider-runnable-track {
 background: linear-gradient(to right, #00FFBF, #00FFBF) 0% / var(--slider-value) 100% no-repeat, #ddd;
