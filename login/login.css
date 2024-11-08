@@ -3,6 +3,7 @@
 a{
   font-weight: 500;
   color: #00FFBF;
+  cursor: pointer;
 }
 body {
   font-family: 'Open Sans', sans-serif;
