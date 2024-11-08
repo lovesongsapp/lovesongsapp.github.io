@@ -111,12 +111,12 @@ right: 0;
 left: 0;
 }
 .info .title {
-font-size: 18px;
+font-size: 16px;
 font-weight: 500;
 font-family: 'Open Sans', sans-serif;
 }
 .info .artist {
-font-size: 16px;
+font-size: 14px;
 font-weight: 400;
 }
 input[type="range"] {
