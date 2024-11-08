@@ -296,7 +296,6 @@ align-items: center;
 .dark-mode .player-controls {
 color: #f1f1f1;
 background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.9) 80%, #000000 100%), url(https://lovesongsapp.github.io/bg-controls.jpg) no-repeat center center;
-/*background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg-controls.jpg) no-repeat center center;*/
 background-size: cover;
 }
 .dark-mode .player-header-items {
@@ -313,17 +312,6 @@ font-size: 24px;
 color: #00FFBF;
 font-size: 24px;
 }
-
-/*.dark-mode .play-outline {
-border: 2px solid #00FFBF;
-}*/
-/*.dark-mode .play-outline:hover {
-border: 2px solid #00FFBF;
-}*/
-/*.dark-mode .pause-outline {
-color: #00FFBF;
-border: 2px solid #00FFBF;
-}*/
 .dark-mode .control-button {
 color: #00FFBF;
 }
@@ -366,17 +354,17 @@ border-radius: 5px;
 }
 input[type="range"]::-ms-track {
 background: linear-gradient(to right, #00FFBF, #00FFBF) 0% / var(--slider-value) 100% no-repeat, #ddd;
-height: 3px; /* Define a altura do preenchimento dinâmico */
+height: 3px;
 border-radius: 5px;
 }
 input[type="range"]::-ms-fill-lower {
 background: #00FFBF;
-height: 3px; /* Define a altura do preenchimento dinâmico */
+height: 3px;
 border-radius: 5px;
 }
 input[type="range"]::-ms-fill-upper {
 background: #ddd;
-height: 3px; /* Define a altura do preenchimento dinâmico */
+height: 3px;
 border-radius: 5px;
 }
 /*//////////////////////// MEDIA QUERY PORTRAIT /////////////////////////////// */
@@ -492,15 +480,6 @@ align-items: center;
 #playlist-items li {
 display: flex;
 align-items: center;
-/*margin: 10px 0;*/
-}
-/*
-#playlist-items img {
-width: 120px;
-height: 90px;
-margin-right: 15px;
-border-radius: 10px;
-}*/
 #playlist-items .text-container {
 display: flex;
 flex-direction: column;
@@ -523,5 +502,5 @@ border: none;
 background: #000;
 }
 .busca:focus {
-    outline: 1px solid #000;
+outline: 1px solid #000;
 }
