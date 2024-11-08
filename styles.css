@@ -359,7 +359,7 @@ font-size: 0.9em;
 }
 /* PREENCHIMENTO DINAMICO */
 input[type="range"]::-webkit-slider-runnable-track {
-background: linear-gradient(to right, purple, #1b7fcc) 0% / var(--slider-value) 100% no-repeat, purple;
+background: linear-gradient(to right, purple, #1b7fcc) 0% / var(--slider-value) 100% no-repeat, #382E49;
 height: 3px; /* Define a altura do preenchimento dinâmico */
 border-radius: 5px;
 }
