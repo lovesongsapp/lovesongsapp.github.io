@@ -49,7 +49,10 @@ input {
   box-sizing: border-box;
   background: #0f0f0f;
   color: #00FFBF;
-  
+}
+input:focus{
+  border:1px solid #00ffbf;
+  outline: none;
 }
 .password-container {
   position: relative;
