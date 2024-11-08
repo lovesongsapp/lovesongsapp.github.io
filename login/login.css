@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 a{
   font-weight: 500;
   color: #00FFBF;
@@ -32,7 +33,7 @@ h1 {
   margin-bottom: 1rem;
   color: #00FFBF;
   text-align: center;
-  font-weight: 500;
+  font-weight: 400;
 }
 form {
   display: flex;
