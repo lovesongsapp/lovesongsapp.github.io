@@ -267,6 +267,7 @@ padding: 2px 0px;
 width: 100px;
 height: 85px;
 margin-right: 10px;
+border-radius: 5px;
 }
 #playlist ul li span {
 flex: 1;
