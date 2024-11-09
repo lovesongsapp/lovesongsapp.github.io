@@ -340,7 +340,7 @@ color: #ffffff;
 bottom: 0;
 }
 .dark-mode #playlist ul li {
-padding: 10px 0px;
+padding: 2px 0px;
 border-bottom: 1px solid #6666663d;
 }
 .dark-mode #playlist ul li:hover{
