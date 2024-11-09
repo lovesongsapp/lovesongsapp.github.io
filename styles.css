@@ -264,10 +264,12 @@ border-bottom: 1px solid #d6d1e1;
 padding: 2px 0px;
 }
 #playlist ul li img {
-width: 100px;
-height: 85px;
+width: 140px;
+height: 80px;
 margin-right: 10px;
 border-radius: 5px;
+object-fit: cover;
+object-position: center;
 }
 #playlist ul li span {
 flex: 1;
