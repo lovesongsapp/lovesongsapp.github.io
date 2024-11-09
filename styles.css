@@ -273,7 +273,7 @@ border-radius: 5px;
 flex: 1;
 }
 #playlist ul li:hover {
-background: #69008C;
+background: #00ffbf;
 cursor: pointer;
 }
 #close-playlist {
