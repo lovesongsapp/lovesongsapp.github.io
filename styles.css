@@ -108,7 +108,15 @@ body {
     justify-content: space-between;
     flex: 1;
 }
-
+.gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50vh; /* Altura do gradiente */
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+    pointer-events: none; /* Permite clicar no vídeo sem interferência do gradiente */
+}
 #music-player {
     width: 100%;
     height: 50vh;
