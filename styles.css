@@ -102,7 +102,7 @@ height: 50vh;
 align-items: center;
 display: flex;
 position: fixed;
-top: 65%;
+bottom: 25%;
 width: 97%;
 margin: 0 auto;
 flex-direction: column;
