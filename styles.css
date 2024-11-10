@@ -17,7 +17,7 @@ justify-content: space-between;
 height: 35px;
 position: fixed;
 width: 45%;
-background: rgba(0, 0, 0, 0.7);
+background: rgba(0, 0, 0, 0.9);
 top: 5px;
 border-radius: 20px;
 border: 1px solid #555;
@@ -299,9 +299,11 @@ cursor: pointer;
 #close-playlist {
 background: none;
 border: none;
-color: #311E56;
+color: #00ffbf;
 cursor: pointer;
 font-size: 32px;
+margin-right: 10px;
+margin-top: 5px
 }
 /* //////////////////// DARK MODE ////////////////////////// */
 .dark-mode .player {
@@ -309,12 +311,13 @@ background: linear-gradient(0deg, rgba(87,32,162,1) 0%, rgba(19,5,31,1) 49%);
 }
 .dark-mode #close-playlist {
 color: #00ffbf;
-display: flex;
 align-items: center;
+cursor: pointer;
 }
 .dark-mode .player-controls {
 color: #f1f1f1;
 background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.9) 80%, #000000 100%), url(https://lovesongsapp.github.io/bg-controls.jpg) no-repeat center center;
+/*background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg-controls.jpg) no-repeat center center;*/
 background-size: cover;
 }
 .dark-mode .player-header-items {
@@ -482,16 +485,12 @@ margin-top: 20px;
 #playlist h2 {
 display: none;
 }
-#close-playlist {
+/*#close-playlist {
 background: none;
 border: none;
 font-size: 32px;
-color: #00FFBF;
 cursor: pointer;
-}
-#close-playlist:hover {
-color: #d35500;
-}
+}*/
 .repeat-number {
 font-size: 10px;
 color: #000;
