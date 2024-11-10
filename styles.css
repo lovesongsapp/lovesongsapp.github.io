@@ -72,8 +72,8 @@ padding: 0px;
 .player-header-items {
 flex-direction: column;
 color: mediumpurple;
-font-weight: 300 !important;
-font-size: 12px;
+font-weight: 400;
+font-size: 14px;
 display: flex;
 align-items: center;
 color: #311E56;
