@@ -17,6 +17,19 @@ justify-content: space-between;
 height: 35px;
 position: fixed;
 width: 45%;
+background: #fff
+top: 5px;
+border-radius: 20px;
+border: 1px solid #ccc;
+padding-left: 20px;
+}
+.dark-mode .playlist-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+height: 35px;
+position: fixed;
+width: 45%;
 background: rgba(0, 0, 0, 0.9);
 top: 5px;
 border-radius: 20px;
@@ -250,7 +263,7 @@ padding: 10px;
 border-radius: 10px;
 text-align: left;
 height: 95%;
-top: 20px;
+/top: 20px;
 position: relative;
 width: 100%;
 }
@@ -269,7 +282,7 @@ overflow-y: auto;
 height: 100%;
 scrollbar-width: none;
 position: relative;
-top: 20px;
+top: 35px;
 }
 #playlist ul li {
 display: flex;
@@ -299,7 +312,7 @@ cursor: pointer;
 #close-playlist {
 background: none;
 border: none;
-color: #00ffbf;
+color: #000;
 cursor: pointer;
 font-size: 32px;
 margin-right: 10px;
@@ -534,10 +547,20 @@ font-weight: 500;
 text-transform: uppercase;
 width: 90%;
 height: 30px;
+color: #000;
+border: none;
+background: #fff;
+}
+.dark-mode .busca {
+font-size: 18px;
+font-weight: 500;
+text-transform: uppercase;
+width: 90%;
+height: 30px;
 color: #00ffbf;
 border: none;
 background: #000;
 }
 .busca:focus {
-outline: 1px solid #000;
+outline: none;
 }
