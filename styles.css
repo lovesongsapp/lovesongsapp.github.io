@@ -133,8 +133,6 @@ bottom: 20%;
 width: 97%;
 margin: 0 auto;
 flex-direction: column;
-right: 10px;
-left: 10px;
 }
 .info .title {
 font-size: 18px;
@@ -453,6 +451,7 @@ position: fixed;
 bottom: 40%;
 left: 50%;
 width: auto;
+right: 0;
 }
 .player-controls {
 width: 50%;
