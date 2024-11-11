@@ -133,8 +133,8 @@ bottom: 20%;
 width: 97%;
 margin: 0 auto;
 flex-direction: column;
-right: 0;
-left: 0;
+right: 10px;
+left: 10px;
 }
 .info .title {
 font-size: 18px;
