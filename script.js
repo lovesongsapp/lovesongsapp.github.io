@@ -52,7 +52,6 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     setupControlButtons();
-    //Volume
     // Controle de volume
 document.addEventListener('DOMContentLoaded', function() {
     const volumeControl = document.getElementById('volume-control');
@@ -71,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-    //End volume
     setInterval(() => {
         if (player && player.getCurrentTime) {
             const currentTime = player.getCurrentTime();
