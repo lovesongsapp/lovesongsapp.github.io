@@ -52,23 +52,21 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     setupControlButtons();
-    // Controle de volume
-document.addEventListener('DOMContentLoaded', function() {
+// Controle de Volume
     const volumeControl = document.getElementById('volume-control');
-
-    // Define o volume inicial do player (0 a 1, onde 1 é o volume máximo)
+    
+    // Verifica se o controle de volume existe no DOM
     if (volumeControl) {
-        player.setVolume(100); // Configuração inicial em 100%
+        player.setVolume(100); // Define volume inicial em 100%
         
-        // Atualiza o volume do player quando o controle é ajustado
+        // Atualiza o volume do player ao mover o controle
         volumeControl.addEventListener('input', function() {
-            const volume = volumeControl.value;
-            player.setVolume(volume); // Ajuste o volume (intervalo 0 a 100)
+            const volume = parseInt(volumeControl.value, 10); // Obtém o valor do controle
+            player.setVolume(volume); // Aplica o volume no player (intervalo 0 a 100)
         });
     } else {
         console.error('Controle de volume não encontrado no DOM.');
     }
-});
 
     setInterval(() => {
         if (player && player.getCurrentTime) {
