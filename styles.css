@@ -291,6 +291,9 @@ border-bottom: 1px solid #d6d1e1;
 padding: 2px 0px;
 height: 90px;
 }
+#playlist ul li .title{
+    font-weight: 500;
+}
 #playlist ul li img {
 width: 150px;
 height: 85px;
