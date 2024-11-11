@@ -130,9 +130,11 @@ align-items: center;
 display: flex;
 position: fixed;
 bottom: 20%;
-width: 97%;
+width: 95%;
 margin: 0 auto;
 flex-direction: column;
+left: 0px;
+right: 0px;
 }
 .info .title {
 font-size: 18px;
