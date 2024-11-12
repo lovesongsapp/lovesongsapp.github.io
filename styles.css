@@ -569,9 +569,8 @@ background: #000;
 outline: none;
 }
 .volume-slider{
-    margin-bottom: 80%;
+    bottom: 20px;
     position: relative;
     max-width: 50%;
-    left: 25%;
-    opacity:70%;
+    opacity:50%;
 }
