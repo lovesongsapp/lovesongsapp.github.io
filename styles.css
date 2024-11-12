@@ -568,3 +568,10 @@ background: #000;
 .busca:focus {
 outline: none;
 }
+.volume-slider{
+    margin-bottom: 80%;
+    position: relative;
+    max-width: 50%;
+    left: 25%;
+    opacity:70%;
+}
