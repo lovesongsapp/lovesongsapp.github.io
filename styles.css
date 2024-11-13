@@ -137,7 +137,7 @@ right: 0;
 left: 0;
 }
 .info .title {
-font-size: 18px;
+font-size: 19px;
 font-weight: 500;
 font-family: 'Roboto', sans-serif;
 }
@@ -356,7 +356,7 @@ color: #fafafa;
 color: #fafafa;
 }
 .dark-mode .info .artist {
-color: #a88ebf;
+color: #aaaaaa;
 }
 .dark-mode #playlist-overlay {
 background: rgba(18, 18, 18, 0.8);
