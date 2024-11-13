@@ -30,8 +30,8 @@ bottom: 0;
 .logo-app {
 float: left;
 margin-right: 10px;
-width: 55px;
-height: 55px;
+width: 65px;
+height: 65px;
 background: url('https://lovesongsapp.github.io/icons/icon192.png') no-repeat center center;
 background-size: cover;
 border-radius: 10px;
@@ -55,11 +55,11 @@ font-weight: 500;
 }
 .message {
 clear: both;
-font-weight: 400;
+font-weight: 500;
 margin-top: 25px;
 margin-bottom: 30px;
 line-height: 1.2;
-font-size: 1.1rem;
+font-size: 1.2rem;
 }
 .app .install-btn-app {
 font-size: 1.1rem;
