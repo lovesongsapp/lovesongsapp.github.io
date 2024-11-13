@@ -1,6 +1,8 @@
 /* /////////////////////// BANNER APP INSTALL ///////////////////////*/
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 .app {
 background: #fff;
 background-size: cover;    
@@ -55,10 +57,10 @@ color: #222;
 font-size: 1.1rem;
 }
 .app .install-btn-app {
-font-size: 1rem;
-font-weight: 600;
+font-size: 1.1rem;
+font-weight: 500;
 width: 100%;
-background: #0b57d0;
+background: #0b57cf;
 color: #fff;
 border-radius: 5px;
 border: none;
@@ -66,7 +68,7 @@ padding: 10px;
 cursor: pointer;
 text-align: center;
 display: block;
-font-family: 'Arial', sans-serif;
+font-family: 'PT Sans', sans-serif;
 }
 .header-app {
 top: 7px;
