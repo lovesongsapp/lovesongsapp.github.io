@@ -351,10 +351,10 @@ font-size: 16px;
 cursor: pointer;
 }
 .dark-mode .control-button {
-color: #fafafa;
+color: #00ffbf;
 }
 .dark-mode .control-button:hover {
-color: #fafafa;
+color: #00ffbf;
 }
 .dark-mode .info .artist {
 color: #aaaaaa;
