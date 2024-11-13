@@ -144,6 +144,7 @@ font-family: 'Roboto', sans-serif;
 .info .artist {
 font-size: 16px;
 font-weight: 400;
+color: #311E56;
 }
 input[type="range"] {
 -webkit-appearance: none;
@@ -355,7 +356,7 @@ color: #fafafa;
 color: #fafafa;
 }
 .dark-mode .info .artist {
-color: #fafafa;
+color: #a88ebf;
 }
 .dark-mode #playlist-overlay {
 background: rgba(18, 18, 18, 0.8);
