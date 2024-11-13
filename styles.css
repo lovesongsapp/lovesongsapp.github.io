@@ -17,7 +17,7 @@ justify-content: space-between;
 height: 35px;
 position: fixed;
 width: 45%;
-background: #fff
+background: #fff;
 top: 5px;
 border-radius: 20px;
 border: 1px solid #ccc;
@@ -147,6 +147,7 @@ font-weight: 400;
 }
 input[type="range"] {
 -webkit-appearance: none;
+appearance: none;
 width: 100%;
 background: #FFFFFF20;
 height: 3px;
@@ -263,7 +264,6 @@ padding: 10px;
 border-radius: 10px;
 text-align: left;
 height: 95%;
-/top: 20px;
 position: relative;
 width: 100%;
 }
