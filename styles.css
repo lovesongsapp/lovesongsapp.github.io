@@ -34,6 +34,7 @@ top: 5px;
 border-radius: 20px;
 border: 1px solid #ccc;
 padding-left: 20px;
+z-index: 2;
 }
 .dark-mode .playlist-header {
 display: flex;
@@ -265,7 +266,7 @@ background: #fff;
 padding: 10px;
 border-radius: 10px;
 text-align: left;
-height: 95%;
+height: 100%;
 position: relative;
 width: 100%;
 }
