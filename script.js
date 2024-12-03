@@ -85,7 +85,7 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
-const savedTheme = localStorage.getItem('theme');
+ const savedTheme = localStorage.getItem('theme');
 const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
 
@@ -173,7 +173,7 @@ function setupControlButtons() {
 }
 
 function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.ENDED) {
+    if (event.data == YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
         isPlaying = false;
 
@@ -189,7 +189,6 @@ function onPlayerStateChange(event) {
                 break;
             case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
-                console.log(`Current Index: ${currentIndex}, Playlist Length: ${player.getPlaylist().length}`);
                 if (currentIndex === player.getPlaylist().length - 1) {
                     player.playVideoAt(0);
                 } else {
@@ -200,9 +199,6 @@ function onPlayerStateChange(event) {
     }
     updateTitleAndArtist();
 }
-
-console.log('Modo atual:', mode);
-console.log('Índice atual:', player.getPlaylistIndex());
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
