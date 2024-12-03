@@ -85,7 +85,7 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
- const savedTheme = localStorage.getItem('theme');
+const savedTheme = localStorage.getItem('theme');
 const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
 
@@ -198,9 +198,11 @@ function onPlayerStateChange(event) {
                 break;
         }
     }
+    updateTitleAndArtist();
 }
 
-updateTitleAndArtist();
+console.log('Modo atual:', mode);
+console.log('Índice atual:', player.getPlaylistIndex());
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
