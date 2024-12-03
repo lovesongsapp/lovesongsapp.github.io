@@ -10,7 +10,7 @@ let volumeControl = document.getElementById('volume-control');
 // Inicializa o iframe do YouTube
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // ID padrão caso não haja um na URL
+    const videoId = urlParams.get('videoId') || 'PFpZzWdu6XM'; // ID padrão caso não haja um na URL
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -206,7 +206,7 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
- const savedTheme = localStorage.getItem('theme');
+const savedTheme = localStorage.getItem('theme');
 const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
 
@@ -244,4 +244,78 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
     fetchPlaylistData();
 }
 
+function setupControlButtons() {
+    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
+        if (isPlaying) {
+            player.pauseVideo();
+            this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
+        } else {
+            player.playVideo();
+            this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
+        }
+        isPlaying = !isPlaying;
+    });
 
+    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
+        player.previousVideo();
+    });
+
+    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
+        player.nextVideo();
+    });
+
+    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
+        switch (mode) {
+            case 'repeat':
+                mode = 'repeat_one';
+                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
+                break;
+            case 'repeat_one':
+                mode = 'shuffle';
+                this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
+                isShuffle = true;
+                break;
+            case 'shuffle':
+                mode = 'repeat';
+                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
+                isShuffle = false;
+                break;
+        }
+    });
+
+    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
+        document.getElementById('playlist-overlay').style.display = 'flex';
+        renderPlaylist(playlistData);
+    });
+
+    document.getElementById('close-playlist').addEventListener('click', function() {
+        document.getElementById('playlist-overlay').style.display = 'none';
+    });
+}
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.ENDED) {
+        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
+        isPlaying = false;
+
+        switch (mode) {
+            case 'repeat_one':
+                player.seekTo(0);
+                player.playVideo();
+                break;
+            case 'shuffle':
+                const playlist = player.getPlaylist();
+                const nextIndex = Math.floor(Math.random() * playlist.length);
+                player.playVideoAt(nextIndex);
+                break;
+            case 'repeat':
+                const currentIndex = player.getPlaylistIndex();
+                if (currentIndex === player.getPlaylist().length - 1) {
+                    player.playVideoAt(0);
+                } else {
+                    player.nextVideo();
+                }
+                break;
+        }
+    }
+    updateTitleAndArtist();
+}
