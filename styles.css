@@ -236,15 +236,15 @@ flex: 1;
 margin: 0 10px;
 }
 .repeat-number {
-font-size: 12px;
+font-size: 14px;
 color: #00ffbf;
 background: #000000;
 border-radius: 50%;
 padding: 2px;
 display: flex;
 position: fixed;
-bottom: 55px;
-left: 28px;
+bottom: 50px;
+left: 30px;
 width: 10px;
 justify-content: center;
 align-items: center;
