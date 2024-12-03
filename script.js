@@ -319,3 +319,108 @@ function onPlayerStateChange(event) {
     }
     updateTitleAndArtist();
 }
+function updateTitleAndArtist() {
+    const videoData = player.getVideoData();
+    document.getElementById('title').textContent = videoData.title;
+    document.getElementById('artist').textContent = videoData.author;
+}
+
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+}
+
+async function fetchPlaylistData() {
+    const playlist = player.getPlaylist();
+    playlistData = playlist.map((videoId, index) => ({
+        videoId,
+        index,
+        title: '',
+        author: ''
+    }));
+
+    for (let i = 0; i < playlistData.length; i++) {
+        const videoId = playlistData[i].videoId;
+        try {
+            const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+            const data = await response.json();
+            playlistData[i].title = data.title;
+            playlistData[i].author = data.author_name;
+        } catch (error) {
+            console.error('Error fetching video details:', error);
+        }
+    }
+
+    renderPlaylist(playlistData);
+}
+
+// inicio
+
+function renderPlaylist(videos) {
+    const playlistContainer = document.getElementById('playlist-items');
+    playlistContainer.innerHTML = ''; // Limpa a lista atual
+
+    videos.forEach(video => {
+        const listItem = document.createElement('li');
+
+        // Cria a miniatura do vídeo
+        const thumbnail = document.createElement('img');
+        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
+        listItem.appendChild(thumbnail);
+
+        // Cria um contêiner para o texto
+        const textContainer = document.createElement('div');
+        textContainer.className = 'text-container';
+
+        // Cria e adiciona o título
+        const titleText = document.createElement('span');
+        titleText.className = 'title';
+        titleText.textContent = video.title;
+        textContainer.appendChild(titleText);
+
+        // Cria e adiciona o autor
+        const authorText = document.createElement('span');
+        authorText.className = 'author';
+        authorText.textContent = video.author;
+        textContainer.appendChild(authorText);
+
+        // Adiciona o contêiner de texto ao item da lista
+        listItem.appendChild(textContainer);
+
+        // Adiciona o evento de clique
+        listItem.addEventListener('click', () => {
+            if (isShuffle) {
+                // Encontrar o índice correspondente ao vídeo clicado na lista original
+                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
+                player.playVideoAt(originalIndex);
+            } else {
+                player.playVideoAt(video.index);
+            }
+            document.getElementById('playlist-overlay').style.display = 'none';
+        });
+
+        // Adiciona o item configurado à lista de reprodução
+        playlistContainer.appendChild(listItem);
+    });
+}
+
+// Renderiza a playlist completa ao carregar a página
+renderPlaylist(playlistData);
+
+// Função para filtrar a playlist
+function filterPlaylist(searchText) {
+    return playlistData.filter(video => {
+        const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
+        const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
+        return titleMatch || authorMatch;
+    });
+}
+
+// Configuração da busca
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', () => {
+    const searchText = searchInput.value.trim().toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
+});
