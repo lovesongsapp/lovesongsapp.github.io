@@ -155,17 +155,6 @@ function playTrack() {
     document.getElementById('artist').textContent = video.artist;
 }
 
-// Inicializa a playlist
-function initPlaylist() {
-    playlist = [
-        { id: 'xiN4EOqpvwc', title: 'Love Song 1', artist: 'Artist 1' },
-        { id: '3c9gDxxdbdE', title: 'Love Song 2', artist: 'Artist 2' },
-        { id: 'Bc4t4zAnNyk', title: 'Love Song 3', artist: 'Artist 3' },
-    ];
-
-    playTrack();
-}
-
 // Adiciona eventos aos botões de controle
 document.getElementById('repeat-button').addEventListener('click', toggleMode);
 document.querySelector('.control-button ion-icon[name="play-skip-back-outline"]').addEventListener('click', previousTrack);
@@ -180,3 +169,79 @@ document.querySelector('.control-button ion-icon[name="play-circle-outline"]').a
 
 // Inicializa a aplicação
 initPlaylist();
+
+function onPlayerReady(event) {
+    setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
+    setupControlButtons();
+// Controle de Volume
+    const volumeControl = document.getElementById('volume-control');
+    
+    // Verifica se o controle de volume existe no DOM
+    if (volumeControl) {
+        player.setVolume(100); // Define volume inicial em 100%
+        
+        // Atualiza o volume do player ao mover o controle
+        volumeControl.addEventListener('input', function() {
+            const volume = parseInt(volumeControl.value, 10); // Obtém o valor do controle
+            player.setVolume(volume); // Aplica o volume no player (intervalo 0 a 100)
+        });
+    } else {
+        console.error('Controle de volume não encontrado no DOM.');
+    }
+
+    setInterval(() => {
+        if (player && player.getCurrentTime) {
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            if (duration > 0) {
+                progressBar.value = (currentTime / duration) * 100;
+                currentTimeDisplay.textContent = formatTime(currentTime);
+                durationDisplay.textContent = formatTime(duration);
+            }
+        }
+    }, 1000);
+
+    progressBar.addEventListener('input', function() {
+        const duration = player.getDuration();
+        player.seekTo((progressBar.value / 100) * duration, true);
+    });
+
+ const savedTheme = localStorage.getItem('theme');
+const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
+
+if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+    themeToggleIcon.setAttribute('name', savedTheme === 'dark' ? 'sunny-outline' : 'moon-outline');
+    metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
+} else {
+    // Apply dark theme by default
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.body.classList.add('dark-mode');
+    themeToggleIcon.setAttribute('name', 'sunny-outline');
+    metaThemeColor.setAttribute('content', '#13051f');
+    localStorage.setItem('theme', 'dark');
+}
+
+document.getElementById('theme-toggle').addEventListener('click', function() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.body.classList.remove('dark-mode');
+        themeToggleIcon.setAttribute('name', 'moon-outline');
+        metaThemeColor.setAttribute('content', '#f0f4f9');
+        localStorage.setItem('theme', 'light');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body.classList.add('dark-mode');
+        themeToggleIcon.setAttribute('name', 'sunny-outline');
+        metaThemeColor.setAttribute('content', '#13051f');
+        localStorage.setItem('theme', 'dark');
+    }
+});
+
+    fetchPlaylistData();
+}
+
+
