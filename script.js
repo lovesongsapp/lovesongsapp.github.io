@@ -10,7 +10,7 @@ let volumeControl = document.getElementById('volume-control');
 // Inicializa o iframe do YouTube
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc'; // ID padrão caso não haja um na URL
+    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // ID padrão caso não haja um na URL
 
     player = new YT.Player('music-player', {
         height: '100%',
