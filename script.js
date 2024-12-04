@@ -1,33 +1,52 @@
 let player;
-let maxQuality = 'medium'; // Definir resolução máxima
-let minQuality = 'low'; // Definir resolução mínima
+let maxQuality = 'medium';
+let minQuality = 'low';
 let isPlaying = false;
 let isShuffle = false;
-let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
+let mode = 'repeat';
 let progressBar, currentTimeDisplay, durationDisplay;
-let playlistData = [];
-let sharedVideoId = null;
+let playlistData = []; // Initialize as empty array
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
 }
 
+// Add a function to load the YouTube IFrame API
+function loadYouTubeIframeAPI() {
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // Set a timeout to handle API loading errors
+    let apiLoadTimeout = setTimeout(() => {
+        console.error("YouTube IFrame API failed to load.");
+        // Handle the error appropriately (e.g., display a message to the user)
+    }, 5000); // Adjust timeout as needed
+
+    window.onYouTubeIframeAPIReady = () => {
+        clearTimeout(apiLoadTimeout); // Clear timeout if API loads successfully
+        onYouTubeIframeAPIReady();
+    };
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
     progressBar = document.getElementById('progress');
     currentTimeDisplay = document.getElementById('current-time');
     durationDisplay = document.getElementById('duration');
-    
-    // Verifique se todos os elementos DOM necessários estão presentes
+
     if (progressBar && currentTimeDisplay && durationDisplay) {
-        onYouTubeIframeAPIReady();
+        loadYouTubeIframeAPI(); // Call the API loading function
     } else {
-        console.error('Um ou mais elementos DOM não foram encontrados.');
+        console.error('One or more DOM elements not found.');
     }
 });
 
+
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI';
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -40,7 +59,7 @@ function onYouTubeIframeAPIReady() {
             'controls': 0,
             'iv_load_policy': 3,
             'modestbranding': 1,
-            'rel': 0 // Evita mostrar vídeos relacionados ao final
+            'rel': 0
         },
         events: {
             'onReady': onPlayerReady,
@@ -50,19 +69,15 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-    setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
+    setVideoQuality(minQuality);
     setupControlButtons();
-// Controle de Volume
-    const volumeControl = document.getElementById('volume-control');
-    
-    // Verifica se o controle de volume existe no DOM
+
+   const volumeControl = document.getElementById('volume-control');
     if (volumeControl) {
-        player.setVolume(100); // Define volume inicial em 100%
-        
-        // Atualiza o volume do player ao mover o controle
+        player.setVolume(100);
         volumeControl.addEventListener('input', function() {
-            const volume = parseInt(volumeControl.value, 10); // Obtém o valor do controle
-            player.setVolume(volume); // Aplica o volume no player (intervalo 0 a 100)
+            const volume = parseInt(volumeControl.value, 10);
+            player.setVolume(volume);
         });
     } else {
         console.error('Controle de volume não encontrado no DOM.');
@@ -85,26 +100,25 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
- const savedTheme = localStorage.getItem('theme');
-const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
+    const savedTheme = localStorage.getItem('theme');
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
 
-if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-    themeToggleIcon.setAttribute('name', savedTheme === 'dark' ? 'sunny-outline' : 'moon-outline');
-    metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
-} else {
-    // Apply dark theme by default
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.body.classList.add('dark-mode');
-    themeToggleIcon.setAttribute('name', 'sunny-outline');
-    metaThemeColor.setAttribute('content', '#13051f');
-    localStorage.setItem('theme', 'dark');
-}
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+        themeToggleIcon.setAttribute('name', savedTheme === 'dark' ? 'sunny-outline' : 'moon-outline');
+        metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body.classList.add('dark-mode');
+        themeToggleIcon.setAttribute('name', 'sunny-outline');
+        metaThemeColor.setAttribute('content', '#13051f');
+        localStorage.setItem('theme', 'dark');
+    }
 
-document.getElementById('theme-toggle').addEventListener('click', function() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
     if (currentTheme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'light');
         document.body.classList.remove('dark-mode');
@@ -118,9 +132,11 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
         metaThemeColor.setAttribute('content', '#13051f');
         localStorage.setItem('theme', 'dark');
     }
-});
+    });
+
 
     fetchPlaylistData();
+
 }
 
 function setupControlButtons() {
@@ -170,7 +186,30 @@ function setupControlButtons() {
     document.getElementById('close-playlist').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
+
+//REPEAT-BUTTON EVENTS
+const repeatButton = document.getElementById('repeat-button'); // Seleciona o botão pelo ID
+
+    repeatButton.addEventListener('click', function() { // Adiciona o ouvinte de eventos
+        switch (mode) {
+            case 'repeat':
+                mode = 'repeat_one';
+                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>'; // Altera o ícone
+                break;
+            case 'repeat_one':
+                mode = 'shuffle';
+                repeatButton.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>'; // Altera o ícone
+                isShuffle = true;
+                break;
+            case 'shuffle':
+                mode = 'repeat';
+                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>'; // Altera o ícone
+                isShuffle = false;
+                break;
+        }
+    });
 }
+
 
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
@@ -183,8 +222,7 @@ function onPlayerStateChange(event) {
                 player.playVideo();
                 break;
             case 'shuffle':
-                const playlist = player.getPlaylist();
-                const nextIndex = Math.floor(Math.random() * playlist.length);
+                const nextIndex = Math.floor(Math.random() * playlistData.length);
                 player.playVideoAt(nextIndex);
                 break;
             case 'repeat':
@@ -198,6 +236,53 @@ function onPlayerStateChange(event) {
         }
     }
     updateTitleAndArtist();
+}
+
+
+function renderPlaylist(videos) {
+        const playlistContainer = document.getElementById('playlist-items');
+    playlistContainer.innerHTML = ''; // Limpa a lista atual
+
+    videos.forEach(video => {
+        const listItem = document.createElement('li');
+
+        // Cria a miniatura do vídeo
+        const thumbnail = document.createElement('img');
+        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
+        listItem.appendChild(thumbnail);
+
+        // Cria um contêiner para o texto
+        const textContainer = document.createElement('div');
+        textContainer.className = 'text-container';
+
+        // Cria e adiciona o título
+        const titleText = document.createElement('span');
+        titleText.className = 'title';
+        titleText.textContent = video.title;
+        textContainer.appendChild(titleText);
+
+        // Cria e adiciona o autor
+        const authorText = document.createElement('span');
+        authorText.className = 'author';
+        authorText.textContent = video.author;
+        textContainer.appendChild(authorText);
+
+        // Adiciona o contêiner de texto ao item da lista
+        listItem.appendChild(textContainer);
+
+        listItem.addEventListener('click', () => {
+            if (isShuffle) {
+                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId); // Corrected index lookup
+                player.playVideoAt(originalIndex);
+            } else {
+                player.playVideoAt(video.index);
+            }
+           document.getElementById('playlist-overlay').style.display = 'none';
+        });
+
+     // Adiciona o item configurado à lista de reprodução
+        playlistContainer.appendChild(listItem);
+    });
 }
 
 function updateTitleAndArtist() {
@@ -235,59 +320,6 @@ async function fetchPlaylistData() {
 
     renderPlaylist(playlistData);
 }
-
-// inicio
-
-function renderPlaylist(videos) {
-    const playlistContainer = document.getElementById('playlist-items');
-    playlistContainer.innerHTML = ''; // Limpa a lista atual
-
-    videos.forEach(video => {
-        const listItem = document.createElement('li');
-
-        // Cria a miniatura do vídeo
-        const thumbnail = document.createElement('img');
-        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
-        listItem.appendChild(thumbnail);
-
-        // Cria um contêiner para o texto
-        const textContainer = document.createElement('div');
-        textContainer.className = 'text-container';
-
-        // Cria e adiciona o título
-        const titleText = document.createElement('span');
-        titleText.className = 'title';
-        titleText.textContent = video.title;
-        textContainer.appendChild(titleText);
-
-        // Cria e adiciona o autor
-        const authorText = document.createElement('span');
-        authorText.className = 'author';
-        authorText.textContent = video.author;
-        textContainer.appendChild(authorText);
-
-        // Adiciona o contêiner de texto ao item da lista
-        listItem.appendChild(textContainer);
-
-        // Adiciona o evento de clique
-        listItem.addEventListener('click', () => {
-            if (isShuffle) {
-                // Encontrar o índice correspondente ao vídeo clicado na lista original
-                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
-                player.playVideoAt(originalIndex);
-            } else {
-                player.playVideoAt(video.index);
-            }
-            document.getElementById('playlist-overlay').style.display = 'none';
-        });
-
-        // Adiciona o item configurado à lista de reprodução
-        playlistContainer.appendChild(listItem);
-    });
-}
-
-// Renderiza a playlist completa ao carregar a página
-renderPlaylist(playlistData);
 
 // Função para filtrar a playlist
 function filterPlaylist(searchText) {
