@@ -210,9 +210,9 @@ const repeatButton = document.getElementById('repeat-button'); // Seleciona o bo
     });
 }
 
+
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
-        if (event.data == YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
         isPlaying = false;
 
@@ -223,31 +223,6 @@ function onPlayerStateChange(event) {
                 break;
             case 'shuffle':
                 const nextIndex = Math.floor(Math.random() * playlistData.length);
-                player.playVideoAt(nextIndex);
-                break;
-            case 'repeat':
-                const currentIndex = player.getPlaylistIndex();
-                if (currentIndex === player.getPlaylist().length - 1) {
-                    player.playVideoAt(0);
-                } else {
-                    player.nextVideo();
-                }
-                break;
-
-}
-
-function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.ENDED) {
-        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
-        isPlaying = false;
-
-        switch (mode) {
-            case 'repeat_one':
-                player.seekTo(0);
-                player.playVideo();
-                break;
-            case 'shuffle':
-                const nextIndex = Math.floor(Math.random() * playlistData.length); // Corrected shuffle logic
                 player.playVideoAt(nextIndex);
                 break;
             case 'repeat':
