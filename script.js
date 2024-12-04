@@ -8,7 +8,7 @@ let shuffledPlaylist = []; // Para armazenar a versão embaralhada da playlist
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || '7xhSlpGrITE'; // ID padrão caso não haja um na URL
+    const videoId = urlParams.get('videoId') || 'A6uZ0Yv8lK4'; // ID padrão caso não haja um na URL
 
     player = new YT.Player('music-player', {
         height: '100%',
