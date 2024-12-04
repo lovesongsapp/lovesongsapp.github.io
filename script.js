@@ -186,6 +186,52 @@ function setupControlButtons() {
     document.getElementById('close-playlist').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
+
+//REPEAT-BUTTON EVENTS
+const repeatButton = document.getElementById('repeat-button'); // Seleciona o botão pelo ID
+
+    repeatButton.addEventListener('click', function() { // Adiciona o ouvinte de eventos
+        switch (mode) {
+            case 'repeat':
+                mode = 'repeat_one';
+                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>'; // Altera o ícone
+                break;
+            case 'repeat_one':
+                mode = 'shuffle';
+                repeatButton.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>'; // Altera o ícone
+                isShuffle = true;
+                break;
+            case 'shuffle':
+                mode = 'repeat';
+                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>'; // Altera o ícone
+                isShuffle = false;
+                break;
+        }
+    });
+}
+
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.ENDED) {
+        // ... (resto do código do onPlayerStateChange)
+
+        switch (mode) {
+            case 'repeat_one':
+                player.seekTo(0);
+                player.playVideo();
+                break;
+            case 'shuffle':
+                const nextIndex = Math.floor(Math.random() * playlistData.length);
+                player.playVideoAt(nextIndex);
+                break;
+            case 'repeat':
+                const currentIndex = player.getPlaylistIndex();
+                if (currentIndex === player.getPlaylist().length - 1) {
+                    player.playVideoAt(0);
+                } else {
+                    player.nextVideo();
+                }
+                break;
+
 }
 
 function onPlayerStateChange(event) {
