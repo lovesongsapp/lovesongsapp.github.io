@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'r5i123onKOQ'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || 'kE1Yle65wjg'; // Video Inicial da Playlist
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -181,23 +181,15 @@ function onPlayerStateChange(event) {
             case 'shuffle':
                 const playlist = player.getPlaylist();
                 const nextIndex = Math.floor(Math.random() * playlist.length);
-                console.log("Modo Shuffle: Próximo vídeo aleatório: " + nextIndex);
                 player.playVideoAt(nextIndex); // Embaralha a playlist
                 break;
             case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
-                console.log('Modo Repeat: Vídeo atual: ' + currentIndex);
-
-                // Ajuste para avançar para o próximo vídeo corretamente
-                let nextIndex = currentIndex + 1;
-
-                // Verifica se chegou ao final da playlist
-                if (nextIndex >= player.getPlaylist().length) {
-                    nextIndex = 0; // Reinicia a playlist se o fim for alcançado
+                if (currentIndex === player.getPlaylist().length - 1) {
+                    player.playVideoAt(0);
+                } else {
+                    player.nextVideo();
                 }
-
-                console.log('Avançando para o próximo vídeo: ' + nextIndex);
-                player.playVideoAt(nextIndex); // Avança para o próximo vídeo na lista
                 break;
         }
     }
