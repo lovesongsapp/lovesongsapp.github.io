@@ -1,10 +1,29 @@
 let player;
+let maxQuality = 'large'; // Definir resolução máxima
+let minQuality = 'medium'; // Definir resolução mínima
 let isPlaying = false;
 let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
-let shuffledPlaylist = []; // Para armazenar a versão embaralhada da playlist
+let sharedVideoId = null;
+
+function setVideoQuality(quality) {
+    player.setPlaybackQuality(quality);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    progressBar = document.getElementById('progress');
+    currentTimeDisplay = document.getElementById('current-time');
+    durationDisplay = document.getElementById('duration');
+    
+    // Verifique se todos os elementos DOM necessários estão presentes
+    if (progressBar && currentTimeDisplay && durationDisplay) {
+        onYouTubeIframeAPIReady();
+    } else {
+        console.error('Um ou mais elementos DOM não foram encontrados.');
+    }
+});
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -15,12 +34,10 @@ function onYouTubeIframeAPIReady() {
         width: '100%',
         videoId: videoId,
         playerVars: {
-            'listType': 'playlist',
-            'list': 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
-            'autoplay': 0,
-            'controls': 1,
-            'rel': 0, // Evitar vídeos relacionados ao final
-            'modestbranding': 1
+            listType: 'playlist',
+            list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
+            autoplay: 0,
+            controls: 0
         },
         events: {
             'onReady': onPlayerReady,
@@ -30,25 +47,65 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
+    setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     setupControlButtons();
-    setInterval(() => updateProgress(), 1000);
 
-    // Controle de Volume
-    const volumeControl = document.getElementById('volume-control');
-    if (volumeControl) {
-        player.setVolume(100); // Volume inicial
-        volumeControl.addEventListener('input', function () {
-            const volume = parseInt(volumeControl.value, 10); // Obtém o valor do controle
-            player.setVolume(volume); // Aplica no player
-        });
+    setInterval(() => {
+        if (player && player.getCurrentTime) {
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            if (duration > 0) {
+                progressBar.value = (currentTime / duration) * 100;
+                currentTimeDisplay.textContent = formatTime(currentTime);
+                durationDisplay.textContent = formatTime(duration);
+            }
+        }
+    }, 1000);
+
+    progressBar.addEventListener('input', function() {
+        const duration = player.getDuration();
+        player.seekTo((progressBar.value / 100) * duration, true);
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+        document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
+        metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
+    } else {
+        // Apply dark theme by default
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
+        metaThemeColor.setAttribute('content', '#13051f');
+        localStorage.setItem('theme', 'dark');
     }
+
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.body.classList.remove('dark-mode');
+            this.innerHTML = '<ion-icon name="moon-outline"></ion-icon>';
+            metaThemeColor.setAttribute('content', '#f0f4f9');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.body.classList.add('dark-mode');
+            this.innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
+            metaThemeColor.setAttribute('content', '#13051f');
+            localStorage.setItem('theme', 'dark');
+        }
+    });
 
     fetchPlaylistData();
 }
 
 function setupControlButtons() {
-    // Botão Play/Pause
-    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function () {
+    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
             this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
@@ -59,23 +116,15 @@ function setupControlButtons() {
         isPlaying = !isPlaying;
     });
 
-    // Botão Anterior
-    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function () {
+    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
         player.previousVideo();
     });
 
-    // Botão Próximo
-    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function () {
-        if (isShuffle && shuffledPlaylist.length) {
-            const nextIndex = Math.floor(Math.random() * shuffledPlaylist.length);
-            player.loadVideoById(shuffledPlaylist[nextIndex]);
-        } else {
-            player.nextVideo();
-        }
+    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
+        player.nextVideo();
     });
 
-    // Botão Repetir/Shuffle
-    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function () {
+    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
                 mode = 'repeat_one';
@@ -85,7 +134,6 @@ function setupControlButtons() {
                 mode = 'shuffle';
                 this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
                 isShuffle = true;
-                shufflePlaylist();
                 break;
             case 'shuffle':
                 mode = 'repeat';
@@ -95,41 +143,38 @@ function setupControlButtons() {
         }
     });
 
-    // Botão Playlist
-    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function () {
+    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
-        renderPlaylist(isShuffle ? shuffledPlaylist : playlistData);
+        renderPlaylist(playlistData);
     });
 
-    // Fechar Playlist
-    document.getElementById('close-playlist').addEventListener('click', function () {
+    document.getElementById('close-playlist').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
 }
 
-function shufflePlaylist() {
-    shuffledPlaylist = [...playlistData];
-    for (let i = shuffledPlaylist.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledPlaylist[i], shuffledPlaylist[j]] = [shuffledPlaylist[j], shuffledPlaylist[i]];
-    }
-}
-
 function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.ENDED) {
+    if (event.data == YT.PlayerState.ENDED) {
+        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
+        isPlaying = false;
+
         switch (mode) {
             case 'repeat_one':
                 player.seekTo(0);
                 player.playVideo();
                 break;
             case 'shuffle':
-                if (shuffledPlaylist.length) {
-                    const nextIndex = Math.floor(Math.random() * shuffledPlaylist.length);
-                    player.loadVideoById(shuffledPlaylist[nextIndex]);
-                }
+                const playlist = player.getPlaylist();
+                const nextIndex = Math.floor(Math.random() * playlist.length);
+                player.playVideoAt(nextIndex);
                 break;
             case 'repeat':
-                player.nextVideo();
+                const currentIndex = player.getPlaylistIndex();
+                if (currentIndex === player.getPlaylist().length - 1) {
+                    player.playVideoAt(0);
+                } else {
+                    player.nextVideo();
+                }
                 break;
         }
     }
@@ -142,19 +187,13 @@ function updateTitleAndArtist() {
     document.getElementById('artist').textContent = videoData.author;
 }
 
-function updateProgress() {
-    if (player && player.getCurrentTime) {
-        const currentTime = player.getCurrentTime();
-        const duration = player.getDuration();
-        if (duration > 0) {
-            progressBar.value = (currentTime / duration) * 100;
-            currentTimeDisplay.textContent = formatTime(currentTime);
-            durationDisplay.textContent = formatTime(duration);
-        }
-    }
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
 }
 
-function fetchPlaylistData() {
+async function fetchPlaylistData() {
     const playlist = player.getPlaylist();
     playlistData = playlist.map((videoId, index) => ({
         videoId,
@@ -163,23 +202,26 @@ function fetchPlaylistData() {
         author: ''
     }));
 
-    playlistData.forEach(async (item) => {
+    for (let i = 0; i < playlistData.length; i++) {
+        const videoId = playlistData[i].videoId;
         try {
-            const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${item.videoId}`);
+            const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
             const data = await response.json();
-            item.title = data.title || 'Sem Título';
-            item.author = data.author_name || 'Desconhecido';
+            playlistData[i].title = data.title;
+            playlistData[i].author = data.author_name;
         } catch (error) {
-            console.error(`Erro ao carregar dados do vídeo ${item.videoId}:`, error);
+            console.error('Error fetching video details:', error);
         }
-    });
+    }
+
+    renderPlaylist(playlistData);
 }
 
-function renderPlaylist(videos) {
+function renderPlaylist(playlist) {
     const playlistContainer = document.getElementById('playlist-items');
     playlistContainer.innerHTML = '';
 
-    videos.forEach(video => {
+    playlist.forEach(video => {
         const listItem = document.createElement('li');
 
         const thumbnail = document.createElement('img');
@@ -202,84 +244,55 @@ function renderPlaylist(videos) {
         listItem.appendChild(textContainer);
 
         listItem.addEventListener('click', () => {
-            const index = isShuffle
-                ? shuffledPlaylist.findIndex(item => item.videoId === video.videoId)
-                : video.index;
-            player.playVideoAt(index);
+            if (isShuffle) {
+                // Encontrar o índice correspondente ao vídeo clicado na lista original
+                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
+                player.playVideoAt(originalIndex);
+            } else {
+                player.playVideoAt(video.index);
+            }
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
         playlistContainer.appendChild(listItem);
     });
 }
+// BUSCA CONFIG
 
-// Formata o tempo de segundos para o formato mm:ss
-function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-}
-
-// Atualiza a barra de progresso e o tempo exibido
-function updateProgressBar() {
-    if (player && player.getCurrentTime) {
-        const currentTime = player.getCurrentTime();
-        const duration = player.getDuration();
-        const progressPercent = (currentTime / duration) * 100;
-
-        progressBar.style.width = `${progressPercent}%`;
-        currentTimeElement.textContent = formatTime(currentTime);
-        durationElement.textContent = formatTime(duration);
-    }
-}
-
-// Lida com cliques na barra de progresso
-progressContainer.addEventListener('click', (event) => {
-    const width = progressContainer.clientWidth;
-    const clickX = event.offsetX;
-    const duration = player.getDuration();
-    const newTime = (clickX / width) * duration;
-
-    player.seekTo(newTime, true);
+// Adicione o evento de keyup ao input de texto
+document.getElementById('search-input').addEventListener('keyup', function(event) {
+    const searchText = event.target.value.toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
 });
 
-// Função para pular para o próximo vídeo
-function playNextVideo() {
-    if (shuffleMode) {
-        currentIndex = Math.floor(Math.random() * playlist.length);
-    } else {
-        currentIndex = (currentIndex + 1) % playlist.length;
-    }
-    loadVideo(playlist[currentIndex]);
-    player.playVideo();
+// Crie a função que filtre a playlist
+function filterPlaylist(searchText) {
+    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
 }
 
-// Função para voltar ao vídeo anterior
-function playPreviousVideo() {
-    if (shuffleMode) {
-        currentIndex = Math.floor(Math.random() * playlist.length);
+// SHARE CONFIG
+// Compartilhamento
+document.getElementById('share-icon').addEventListener('click', function() {
+    const videoData = player.getVideoData();
+    const videoId = videoData.video_id;
+    const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: videoData.title,
+            text: `🩷💚 Confira este vídeo: ${videoData.title}`,
+            url: shareUrl,
+        }).then(() => {
+            console.log('Compartilhamento bem-sucedido');
+        }).catch((error) => {
+            console.error('Erro ao compartilhar:', error);
+        });
     } else {
-        currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+        // Fallback para navegadores que não suportam a API de compartilhamento
+        alert(`🩷💚 Confira este vídeo: ${videoData.title}\n${shareUrl}`);
     }
-    loadVideo(playlist[currentIndex]);
-    player.playVideo();
-}
-
-// Eventos de clique para botões de controle
-playPauseButton.addEventListener('click', togglePlayPause);
-nextButton.addEventListener('click', playNextVideo);
-prevButton.addEventListener('click', playPreviousVideo);
-shuffleButton.addEventListener('click', toggleShuffleMode);
-
-// Função chamada em intervalos para atualizar a barra de progresso
-setInterval(updateProgressBar, 1000);
-
-// Atualização inicial de elementos
-currentTimeElement.textContent = "0:00";
-durationElement.textContent = "0:00";
-
-// Inicia o carregamento do primeiro vídeo da playlist
-loadVideo(playlist[currentIndex]);
+});
 
 // Selecionando o botão pelo ID
 const repeatButton = document.getElementById('repeat-button');
@@ -341,4 +354,3 @@ function updatePlayerWithPlaylist(playlist) {
     console.log('Atualizando player com nova playlist:', playlist);
     // Aqui você deve implementar como carregar a nova ordem no reprodutor
 }
-
