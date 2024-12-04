@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || '3JWTaaS7LdU'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // Video Inicial da Playlist
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -128,29 +128,6 @@ function setupControlButtons() {
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function () {
         player.nextVideo();
     });
-
-// Evento do botão shuffle
-const repeatButton = document.querySelector('.control-button:nth-child(1)');
-repeatButton.addEventListener('click', function () {
-    switch (mode) {
-        case 'repeat':
-            mode = 'repeat_one';
-            this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
-            break;
-        case 'repeat_one':
-            mode = 'shuffle';
-            isShuffle = true;
-            this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-            shuffledPlaylist = shuffleArray(player.getPlaylist());
-            break;
-        case 'shuffle':
-            mode = 'repeat';
-            isShuffle = false;
-            this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
-            shuffledPlaylist = [];
-            break;
-    }
-});
 
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function () {
         document.getElementById('playlist-overlay').style.display = 'flex';
