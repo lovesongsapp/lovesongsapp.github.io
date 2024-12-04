@@ -123,7 +123,7 @@ function setupControlButtons() {
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
         player.nextVideo();
     });
-
+/*
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
@@ -142,7 +142,33 @@ function setupControlButtons() {
                 break;
         }
     });
+*/
 
+//SUFFLE
+
+    const repeatButton = document.getElementById('repeat-button'); // Seleciona o botão pelo ID
+
+    repeatButton.addEventListener('click', function() { // Adiciona o ouvinte de eventos
+        switch (mode) {
+            case 'repeat':
+                mode = 'repeat_one';
+                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>'; // Altera o ícone
+                break;
+            case 'repeat_one':
+                mode = 'shuffle';
+                repeatButton.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>'; // Altera o ícone
+                isShuffle = true;
+                break;
+            case 'shuffle':
+                mode = 'repeat';
+                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>'; // Altera o ícone
+                isShuffle = false;
+                break;
+        }
+    });
+
+
+    
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
         renderPlaylist(playlistData);
