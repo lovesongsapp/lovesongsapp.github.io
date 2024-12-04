@@ -1,6 +1,6 @@
 let player;
-let maxQuality = 'large'; // Definir resolução máxima
-let minQuality = 'medium'; // Definir resolução mínima
+let maxQuality = 'medium'; // Definir resolução máxima
+let minQuality = 'low'; // Definir resolução mínima
 let isPlaying = false;
 let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
@@ -27,17 +27,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc'; // ID padrão caso não haja um na URL
+    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // Video Inicial da Playlist
 
     player = new YT.Player('music-player', {
         height: '100%',
         width: '100%',
         videoId: videoId,
         playerVars: {
-            listType: 'playlist',
-            list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
-            autoplay: 0,
-            controls: 0
+            'listType': 'playlist',
+            'list': 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
+            'autoplay': 0,
+            'controls': 0,
+            'iv_load_policy': 3,
+            'modestbranding': 1,
+            'rel': 0 // Evita mostrar vídeos relacionados ao final
         },
         events: {
             'onReady': onPlayerReady,
@@ -49,6 +52,21 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     setupControlButtons();
+    // Controle de Volume
+    const volumeControl = document.getElementById('volume-control');
+    
+    // Verifica se o controle de volume existe no DOM
+    if (volumeControl) {
+        player.setVolume(100); // Define volume inicial em 100%
+        
+        // Atualiza o volume do player ao mover o controle
+        volumeControl.addEventListener('input', function() {
+            const volume = parseInt(volumeControl.value, 10); // Obtém o valor do controle
+            player.setVolume(volume); // Aplica o volume no player (intervalo 0 a 100)
+        });
+    } else {
+        console.error('Controle de volume não encontrado no DOM.');
+    }
 
     setInterval(() => {
         if (player && player.getCurrentTime) {
@@ -67,19 +85,21 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
+    // Temas e modo escuro/claro
     const savedTheme = localStorage.getItem('theme');
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
 
     if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
         document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-        document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
+        themeToggleIcon.setAttribute('name', savedTheme === 'dark' ? 'sunny-outline' : 'moon-outline');
         metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
     } else {
         // Apply dark theme by default
         document.documentElement.setAttribute('data-theme', 'dark');
         document.body.classList.add('dark-mode');
-        document.getElementById('theme-toggle').innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
+        themeToggleIcon.setAttribute('name', 'sunny-outline');
         metaThemeColor.setAttribute('content', '#13051f');
         localStorage.setItem('theme', 'dark');
     }
@@ -89,13 +109,13 @@ function onPlayerReady(event) {
         if (currentTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'light');
             document.body.classList.remove('dark-mode');
-            this.innerHTML = '<ion-icon name="moon-outline"></ion-icon>';
+            themeToggleIcon.setAttribute('name', 'moon-outline');
             metaThemeColor.setAttribute('content', '#f0f4f9');
             localStorage.setItem('theme', 'light');
         } else {
             document.documentElement.setAttribute('data-theme', 'dark');
             document.body.classList.add('dark-mode');
-            this.innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
+            themeToggleIcon.setAttribute('name', 'sunny-outline');
             metaThemeColor.setAttribute('content', '#13051f');
             localStorage.setItem('theme', 'dark');
         }
@@ -105,25 +125,6 @@ function onPlayerReady(event) {
 }
 
 function setupControlButtons() {
-    const repeatButton = document.getElementById('repeat-button'); // Seleciona o botão pelo ID
-    repeatButton.addEventListener('click', function() { // Adiciona o ouvinte de eventos
-        switch (mode) {
-            case 'repeat':
-                mode = 'repeat_one';
-                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>'; // Altera o ícone
-                break;
-            case 'repeat_one':
-                mode = 'shuffle';
-                repeatButton.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>'; // Altera o ícone
-                isShuffle = true;
-                break;
-            case 'shuffle':
-                mode = 'repeat';
-                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>'; // Altera o ícone
-                isShuffle = false;
-                break;
-        }
-    });
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
@@ -143,7 +144,7 @@ function setupControlButtons() {
         player.nextVideo();
     });
 
-    /*document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
+    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
                 mode = 'repeat_one';
@@ -160,7 +161,7 @@ function setupControlButtons() {
                 isShuffle = false;
                 break;
         }
-    });*/
+    });
 
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
@@ -236,79 +237,40 @@ async function fetchPlaylistData() {
     renderPlaylist(playlistData);
 }
 
-function renderPlaylist(playlist) {
+function renderPlaylist(videos) {
     const playlistContainer = document.getElementById('playlist-items');
-    playlistContainer.innerHTML = '';
+    playlistContainer.innerHTML = ''; // Limpa a lista atual
 
-    playlist.forEach(video => {
+    videos.forEach(video => {
         const listItem = document.createElement('li');
+        listItem.classList.add('playlist-item');
 
         const thumbnail = document.createElement('img');
+        thumbnail.classList.add('thumbnail');
         thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
+        thumbnail.alt = video.title;
+
+        const details = document.createElement('div');
+        details.classList.add('details');
+
+        const title = document.createElement('span');
+        title.classList.add('video-title');
+        title.textContent = video.title;
+
+        const author = document.createElement('span');
+        author.classList.add('video-author');
+        author.textContent = video.author;
+
+        details.appendChild(title);
+        details.appendChild(author);
         listItem.appendChild(thumbnail);
-
-        const textContainer = document.createElement('div');
-        textContainer.className = 'text-container';
-
-        const titleText = document.createElement('span');
-        titleText.className = 'title';
-        titleText.textContent = video.title;
-        textContainer.appendChild(titleText);
-
-        const authorText = document.createElement('span');
-        authorText.className = 'author';
-        authorText.textContent = video.author;
-        textContainer.appendChild(authorText);
-
-        listItem.appendChild(textContainer);
+        listItem.appendChild(details);
 
         listItem.addEventListener('click', () => {
-            if (isShuffle) {
-                // Encontrar o índice correspondente ao vídeo clicado na lista original
-                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
-                player.playVideoAt(originalIndex);
-            } else {
-                player.playVideoAt(video.index);
-            }
+            player.loadVideoById(video.videoId);
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
         playlistContainer.appendChild(listItem);
     });
 }
-// BUSCA CONFIG
-
-// Adicione o evento de keyup ao input de texto
-document.getElementById('search-input').addEventListener('keyup', function(event) {
-    const searchText = event.target.value.toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
-});
-
-// Crie a função que filtre a playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
-}
-
-// SHARE CONFIG
-// Compartilhamento
-document.getElementById('share-icon').addEventListener('click', function() {
-    const videoData = player.getVideoData();
-    const videoId = videoData.video_id;
-    const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
-
-    if (navigator.share) {
-        navigator.share({
-            title: videoData.title,
-            text: `🩷💚 Confira este vídeo: ${videoData.title}`,
-            url: shareUrl,
-        }).then(() => {
-            console.log('Compartilhamento bem-sucedido');
-        }).catch((error) => {
-            console.error('Erro ao compartilhar:', error);
-        });
-    } else {
-        // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`🩷💚 Confira este vídeo: ${videoData.title}\n${shareUrl}`);
-    }
-});
