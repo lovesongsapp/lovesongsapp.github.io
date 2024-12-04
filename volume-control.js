@@ -1,16 +1,14 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const volumeControl = document.getElementById('volume-control');
 
-    function updateVolume() {
-        const volume = volumeControl.value;
-        // Atualiza o estilo do controle deslizante
-        volumeControl.style.setProperty('--slider-value', `${volume}%`);
-        console.log(`Volume set to: ${volume}`);
-    }
+    const updateSliderStyle = () => {
+        const volume = volumeControl.value; // Obtém o valor atual do controle
+        volumeControl.style.setProperty('--slider-value', `${volume}%`); // Define a propriedade CSS personalizada
+    };
 
-    // Atualizar o volume ao mover o slider
-    volumeControl.addEventListener('input', updateVolume);
+    // Atualiza o estilo sempre que o controle deslizante muda
+    volumeControl.addEventListener('input', updateSliderStyle);
 
-    // Garantir que o valor inicial esteja correto
-    updateVolume();
+    // Inicializa o estilo com o valor atual ao carregar a página
+    updateSliderStyle();
 });
