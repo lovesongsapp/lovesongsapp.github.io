@@ -1,23 +1,17 @@
 let player;
-let maxQuality = 'medium'; // Definir resolução máxima
-let minQuality = 'low'; // Definir resolução mínima
 let isPlaying = false;
-let isShuffle = false;
+let isShuffle = false; // Estado do modo aleatório
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
-let sharedVideoId = null;
+let originalPlaylist = []; // Para preservar a ordem original da playlist
+let shuffledPlaylist = []; // Para armazenar a playlist embaralhada
 
-function setVideoQuality(quality) {
-    player.setPlaybackQuality(quality);
-}
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     progressBar = document.getElementById('progress');
     currentTimeDisplay = document.getElementById('current-time');
     durationDisplay = document.getElementById('duration');
-    
-    // Verifique se todos os elementos DOM necessários estão presentes
+
     if (progressBar && currentTimeDisplay && durationDisplay) {
         onYouTubeIframeAPIReady();
     } else {
@@ -25,10 +19,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function onYouTubeIframeAPIReady() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // Video Inicial da Playlist
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
+function onYouTubeIframeAPIReady() {
+    const videoId = 'eT5_neXR3FI'; // Vídeo inicial da playlist
     player = new YT.Player('music-player', {
         height: '100%',
         width: '100%',
@@ -40,91 +40,45 @@ function onYouTubeIframeAPIReady() {
             'controls': 0,
             'iv_load_policy': 3,
             'modestbranding': 1,
-            'rel': 0 // Evita mostrar vídeos relacionados ao final
+            'rel': 0,
         },
         events: {
             'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
+            'onStateChange': onPlayerStateChange,
+        },
     });
 }
 
 function onPlayerReady(event) {
-    setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     setupControlButtons();
-// Controle de Volume
-    const volumeControl = document.getElementById('volume-control');
-    
-    // Verifica se o controle de volume existe no DOM
-    if (volumeControl) {
-        player.setVolume(100); // Define volume inicial em 100%
-        
-        // Atualiza o volume do player ao mover o controle
-        volumeControl.addEventListener('input', function() {
-            const volume = parseInt(volumeControl.value, 10); // Obtém o valor do controle
-            player.setVolume(volume); // Aplica o volume no player (intervalo 0 a 100)
-        });
-    } else {
-        console.error('Controle de volume não encontrado no DOM.');
-    }
-
-    setInterval(() => {
-        if (player && player.getCurrentTime) {
-            const currentTime = player.getCurrentTime();
-            const duration = player.getDuration();
-            if (duration > 0) {
-                progressBar.value = (currentTime / duration) * 100;
-                currentTimeDisplay.textContent = formatTime(currentTime);
-                durationDisplay.textContent = formatTime(duration);
-            }
-        }
-    }, 1000);
-
-    progressBar.addEventListener('input', function() {
-        const duration = player.getDuration();
-        player.seekTo((progressBar.value / 100) * duration, true);
-    });
-
- const savedTheme = localStorage.getItem('theme');
-const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
-
-if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-    themeToggleIcon.setAttribute('name', savedTheme === 'dark' ? 'sunny-outline' : 'moon-outline');
-    metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
-} else {
-    // Apply dark theme by default
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.body.classList.add('dark-mode');
-    themeToggleIcon.setAttribute('name', 'sunny-outline');
-    metaThemeColor.setAttribute('content', '#13051f');
-    localStorage.setItem('theme', 'dark');
-}
-
-document.getElementById('theme-toggle').addEventListener('click', function() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    if (currentTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        document.body.classList.remove('dark-mode');
-        themeToggleIcon.setAttribute('name', 'moon-outline');
-        metaThemeColor.setAttribute('content', '#f0f4f9');
-        localStorage.setItem('theme', 'light');
-    } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.body.classList.add('dark-mode');
-        themeToggleIcon.setAttribute('name', 'sunny-outline');
-        metaThemeColor.setAttribute('content', '#13051f');
-        localStorage.setItem('theme', 'dark');
-    }
-});
-
     fetchPlaylistData();
 }
 
 function setupControlButtons() {
-    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
+    const repeatButton = document.getElementById('repeat-button');
+
+    repeatButton.addEventListener('click', function () {
+        switch (mode) {
+            case 'repeat':
+                mode = 'repeat_one';
+                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
+                break;
+            case 'repeat_one':
+                mode = 'shuffle';
+                repeatButton.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
+                isShuffle = true;
+                shufflePlaylist();
+                break;
+            case 'shuffle':
+                mode = 'repeat';
+                repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
+                isShuffle = false;
+                restoreOriginalPlaylist();
+                break;
+        }
+    });
+
+    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function () {
         if (isPlaying) {
             player.pauseVideo();
             this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
@@ -135,196 +89,76 @@ function setupControlButtons() {
         isPlaying = !isPlaying;
     });
 
-    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
+    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function () {
         player.previousVideo();
     });
 
-    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
-        player.nextVideo();
-    });
-
-    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
-        switch (mode) {
-            case 'repeat':
-                mode = 'repeat_one';
-                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
-                break;
-            case 'repeat_one':
-                mode = 'shuffle';
-                this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-                isShuffle = true;
-                break;
-            case 'shuffle':
-                mode = 'repeat';
-                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
-                isShuffle = false;
-                break;
+    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function () {
+        if (isShuffle) {
+            playNextRandom();
+        } else {
+            player.nextVideo();
         }
-    });
-
-    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
-        document.getElementById('playlist-overlay').style.display = 'flex';
-        renderPlaylist(playlistData);
-    });
-
-    document.getElementById('close-playlist').addEventListener('click', function() {
-        document.getElementById('playlist-overlay').style.display = 'none';
     });
 }
 
 function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.ENDED) {
-        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
-        isPlaying = false;
-
+    if (event.data === YT.PlayerState.ENDED) {
         switch (mode) {
             case 'repeat_one':
                 player.seekTo(0);
                 player.playVideo();
                 break;
             case 'shuffle':
-                const playlist = player.getPlaylist();
-                const nextIndex = Math.floor(Math.random() * playlist.length);
-                player.playVideoAt(nextIndex);
+                playNextRandom();
                 break;
             case 'repeat':
-                const currentIndex = player.getPlaylistIndex();
-                if (currentIndex === player.getPlaylist().length - 1) {
-                    player.playVideoAt(0);
-                } else {
-                    player.nextVideo();
-                }
+                player.nextVideo();
                 break;
         }
     }
     updateTitleAndArtist();
 }
 
-function updateTitleAndArtist() {
-    const videoData = player.getVideoData();
-    document.getElementById('title').textContent = videoData.title;
-    document.getElementById('artist').textContent = videoData.author;
+function shufflePlaylist() {
+    shuffledPlaylist = shuffleArray([...originalPlaylist]);
+    player.loadPlaylist({
+        list: shuffledPlaylist,
+        index: 0,
+    });
 }
 
-function formatTime(seconds) {
-    const min = Math.floor(seconds / 60);
-    const sec = Math.floor(seconds % 60);
-    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+function restoreOriginalPlaylist() {
+    player.loadPlaylist({
+        list: originalPlaylist,
+        index: player.getPlaylistIndex(),
+    });
+}
+
+function playNextRandom() {
+    const nextIndex = Math.floor(Math.random() * shuffledPlaylist.length);
+    player.playVideoAt(nextIndex);
+}
+
+function updateTitleAndArtist() {
+    const videoData = player.getVideoData();
+    document.getElementById('title').textContent = videoData.title || 'Título';
+    document.getElementById('artist').textContent = videoData.author || 'Artista';
 }
 
 async function fetchPlaylistData() {
-    const playlist = player.getPlaylist();
-    playlistData = playlist.map((videoId, index) => ({
-        videoId,
-        index,
-        title: '',
-        author: ''
-    }));
+    originalPlaylist = player.getPlaylist();
+    playlistData = originalPlaylist.map((videoId) => ({ videoId, title: '', author: '' }));
 
     for (let i = 0; i < playlistData.length; i++) {
         const videoId = playlistData[i].videoId;
         try {
             const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
             const data = await response.json();
-            playlistData[i].title = data.title;
-            playlistData[i].author = data.author_name;
+            playlistData[i].title = data.title || 'Título não encontrado';
+            playlistData[i].author = data.author_name || 'Autor não encontrado';
         } catch (error) {
-            console.error('Error fetching video details:', error);
+            console.error('Erro ao buscar informações do vídeo:', error);
         }
     }
-
-    renderPlaylist(playlistData);
 }
-
-// inicio
-
-function renderPlaylist(videos) {
-    const playlistContainer = document.getElementById('playlist-items');
-    playlistContainer.innerHTML = ''; // Limpa a lista atual
-
-    videos.forEach(video => {
-        const listItem = document.createElement('li');
-
-        // Cria a miniatura do vídeo
-        const thumbnail = document.createElement('img');
-        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
-        listItem.appendChild(thumbnail);
-
-        // Cria um contêiner para o texto
-        const textContainer = document.createElement('div');
-        textContainer.className = 'text-container';
-
-        // Cria e adiciona o título
-        const titleText = document.createElement('span');
-        titleText.className = 'title';
-        titleText.textContent = video.title;
-        textContainer.appendChild(titleText);
-
-        // Cria e adiciona o autor
-        const authorText = document.createElement('span');
-        authorText.className = 'author';
-        authorText.textContent = video.author;
-        textContainer.appendChild(authorText);
-
-        // Adiciona o contêiner de texto ao item da lista
-        listItem.appendChild(textContainer);
-
-        // Adiciona o evento de clique
-        listItem.addEventListener('click', () => {
-            if (isShuffle) {
-                // Encontrar o índice correspondente ao vídeo clicado na lista original
-                const originalIndex = playlistData.findIndex(item => item.videoId === video.videoId);
-                player.playVideoAt(originalIndex);
-            } else {
-                player.playVideoAt(video.index);
-            }
-            document.getElementById('playlist-overlay').style.display = 'none';
-        });
-
-        // Adiciona o item configurado à lista de reprodução
-        playlistContainer.appendChild(listItem);
-    });
-}
-
-// Renderiza a playlist completa ao carregar a página
-renderPlaylist(playlistData);
-
-// Função para filtrar a playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => {
-        const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
-        const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
-        return titleMatch || authorMatch;
-    });
-}
-
-// Configuração da busca
-const searchInput = document.getElementById('search-input');
-searchInput.addEventListener('input', () => {
-    const searchText = searchInput.value.trim().toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
-});
-
-
-// Compartilhamento
-document.getElementById('share-icon').addEventListener('click', function() {
-    const videoData = player.getVideoData();
-    const videoId = videoData.video_id;
-    const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
-
-    if (navigator.share) {
-        navigator.share({
-            title: videoData.title,
-            text: `🥰 LoveSongs: ${videoData.title}`,
-            url: shareUrl,
-        }).then(() => {
-            console.log('Compartilhamento bem-sucedido');
-        }).catch((error) => {
-            console.error('Erro ao compartilhar:', error);
-        });
-    } else {
-        // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`🩷💚 Confira este vídeo: ${videoData.title}\n${shareUrl}`);
-    }
-});
