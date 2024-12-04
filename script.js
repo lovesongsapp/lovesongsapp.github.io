@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || '1OgQdgSQB3o'; // ID padrão caso não haja um na URL
+    const videoId = urlParams.get('videoId') || 'V4RB6mkljB8'; // ID padrão caso não haja um na URL
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -294,27 +294,26 @@ document.getElementById('share-icon').addEventListener('click', function() {
     }
 });
 
+//Repeat-Button Config
 
 const repeatButton = document.getElementById('repeat-button');
 
-let playbackMode = 'normal'; // Pode ser 'normal', 'shuffle', 'repeat'
-
 repeatButton.addEventListener('click', () => {
-    if (playbackMode === 'normal') {
-        playbackMode = 'shuffle';
+    if (Mode === 'normal') {
+        Mode = 'shuffle';
         repeatButton.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-    } else if (playbackMode === 'shuffle') {
-        playbackMode = 'repeat';
+    } else if (Mode === 'shuffle') {
+        Mode = 'repeat';
         repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
     } else {
-        playbackMode = 'normal';
+        Mode = 'normal';
         repeatButton.innerHTML = '<ion-icon name="play-outline"></ion-icon>';
     }
-    console.log('Modo de reprodução:', playbackMode);
-    applyPlaybackMode(playbackMode);
+    console.log('Modo de reprodução:', Mode);
+    applyMode(Mode);
 });
 
-function applyPlaybackMode(mode) {
+function applyMode(mode) {
     if (mode === 'shuffle') {
         shufflePlaylist();
     } else if (mode === 'repeat') {
