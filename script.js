@@ -109,6 +109,21 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 }
 
 function setupControlButtons() {
+    
+    const repeatButton = document.getElementById('repeat-button');
+    repeatButton.addEventListener('click', () => {
+    // Alterna o modo
+    if (mode === 'normal') {
+        mode = 'repeat';
+        repeatButton.innerHTML = '<ion-icon name="repeat"></ion-icon>'; // Ícone para repetir
+    } else if (mode === 'repeat') {
+        mode = 'shuffle';
+        repeatButton.innerHTML = '<ion-icon name="shuffle"></ion-icon>'; // Ícone para embaralhar
+    } else if (mode === 'shuffle') {
+        mode = 'normal';
+        repeatButton.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>'; // Ícone para sequência normal
+    }
+
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
