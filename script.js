@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || 'V4RB6mkljB8'; // Video Inicial da Playlist
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -109,7 +109,8 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 }
 
 function setupControlButtons() {
-    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
+    // Configuração dos botões principais
+    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function () {
         if (isPlaying) {
             player.pauseVideo();
             this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
@@ -120,15 +121,16 @@ function setupControlButtons() {
         isPlaying = !isPlaying;
     });
 
-    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
+    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function () {
         player.previousVideo();
     });
 
-    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
+    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function () {
         player.nextVideo();
     });
 
-    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
+    const repeatButton = document.querySelector('.control-button:nth-child(1)');
+    repeatButton.addEventListener('click', function () {
         switch (mode) {
             case 'repeat':
                 mode = 'repeat_one';
@@ -147,12 +149,12 @@ function setupControlButtons() {
         }
     });
 
-    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
+    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function () {
         document.getElementById('playlist-overlay').style.display = 'flex';
         renderPlaylist(playlistData);
     });
 
-    document.getElementById('close-playlist').addEventListener('click', function() {
+    document.getElementById('close-playlist').addEventListener('click', function () {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
 }
