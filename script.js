@@ -147,6 +147,17 @@ function setupControlButtons() {
         }
     });
 
+    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
+        if (isShuffle) {
+            // Gera um índice aleatório para a playlist
+            const playlist = player.getPlaylist();
+            const nextIndex = Math.floor(Math.random() * playlist.length);
+            player.playVideoAt(nextIndex);
+        } else {
+            player.nextVideo();
+        }
+    });
+
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
         renderPlaylist(playlistData);
