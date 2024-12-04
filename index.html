@@ -76,8 +76,15 @@
                     </div>
                 </div>
                 <div class="info">
-                    <input type="range" id="volume-control" min="0" max="100" value="100" class="volume-slider"
-                        style="--slider-value: 100%;" />
+                    <!--VOLUME-->
+                    <div class="volume-container">
+                        <ion-icon name="volume-high-outline" class="volume-icon"></ion-icon>
+                        <div class="volume-slider-container">
+                        <input type="range" id="volume-control" class="volume-slider" min="0" max="100" value="100" style="--slider-value: 100%;">
+                        <span id="volume-value" class="volume-value">100</span>
+                        </div>
+                    </div>
+                    
                     <p class="title" id="title">
                         Título
                     </p>
@@ -153,7 +160,7 @@
         </button>
     </div>
     
-    <script src="volume-control.js"></script>
+    <script src="volume.js"></script>
     <script src="script.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="script-sw.js"></script>
