@@ -187,14 +187,17 @@ function onPlayerStateChange(event) {
             case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
                 console.log('Modo Repeat: Vídeo atual: ' + currentIndex);
-                if (currentIndex === player.getPlaylist().length - 1) {
-                    player.playVideoAt(0); // Reinicia a playlist
-                    console.log('Reiniciando playlist...');
-                } else {
-                    const nextIndex = currentIndex + 1;
-                    console.log('Avançando para o próximo vídeo: ' + nextIndex);
-                    player.playVideoAt(nextIndex); // Avança corretamente para o próximo vídeo
+
+                // Ajuste para avançar para o próximo vídeo corretamente
+                let nextIndex = currentIndex + 1;
+
+                // Verifica se chegou ao final da playlist
+                if (nextIndex >= player.getPlaylist().length) {
+                    nextIndex = 0; // Reinicia a playlist se o fim for alcançado
                 }
+
+                console.log('Avançando para o próximo vídeo: ' + nextIndex);
+                player.playVideoAt(nextIndex); // Avança para o próximo vídeo na lista
                 break;
         }
     }
