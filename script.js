@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || 'kE1Yle65wjg'; // Video Inicial da Playlist
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -181,7 +181,7 @@ function onPlayerStateChange(event) {
             case 'shuffle':
                 const playlist = player.getPlaylist();
                 const nextIndex = Math.floor(Math.random() * playlist.length);
-                player.playVideoAt(nextIndex);
+                player.playVideoAt(nextIndex); // Embaralha a playlist
                 break;
             case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
