@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const volumeSliderContainer = document.querySelector('.volume-slider-container');
     const volumeControl = document.getElementById('volume-control');
     const volumeValue = document.getElementById('volume-value');
-
+    const audioElements = document.querySelectorAll('audio'); // Seleciona todos os elementos de áudio na página
     let hideTimeout;
 
     // Função para esconder o controle de volume
@@ -22,11 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Atualiza o valor do slider em tempo real
+    // Atualiza o valor do slider e o volume de todos os áudios em tempo real
     volumeControl.addEventListener('input', () => {
         const volume = volumeControl.value;
         volumeControl.style.setProperty('--slider-value', `${volume}%`);
         volumeValue.textContent = volume;
+
+        // Define o volume de todos os áudios na playlist com base no valor do controle deslizante
+        audioElements.forEach(audio => {
+            audio.volume = volume / 100; // Volume entre 0 e 1
+        });
 
         // Reinicia o temporizador sempre que o controle for ajustado
         clearTimeout(hideTimeout);
