@@ -3,7 +3,7 @@ let maxQuality = 'large'; // Definir resolução máxima
 let minQuality = 'medium'; // Definir resolução mínima
 let isPlaying = false;
 let isShuffle = false;
-let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
+let Mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
 let sharedVideoId = null;
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'V4RB6mkljB8'; // ID padrão caso não haja um na URL
+    const videoId = urlParams.get('videoId') || '1OgQdgSQB3o'; // ID padrão caso não haja um na URL
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -105,25 +105,6 @@ function onPlayerReady(event) {
 }
 
 function setupControlButtons() {
-    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
-        if (isPlaying) {
-            player.pauseVideo();
-            this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
-        } else {
-            player.playVideo();
-            this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
-        }
-        isPlaying = !isPlaying;
-    });
-
-    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
-        player.previousVideo();
-    });
-
-    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
-        player.nextVideo();
-    });
-
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
@@ -141,6 +122,25 @@ function setupControlButtons() {
                 isShuffle = false;
                 break;
         }
+    });
+
+    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
+        player.previousVideo();
+    });
+
+    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
+        if (isPlaying) {
+            player.pauseVideo();
+            this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
+        } else {
+            player.playVideo();
+            this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
+        }
+        isPlaying = !isPlaying;
+    });
+
+    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
+        player.nextVideo();
     });
 
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
@@ -293,8 +293,6 @@ document.getElementById('share-icon').addEventListener('click', function() {
         alert(`🩷💚 Confira este vídeo: ${videoData.title}\n${shareUrl}`);
     }
 });
-
-//Repeat-Button Config
 
 const repeatButton = document.getElementById('repeat-button');
 
