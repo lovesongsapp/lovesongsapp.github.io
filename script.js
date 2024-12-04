@@ -125,17 +125,18 @@ function setupControlButtons() {
     });
 
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
-        const currentIndex = player.getPlaylistIndex(); // Obtém o índice atual
-        const playlistLength = player.getPlaylist().length; // Comprimento da playlist
-    
-        // Calcula o próximo índice
-        const nextIndex = (currentIndex + 1) % playlistLength;
-    
-        // Toca o vídeo no índice calculado
-        player.playVideoAt(nextIndex);
-        console.log('Avançando para o próximo vídeo na posição: ' + nextIndex);
-    });
-    
+        if (isShuffle) {
+            // Gera um índice aleatório para a playlist
+            const playlist = player.getPlaylist();
+            const nextIndex = Math.floor(Math.random() * playlist.length);
+            player.playVideoAt(nextIndex);
+        } else {
+            const currentIndex = player.getPlaylistIndex(); // Obtém o índice atual
+            const playlistLength = player.getPlaylist().length; // Comprimento da playlist
+            const nextIndex = (currentIndex + 1) % playlistLength; // Calcula o próximo índice
+            player.playVideoAt(nextIndex); // Avança para o próximo vídeo
+        }
+    });  
     
 
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
