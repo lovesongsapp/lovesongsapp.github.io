@@ -172,9 +172,6 @@ repeatButton.addEventListener('click', function () {
     });
 }
 
-let shuffledPlaylist = []; // Lista embaralhada
-let isShuffle = false;
-
 function shuffleArray(array) {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
