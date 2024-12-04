@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc'; // ID padrão caso não haja um na URL
+    const videoId = urlParams.get('videoId') || 'GjmTlGCmxq0'; // ID padrão caso não haja um na URL
 
     player = new YT.Player('music-player', {
         height: '100%',
