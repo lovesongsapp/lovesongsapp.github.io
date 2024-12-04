@@ -1,6 +1,6 @@
 let player;
-let maxQuality = 'medium'; // Definir resolução máxima
-let minQuality = 'low'; // Definir resolução mínima
+let maxQuality = 'large'; // Definir resolução máxima
+let minQuality = 'medium'; // Definir resolução mínima
 let isPlaying = false;
 let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
@@ -27,20 +27,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc'; // ID padrão caso não haja um na URL
 
     player = new YT.Player('music-player', {
         height: '100%',
         width: '100%',
         videoId: videoId,
         playerVars: {
-            'listType': 'playlist',
-            'list': 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
-            'autoplay': 0,
-            'controls': 0,
-            'iv_load_policy': 3,
-            'modestbranding': 1,
-            'rel': 0 // Evita mostrar vídeos relacionados ao final
+            listType: 'playlist',
+            list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
+            autoplay: 0,
+            controls: 0
         },
         events: {
             'onReady': onPlayerReady,
@@ -52,21 +49,6 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     setupControlButtons();
-// Controle de Volume
-    const volumeControl = document.getElementById('volume-control');
-    
-    // Verifica se o controle de volume existe no DOM
-    if (volumeControl) {
-        player.setVolume(100); // Define volume inicial em 100%
-        
-        // Atualiza o volume do player ao mover o controle
-        volumeControl.addEventListener('input', function() {
-            const volume = parseInt(volumeControl.value, 10); // Obtém o valor do controle
-            player.setVolume(volume); // Aplica o volume no player (intervalo 0 a 100)
-        });
-    } else {
-        console.error('Controle de volume não encontrado no DOM.');
-    }
 
     setInterval(() => {
         if (player && player.getCurrentTime) {
@@ -85,40 +67,39 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
- const savedTheme = localStorage.getItem('theme');
-const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
+    const savedTheme = localStorage.getItem('theme');
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
-if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-    themeToggleIcon.setAttribute('name', savedTheme === 'dark' ? 'sunny-outline' : 'moon-outline');
-    metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
-} else {
-    // Apply dark theme by default
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.body.classList.add('dark-mode');
-    themeToggleIcon.setAttribute('name', 'sunny-outline');
-    metaThemeColor.setAttribute('content', '#13051f');
-    localStorage.setItem('theme', 'dark');
-}
-
-document.getElementById('theme-toggle').addEventListener('click', function() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    if (currentTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        document.body.classList.remove('dark-mode');
-        themeToggleIcon.setAttribute('name', 'moon-outline');
-        metaThemeColor.setAttribute('content', '#f0f4f9');
-        localStorage.setItem('theme', 'light');
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+        document.getElementById('theme-toggle').innerHTML = savedTheme === 'dark' ? '<ion-icon name="sunny-outline"></ion-icon>' : '<ion-icon name="moon-outline"></ion-icon>';
+        metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
     } else {
+        // Apply dark theme by default
         document.documentElement.setAttribute('data-theme', 'dark');
         document.body.classList.add('dark-mode');
-        themeToggleIcon.setAttribute('name', 'sunny-outline');
+        document.getElementById('theme-toggle').innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
         metaThemeColor.setAttribute('content', '#13051f');
         localStorage.setItem('theme', 'dark');
     }
-});
+
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.body.classList.remove('dark-mode');
+            this.innerHTML = '<ion-icon name="moon-outline"></ion-icon>';
+            metaThemeColor.setAttribute('content', '#f0f4f9');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.body.classList.add('dark-mode');
+            this.innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
+            metaThemeColor.setAttribute('content', '#13051f');
+            localStorage.setItem('theme', 'dark');
+        }
+    });
 
     fetchPlaylistData();
 }
@@ -236,40 +217,32 @@ async function fetchPlaylistData() {
     renderPlaylist(playlistData);
 }
 
-// inicio
-
-function renderPlaylist(videos) {
+function renderPlaylist(playlist) {
     const playlistContainer = document.getElementById('playlist-items');
-    playlistContainer.innerHTML = ''; // Limpa a lista atual
+    playlistContainer.innerHTML = '';
 
-    videos.forEach(video => {
+    playlist.forEach(video => {
         const listItem = document.createElement('li');
 
-        // Cria a miniatura do vídeo
         const thumbnail = document.createElement('img');
         thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
         listItem.appendChild(thumbnail);
 
-        // Cria um contêiner para o texto
         const textContainer = document.createElement('div');
         textContainer.className = 'text-container';
 
-        // Cria e adiciona o título
         const titleText = document.createElement('span');
         titleText.className = 'title';
         titleText.textContent = video.title;
         textContainer.appendChild(titleText);
 
-        // Cria e adiciona o autor
         const authorText = document.createElement('span');
         authorText.className = 'author';
         authorText.textContent = video.author;
         textContainer.appendChild(authorText);
 
-        // Adiciona o contêiner de texto ao item da lista
         listItem.appendChild(textContainer);
 
-        // Adiciona o evento de clique
         listItem.addEventListener('click', () => {
             if (isShuffle) {
                 // Encontrar o índice correspondente ao vídeo clicado na lista original
@@ -281,32 +254,24 @@ function renderPlaylist(videos) {
             document.getElementById('playlist-overlay').style.display = 'none';
         });
 
-        // Adiciona o item configurado à lista de reprodução
         playlistContainer.appendChild(listItem);
     });
 }
+// BUSCA CONFIG
 
-// Renderiza a playlist completa ao carregar a página
-renderPlaylist(playlistData);
-
-// Função para filtrar a playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => {
-        const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
-        const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
-        return titleMatch || authorMatch;
-    });
-}
-
-// Configuração da busca
-const searchInput = document.getElementById('search-input');
-searchInput.addEventListener('input', () => {
-    const searchText = searchInput.value.trim().toLowerCase();
+// Adicione o evento de keyup ao input de texto
+document.getElementById('search-input').addEventListener('keyup', function(event) {
+    const searchText = event.target.value.toLowerCase();
     const filteredPlaylist = filterPlaylist(searchText);
     renderPlaylist(filteredPlaylist);
 });
 
+// Crie a função que filtre a playlist
+function filterPlaylist(searchText) {
+    return playlistData.filter(video => video.title.toLowerCase().includes(searchText) || video.author.toLowerCase().includes(searchText));
+}
 
+// SHARE CONFIG
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
@@ -316,7 +281,7 @@ document.getElementById('share-icon').addEventListener('click', function() {
     if (navigator.share) {
         navigator.share({
             title: videoData.title,
-            text: `🥰 LoveSongs: ${videoData.title}`,
+            text: `🩷💚 Confira este vídeo: ${videoData.title}`,
             url: shareUrl,
         }).then(() => {
             console.log('Compartilhamento bem-sucedido');
