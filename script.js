@@ -125,8 +125,17 @@ function setupControlButtons() {
     });
 
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
-        player.nextVideo();
+        const currentIndex = player.getPlaylistIndex(); // Obtém o índice atual
+        const playlistLength = player.getPlaylist().length; // Comprimento da playlist
+    
+        // Calcula o próximo índice
+        const nextIndex = (currentIndex + 1) % playlistLength;
+    
+        // Toca o vídeo no índice calculado
+        player.playVideoAt(nextIndex);
+        console.log('Avançando para o próximo vídeo na posição: ' + nextIndex);
     });
+    
 
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
