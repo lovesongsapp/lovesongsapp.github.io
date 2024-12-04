@@ -571,12 +571,6 @@ font-size: 16px !important;
 color: #fff !important;
 cursor: pointer;
 }
-.volume-slider{
-bottom: 20px;
-position: relative;
-max-width: 50%;
-opacity:50%;
-}
 #playlist-items .title{
 font-weight: 500;
 }
