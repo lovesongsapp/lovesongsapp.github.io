@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'GjmTlGCmxq0';
+    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI';
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -212,7 +212,9 @@ const repeatButton = document.getElementById('repeat-button'); // Seleciona o bo
 
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
-        // ... (resto do código do onPlayerStateChange)
+        if (event.data == YT.PlayerState.ENDED) {
+        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
+        isPlaying = false;
 
         switch (mode) {
             case 'repeat_one':
