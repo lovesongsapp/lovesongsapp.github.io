@@ -7,7 +7,6 @@ let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
 let sharedVideoId = null;
-let shuffledPlaylist = [];
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
@@ -52,6 +51,7 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
+    setupControlButtons();
 
     setInterval(() => {
         if (player && player.getCurrentTime) {
@@ -70,7 +70,7 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
-const savedTheme = localStorage.getItem('theme');
+ const savedTheme = localStorage.getItem('theme');
 const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
 
@@ -109,8 +109,7 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 }
 
 function setupControlButtons() {
-    // Configuração dos botões principais
-    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function () {
+    document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
             this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
@@ -121,59 +120,45 @@ function setupControlButtons() {
         isPlaying = !isPlaying;
     });
 
-    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function () {
+    document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
         player.previousVideo();
     });
 
-    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function () {
+    document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
         player.nextVideo();
     });
 
-    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function () {
+    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
+        switch (mode) {
+            case 'repeat':
+                mode = 'repeat_one';
+                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
+                break;
+            case 'repeat_one':
+                mode = 'shuffle';
+                this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
+                isShuffle = true;
+                break;
+            case 'shuffle':
+                mode = 'repeat';
+                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
+                isShuffle = false;
+                break;
+        }
+    });
+
+    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
         renderPlaylist(playlistData);
     });
 
-    document.getElementById('close-playlist').addEventListener('click', function () {
+    document.getElementById('close-playlist').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
 }
 
-function shuffleArray(array) {
-    const shuffled = array.slice();
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-}
-
-// Evento do botão shuffle
-const repeatButton = document.querySelector('.control-button:nth-child(1)');
-repeatButton.addEventListener('click', function () {
-    switch (mode) {
-        case 'repeat':
-            mode = 'repeat_one';
-            this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
-            break;
-        case 'repeat_one':
-            mode = 'shuffle';
-            isShuffle = true;
-            this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-            shuffledPlaylist = shuffleArray(player.getPlaylist());
-            break;
-        case 'shuffle':
-            mode = 'repeat';
-            isShuffle = false;
-            this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
-            shuffledPlaylist = [];
-            break;
-    }
-});
-
-// Reprodução baseada no shuffle
 function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.ENDED) {
+    if (event.data == YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
         isPlaying = false;
 
@@ -183,12 +168,9 @@ function onPlayerStateChange(event) {
                 player.playVideo();
                 break;
             case 'shuffle':
-                if (shuffledPlaylist.length > 0) {
-                    const nextIndex = Math.floor(Math.random() * shuffledPlaylist.length);
-                    const nextVideoId = shuffledPlaylist[nextIndex];
-                    const originalIndex = player.getPlaylist().indexOf(nextVideoId);
-                    player.playVideoAt(originalIndex);
-                }
+                const playlist = player.getPlaylist();
+                const nextIndex = Math.floor(Math.random() * playlist.length);
+                player.playVideoAt(nextIndex);
                 break;
             case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
@@ -202,7 +184,6 @@ function onPlayerStateChange(event) {
     }
     updateTitleAndArtist();
 }
-
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
