@@ -123,7 +123,7 @@ function setupControlButtons() {
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
         player.nextVideo();
     });
-/*
+
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
@@ -142,12 +142,17 @@ function setupControlButtons() {
                 break;
         }
     });
-*/
 
-//SUFFLE
+    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
+        document.getElementById('playlist-overlay').style.display = 'flex';
+        renderPlaylist(playlistData);
+    });
 
-    const repeatButton = document.getElementById('repeat-button'); // Seleciona o botão pelo ID
-
+    document.getElementById('close-playlist').addEventListener('click', function() {
+        document.getElementById('playlist-overlay').style.display = 'none';
+    });
+    // Seleciona o botão pelo ID
+    const repeatButton = document.getElementById('repeat-button');
     repeatButton.addEventListener('click', function() { // Adiciona o ouvinte de eventos
         switch (mode) {
             case 'repeat':
@@ -165,17 +170,6 @@ function setupControlButtons() {
                 isShuffle = false;
                 break;
         }
-    });
-
-
-    
-    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
-        document.getElementById('playlist-overlay').style.display = 'flex';
-        renderPlaylist(playlistData);
-    });
-
-    document.getElementById('close-playlist').addEventListener('click', function() {
-        document.getElementById('playlist-overlay').style.display = 'none';
     });
 }
 
