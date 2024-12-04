@@ -13,15 +13,6 @@ function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
 }
 
-function shuffleArray(array) {
-    const shuffled = array.slice();
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     progressBar = document.getElementById('progress');
     currentTimeDisplay = document.getElementById('current-time');
@@ -61,7 +52,6 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
-    setupControlButtons();
 
     setInterval(() => {
         if (player && player.getCurrentTime) {
