@@ -5,11 +5,31 @@ let isPlaying = false;
 let isShuffle = false;
 let mode = 'repeat';
 let progressBar, currentTimeDisplay, durationDisplay;
-let playlistData = [];
+let playlistData = []; // Initialize as empty array
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
 }
+
+// Add a function to load the YouTube IFrame API
+function loadYouTubeIframeAPI() {
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // Set a timeout to handle API loading errors
+    let apiLoadTimeout = setTimeout(() => {
+        console.error("YouTube IFrame API failed to load.");
+        // Handle the error appropriately (e.g., display a message to the user)
+    }, 5000); // Adjust timeout as needed
+
+    window.onYouTubeIframeAPIReady = () => {
+        clearTimeout(apiLoadTimeout); // Clear timeout if API loads successfully
+        onYouTubeIframeAPIReady();
+    };
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
     progressBar = document.getElementById('progress');
@@ -17,11 +37,12 @@ document.addEventListener('DOMContentLoaded', function() {
     durationDisplay = document.getElementById('duration');
 
     if (progressBar && currentTimeDisplay && durationDisplay) {
-        onYouTubeIframeAPIReady();
+        loadYouTubeIframeAPI(); // Call the API loading function
     } else {
-        console.error('Um ou mais elementos DOM não foram encontrados.');
+        console.error('One or more DOM elements not found.');
     }
 });
+
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -47,12 +68,11 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-
 function onPlayerReady(event) {
     setVideoQuality(minQuality);
     setupControlButtons();
 
-    const volumeControl = document.getElementById('volume-control');
+   const volumeControl = document.getElementById('volume-control');
     if (volumeControl) {
         player.setVolume(100);
         volumeControl.addEventListener('input', function() {
@@ -116,6 +136,7 @@ function onPlayerReady(event) {
 
 
     fetchPlaylistData();
+
 }
 
 function setupControlButtons() {
