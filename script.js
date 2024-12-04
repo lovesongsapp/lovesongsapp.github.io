@@ -181,14 +181,19 @@ function onPlayerStateChange(event) {
             case 'shuffle':
                 const playlist = player.getPlaylist();
                 const nextIndex = Math.floor(Math.random() * playlist.length);
+                console.log("Modo Shuffle: Próximo vídeo aleatório: " + nextIndex);
                 player.playVideoAt(nextIndex); // Embaralha a playlist
                 break;
             case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
+                console.log('Modo Repeat: Vídeo atual: ' + currentIndex);
                 if (currentIndex === player.getPlaylist().length - 1) {
-                    player.playVideoAt(0);
+                    player.playVideoAt(0); // Reinicia a playlist
+                    console.log('Reiniciando playlist...');
                 } else {
-                    player.nextVideo();
+                    const nextIndex = currentIndex + 1;
+                    console.log('Avançando para o próximo vídeo: ' + nextIndex);
+                    player.playVideoAt(nextIndex); // Avança corretamente para o próximo vídeo
                 }
                 break;
         }
