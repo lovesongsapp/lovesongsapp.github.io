@@ -1,69 +1,46 @@
-document.addEventListener('DOMContentLoaded', () => {
+cdocument.addEventListener('DOMContentLoaded', () => {
+    let player; // Variável para o player do YouTube
+
+    // Configuração inicial para controle de volume
     const volumeIcon = document.querySelector('.volume-icon');
     const volumeSliderContainer = document.querySelector('.volume-slider-container');
     const volumeControl = document.getElementById('volume-control');
-    const volumeValue = document.getElementById('volume-value');
-    const audioElements = document.querySelectorAll('audio'); // Seleciona todos os elementos de áudio
     let hideTimeout;
 
-    // Função para esconder o controle de volume
-    function hideVolumeControl() {
-        volumeSliderContainer.style.display = 'none';
-    }
+    // Carrega a API do YouTube IFrame
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // Função para restaurar o volume salvo
-    function restoreVolume() {
-        const previousVolume = localStorage.getItem('audioVolume');
-        const volume = previousVolume !== null ? previousVolume : 1;
-        volumeControl.value = volume * 100; // Ajusta o controle para o volume salvo (convertido para 0-100)
-        volumeValue.textContent = volumeControl.value;
-        audioElements.forEach(audio => {
-            audio.volume = volume; // Restaura o volume do áudio
-        });
-    }
-
-    // Função para salvar o volume
-    function saveVolume(volume) {
-        localStorage.setItem('audioVolume', volume);
-    }
-
-    // Alternar visibilidade do controle de volume ao clicar no ícone
+    // Exibir ou ocultar o controle de volume ao clicar no ícone
     volumeIcon.addEventListener('click', () => {
         if (volumeSliderContainer.style.display === 'none' || !volumeSliderContainer.style.display) {
             volumeSliderContainer.style.display = 'flex';
-            // Reinicia o temporizador de 5 segundos sempre que o slider é mostrado
             clearTimeout(hideTimeout);
-            hideTimeout = setTimeout(hideVolumeControl, 5000); // Esconde após 5 segundos de inatividade
+            hideTimeout = setTimeout(() => {
+                volumeSliderContainer.style.display = 'none';
+            }, 5000);
+        } else {
+            volumeSliderContainer.style.display = 'none';
         }
     });
 
-    // Atualiza o valor do slider e o volume de todos os áudios em tempo real
+    // Ajustar o volume do YouTube Player ao deslizar o controle
     volumeControl.addEventListener('input', () => {
-        const volume = volumeControl.value / 100; // Converte o valor de 0-100 para 0-1
-        volumeControl.style.setProperty('--slider-value', `${volumeControl.value}%`);
-        volumeValue.textContent = volumeControl.value;
-
-        // Define o volume de todos os áudios na playlist com base no valor do controle deslizante
-        audioElements.forEach(audio => {
-            audio.volume = volume; // Aplica o volume no áudio
-        });
-
-        // Salva o volume
-        saveVolume(volume);
-        
-        // Reinicia o temporizador sempre que o controle for ajustado
-        clearTimeout(hideTimeout);
-        hideTimeout = setTimeout(hideVolumeControl, 5000); // Esconde após 5 segundos de inatividade
+        const volume = parseInt(volumeControl.value, 10); // Obtém o valor do controle de volume (0 a 100)
+        if (player && typeof player.setVolume === 'function') {
+            player.setVolume(volume); // Ajusta o volume no player do YouTube
+        }
     });
 
-    // Fecha o controle de volume ao clicar fora dele
+    // Ocultar o controle de volume ao clicar fora dele
     document.addEventListener('click', (event) => {
         if (!volumeSliderContainer.contains(event.target) && !volumeIcon.contains(event.target)) {
             volumeSliderContainer.style.display = 'none';
         }
     });
 
-    // Configura o estado inicial
-    volumeSliderContainer.style.display = 'none'; // Começa oculto
-    restoreVolume(); // Restaura o volume salvo ao carregar a página
+    // Configuração inicial
+    volumeSliderContainer.style.display = 'none'; // O controle começa oculto
 });
