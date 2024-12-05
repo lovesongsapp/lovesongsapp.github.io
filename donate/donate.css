@@ -62,7 +62,7 @@
          font-family: 'Plus Jakarta Sans', sans-serif;   
          padding: 20px;
          background: #726232;
-         background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('bg.jpg') no-repeat center center fixed;
+         background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('donate-bg.jpg') no-repeat center center fixed;
          background-size: cover;
          }
          .qrcode {
