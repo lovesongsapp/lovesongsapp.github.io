@@ -3,10 +3,12 @@
 margin: 0;
 padding: 0;
 }
-.logo-popup {
-display: flex;
-align-items: center;
+.texto{
+   display: flex;
+   align-items: center;
+   justify-content: center;
 }
+.logo-popup {display: flex;align-items: center;justify-content: center;margin-bottom: 30px;}
 .logo-popup img {
 margin-right: 10px;
 text-align: left;
@@ -59,23 +61,28 @@ transform: translateY(100%);
 }
 }
 .popup-content {
-font-family: 'Plus Jakarta Sans', sans-serif;   
-padding: 20px;
-background: #726232;
-background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://lovesongsapp.github.io/donate/donate-bg.jpg') no-repeat center center fixed;
-background-size: cover;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    padding: 20px;
+    background: #726232;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://lovesongsapp.github.io/donate/donate-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 .qrcode {
-margin: 15px 0px;
+margin: 50px 0px;
 }
 .qrcode img{
 border-radius: 5px;
 }
 .donate-btn {
-margin: 15px 0px;
-align-items: center;
-display: flex;
-justify-content: space-between;
+    margin: 15px 0px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
 }
 .key1 {
 padding: 10px 20px;
