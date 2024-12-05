@@ -138,7 +138,7 @@ function setupControlButtons() {
         }
     });  
     
-
+    //controle do botão de alternância do modo
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
@@ -176,8 +176,8 @@ function onPlayerStateChange(event) {
 
         switch (mode) {
             case 'repeat_one':
-                player.seekTo(0);
-                player.playVideo();
+                player.seekTo(0);  // Volta ao início do vídeo
+                player.playVideo();  // Reproduz novamente
                 break;
             case 'shuffle':
                 const playlist = player.getPlaylist();
@@ -196,6 +196,7 @@ function onPlayerStateChange(event) {
     }
     updateTitleAndArtist();
 }
+
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
