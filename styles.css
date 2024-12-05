@@ -580,7 +580,7 @@ font-weight: 500;
 }
 
 /*VOLUME CONFIG*/
-/*
+
 .volume-container {
 display: flex;
 align-items: center;
@@ -634,4 +634,4 @@ cursor: pointer;
 .volume-value {
 font-size: 14px;
 }
-*/
+
