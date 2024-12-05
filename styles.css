@@ -593,7 +593,7 @@ cursor: pointer;
 color: #00ffbf;
 }
 .volume-slider-container {
-display: none;
+display: none; /* Escondido por padrão */
 top: -10px;
 left: 40px;
 background: #333;
@@ -634,4 +634,3 @@ cursor: pointer;
 .volume-value {
 font-size: 14px;
 }
-
