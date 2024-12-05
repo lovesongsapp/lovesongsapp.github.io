@@ -22,11 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Atualiza o valor do slider em tempo real
+    // Atualiza o valor do slider em tempo real e ajusta o volume do player
     volumeControl.addEventListener('input', () => {
         const volume = volumeControl.value;
         volumeControl.style.setProperty('--slider-value', `${volume}%`);
         volumeValue.textContent = volume;
+
+        // Ajusta o volume no player do YouTube (de 0 a 100)
+        if (player && typeof player.setVolume === 'function') {
+            player.setVolume(volume);
+        }
 
         // Reinicia o temporizador sempre que o controle for ajustado
         clearTimeout(hideTimeout);
@@ -42,5 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Configura o estado inicial
     volumeSliderContainer.style.display = 'none'; // Começa oculto
-    volumeControl.dispatchEvent(new Event('input'));
+    volumeControl.value = 100; // Define o volume inicial para 100%
+    volumeControl.dispatchEvent(new Event('input')); // Atualiza a exibição inicial do volume
 });
