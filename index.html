@@ -161,79 +161,7 @@
       </div><!--end home-screen-->
       
       <!-- START DONATE -->
-<div id="donate"></div>
-<script>
-  // Função para carregar o CSS externo
-  async function loadExternalCSS() {
-    const response = await fetch('donate.css'); // Carrega o arquivo donate.css
-    return await response.text(); // Retorna o conteúdo do CSS como texto
-  }
 
-  // Adiciona o conteúdo ao Shadow DOM
-  async function applyShadowDOM() {
-    const container = document.querySelector('#donate'); // Seleciona a div "donate"
-
-    // Cria o Shadow Root
-    const shadow = container.attachShadow({ mode: 'open' });
-
-    // Carrega o CSS e adiciona ao Shadow DOM
-    const css = await loadExternalCSS();
-    shadow.innerHTML = `
-      <style>
-        ${css} /* Aplica o conteúdo do arquivo CSS aqui */
-      </style>
-      <div class="donate">
-        <div class="popup" id="popup">
-          <div class="popup-content">
-             <div>
-                <div class="logo-popup">
-                   <img src="https://lovesongsapp.github.io/icons/icon192.png">
-                   <div>
-                      <h1>LoveSongs App</h1>
-                      <p>A trilha sonora do amor!</p>
-                   </div>
-                </div>
-                <p>
-                   Sua contribuição é importante!
-                </p>
-                <div align="center" class="qrcode">
-                   <img src="https://waltemar.com.br/bank/qrcodes/qrcode-inter-500.png" height="110" alt="qrcode">
-                </div>
-                <div class="btn">
-                   <button class="key1" data-target="pix">Copiar Chave</button>
-                   <button class="key2" data-target="code">Copia e Cola</button>
-                </div>
-             </div>
-             <div>
-                <button class="close-btn">Fechar</button>
-             </div>
-             <span id="pix" class="chave">6f079b8a-1237-4e11-bdc7-6f3b4d64c155</span>
-             <span id="code"
-                class="chave">00020101021126580014br.gov.bcb.pix01366f079b8a-1237-4e11-bdc7-6f3b4d64c1555204000053039865802BR5922WALTEMAR LIMA CARNEIRO6006MANAUS6108690186846227052349E364C467374834AC1EE3C6304F3E7</span>
-          </div>
-        </div>
-      </div>
-    `;
-
-    // Eventos dentro do Shadow DOM
-    shadow.querySelectorAll(".btn button").forEach(button => {
-      button.addEventListener("click", () => {
-        const targetId = button.getAttribute("data-target");
-        const text = shadow.querySelector(`#${targetId}`).textContent;
-        navigator.clipboard.writeText(text).then(() => {
-          Swal.fire("Copiado!", "Texto copiado para a área de transferência.", "success");
-        });
-      });
-    });
-
-    shadow.querySelector(".close-btn").addEventListener("click", () => {
-      shadow.querySelector("#popup").style.display = "none";
-    });
-  }
-
-  // Chama a função para aplicar o Shadow DOM
-  applyShadowDOM();
-</script>
 <!-- END DONATE -->
 
 <!-- Scripts Globais -->
