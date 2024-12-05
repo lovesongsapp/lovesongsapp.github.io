@@ -310,13 +310,15 @@ background: #00ffbf;
 cursor: pointer;
 }
 #close-playlist {
-background: none;
-border: none;
-color: #000;
-cursor: pointer;
-font-size: 32px;
-margin-right: 10px;
-margin-top: 5px
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    font-size: 32px;
+    margin-right: 10px;
+    margin-top: 5px;
+    right: 0;
+    position: absolute;
 }
 /* //////////////////// DARK MODE ////////////////////////// */
 .dark-mode .player {
