@@ -581,11 +581,11 @@ font-weight: 500;
 display: flex;
 align-items: center;
 position: relative;
+padding: 10px;
 }
 .volume-icon {
 font-size: 24px;
 cursor: pointer;
-margin-bottom: 10px;
 color: #00ffbf;
 }
 .volume-slider-container {
