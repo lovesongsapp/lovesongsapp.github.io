@@ -159,7 +159,30 @@
          Adicionar
          </button>
       </div><!--end home-screen-->
-      <div id="donate">
+      
+      <!--START DONATE-->
+         <div id="donate"></div>
+<script>
+  // Função para carregar o CSS externo
+  async function loadExternalCSS() {
+    const response = await fetch('donate.css'); // Carrega o arquivo donate.css
+    return await response.text(); // Retorna o conteúdo do CSS como texto
+  }
+
+  // Adiciona o conteúdo ao Shadow DOM
+  async function applyShadowDOM() {
+    const container = document.querySelector('#donate'); // Seleciona a div "donate"
+
+    // Cria o Shadow Root
+    const shadow = container.attachShadow({ mode: 'open' });
+
+    // Carrega o CSS e adiciona ao Shadow DOM
+    const css = await loadExternalCSS();
+    shadow.innerHTML = `
+      <style>
+        ${css} /* Aplica o conteúdo do arquivo CSS aqui */
+      </style>
+            <div id="donate" class="donate">
           <div class="popup" id="popup">
             <div class="popup-content">
                <div>
@@ -192,7 +215,15 @@
          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
          <script src="./donate/donate.js"></script>
       </div>
+    `;
+  }
+
+  // Chama a função para aplicar o Shadow DOM
+  applyShadowDOM();
+</script>
+
       <!--END DIV DONATE-->
+      
       <script src="volume.js"></script>
       <script src="script.js"></script>
       <script src="https://www.youtube.com/iframe_api"></script>
