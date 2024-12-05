@@ -116,17 +116,7 @@ font-family: 'Plus Jakarta Sans', sans-serif;
 display: none;
 }
 /* Adicione as classes CSS para personalizar o estilo do SweetAlert */
-.swal-title-custom {
-color: #252E48 !important;
-font-size: 26px !important;
-font-family: 'Roboto', sans-serif;
-}
-.swal-text-custom {
-font-weight: 500 !important;
-font-size: 16px;
-color: #252E48 !important;
-font-family: 'Roboto', sans-serif;
-}
+
 /*anime icon*/
 .swal2-header {
 padding: 0 !important;
@@ -151,13 +141,42 @@ border-radius: 50%;
 .swal2-container.swal2-backdrop-show, .swal2-container.swal2-noanimation {
 background: rgba(0,0,0,0.95) !important;
 }
-.swal2-popup .swal2-styled.swal2-confirm {
+
+.swal2-popup {
+    display: none;
+    position: relative;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    width: 32em;
+    max-width: 100%;
+    padding: 1.25em;
+    border: none;
+    border-radius: 5px;
+    background: #0f0225;
+    font-family: inherit;
+    font-size: 1rem;
+}
+.swal-title-custom {
+color: #fff !important;
+font-size: 26px !important;
+font-weight: 500;
+font-family: 'Roboto', sans-serif;
+}
+.swal-text-custom {
+font-weight: 500 !important;
+font-size: 16px;
+color: #fff !important;
+font-family: 'Roboto', sans-serif;
+}
+.swal2-styled.swal2-confirm {
 border: 0;
 border-radius: 2em !important;
 background-color: #f29200 !important;
 color: #fff !important;
 font-size: 1.0625em !important;
 }
+
 /*icones de direita*/
 .icons {
 position: fixed;
