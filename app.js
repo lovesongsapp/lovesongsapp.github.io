@@ -175,16 +175,16 @@ function onPlayerStateChange(event) {
         isPlaying = false;
 
         switch (mode) {
-            case 'repeat_one':
-                player.seekTo(0);
-                player.playVideo();
+            case 'repeat_one': // Para repetir o mesmo vídeo
+                player.seekTo(0); // Volta ao início do vídeo
+                player.playVideo(); // Reproduz novamente
                 break;
-            case 'shuffle':
+            case 'shuffle': // Para reproduzir aleatoriamente
                 const playlist = player.getPlaylist();
                 const nextIndex = Math.floor(Math.random() * playlist.length);
                 player.playVideoAt(nextIndex); // Embaralha a playlist
                 break;
-            case 'repeat':
+            case 'repeat': // Para repetir a playlist
                 const currentIndex = player.getPlaylistIndex();
                 if (currentIndex === player.getPlaylist().length - 1) {
                     player.playVideoAt(0);
@@ -196,6 +196,7 @@ function onPlayerStateChange(event) {
     }
     updateTitleAndArtist();
 }
+
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
