@@ -2,7 +2,8 @@ let player;
 let maxQuality = 'medium'; // Definir resolução máxima
 let minQuality = 'low'; // Definir resolução mínima
 let isPlaying = false;
-let isShuffle = false; // Variável de controle
+let isShuffle = false; 
+let isRepeatOne = false; // Variável de controle
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
@@ -70,7 +71,7 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
- const savedTheme = localStorage.getItem('theme');
+const savedTheme = localStorage.getItem('theme');
 const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
 
@@ -170,7 +171,7 @@ function setupControlButtons() {
 }
 
 function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.ENDED) {
+    if (event.data === 0 && isRepeatOne) {
         switch (mode) {
             case 'repeat_one':
                 player.seekTo(0); // Reinicia o vídeo
