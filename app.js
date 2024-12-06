@@ -110,6 +110,7 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 }
 
 function setupControlButtons() {
+    // Botão de Play/Pause
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
@@ -121,10 +122,12 @@ function setupControlButtons() {
         isPlaying = !isPlaying;
     });
 
+    // Botão de Voltar (Vídeo anterior)
     document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
         player.previousVideo();
     });
 
+    // Botão de Avançar (Vídeo seguinte)
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
         if (isShuffle) {
             // Gera um índice aleatório para a playlist
@@ -139,6 +142,7 @@ function setupControlButtons() {
         }
     });
 
+    // Botão de Modo de Repetição e Embaralhamento
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
@@ -159,6 +163,7 @@ function setupControlButtons() {
         }
     });
 }
+
 
 // Função para lidar com a mudança de estado do player
 function onPlayerStateChange(event) {
