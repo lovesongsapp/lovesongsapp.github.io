@@ -1,7 +1,6 @@
 let player;
 let maxQuality = 'medium'; // Definir resolução máxima
 let minQuality = 'low'; // Definir resolução mínima
-let isRepeatOne = false;
 let isPlaying = false;
 let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'xuZA6qiJVfU'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || '_i0wRFjJjj4'; // Video Inicial da Playlist
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -110,7 +109,6 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 }
 
 function setupControlButtons() {
-    // Botão de Play/Pause
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
@@ -122,12 +120,10 @@ function setupControlButtons() {
         isPlaying = !isPlaying;
     });
 
-    // Botão de Voltar (Vídeo anterior)
     document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
         player.previousVideo();
     });
 
-    // Botão de Avançar (Vídeo seguinte)
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
         if (isShuffle) {
             // Gera um índice aleatório para a playlist
@@ -140,32 +136,39 @@ function setupControlButtons() {
             const nextIndex = (currentIndex + 1) % playlistLength; // Calcula o próximo índice
             player.playVideoAt(nextIndex); // Avança para o próximo vídeo
         }
-    });
+    });  
+    
 
-    // Botão de Modo de Repetição e Embaralhamento
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
                 mode = 'repeat_one';
                 this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
-                isRepeatOne = true;  // Ativa o repeat-one
                 break;
             case 'repeat_one':
                 mode = 'shuffle';
                 this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-                isRepeatOne = false;  // Desativa o repeat-one
+                isShuffle = true;
                 break;
             case 'shuffle':
                 mode = 'repeat';
                 this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
-                isRepeatOne = false;
+                isShuffle = false;
                 break;
         }
     });
+
+
+    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
+        document.getElementById('playlist-overlay').style.display = 'flex';
+        renderPlaylist(playlistData);
+    });
+
+    document.getElementById('close-playlist').addEventListener('click', function() {
+        document.getElementById('playlist-overlay').style.display = 'none';
+    });
 }
 
-
-// Função para lidar com a mudança de estado do player
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
@@ -173,8 +176,8 @@ function onPlayerStateChange(event) {
 
         switch (mode) {
             case 'repeat_one':
-                player.seekTo(0);  // Volta ao início do vídeo
-                player.playVideo();  // Reproduz novamente
+                player.seekTo(0);
+                player.playVideo();
                 break;
             case 'shuffle':
                 const playlist = player.getPlaylist();
@@ -193,7 +196,6 @@ function onPlayerStateChange(event) {
     }
     updateTitleAndArtist();
 }
-
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
