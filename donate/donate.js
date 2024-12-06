@@ -36,7 +36,7 @@
          
              // Exibe um popup personalizado com o SweetAlert
              Swal.fire({
-                 title: elementId === 'pix' ? 'Chave copiada!' : 'Codigo Pix copiado com sucesso!',
+                 title: elementId === 'pix' ? 'Chave Pix copiada com sucesso!' : 'Codigo Pix copiado com sucesso!',
                  text: elementId === 'pix' ? 'Use a opção CHAVE ALEATÓRIA no app do seu banco.' : 'Use a opção COPIA e COLA no app do seu banco.',
                  icon: 'success',
                  confirmButtonText: 'OK',
