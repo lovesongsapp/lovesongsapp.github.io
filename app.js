@@ -2,8 +2,7 @@ let player;
 let maxQuality = 'medium'; // Definir resolução máxima
 let minQuality = 'low'; // Definir resolução mínima
 let isPlaying = false;
-let isShuffle = false; 
-let isRepeatOne = false; // Variável de controle
+let isShuffle = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'FkDpwF6-QiA'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || 'jjnmICxvoVY'; // Video Inicial da Playlist
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -171,11 +170,14 @@ function setupControlButtons() {
 }
 
 function onPlayerStateChange(event) {
-    if (event.data === 0 && isRepeatOne) {
+    if (event.data == YT.PlayerState.ENDED) {
+        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
+        isPlaying = false;
+
         switch (mode) {
             case 'repeat_one':
-                player.seekTo(0); // Reinicia o vídeo
-                player.playVideo(); // Reproduz o vídeo
+                player.seekTo(0);
+                player.playVideo();
                 break;
             case 'shuffle':
                 const playlist = player.getPlaylist();
@@ -185,21 +187,15 @@ function onPlayerStateChange(event) {
             case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
                 if (currentIndex === player.getPlaylist().length - 1) {
-                    player.playVideoAt(0); // Volta ao início da playlist
+                    player.playVideoAt(0);
                 } else {
-                    player.nextVideo(); // Próximo vídeo
+                    player.nextVideo();
                 }
                 break;
-            default:
-                // Atualiza o botão para "play" apenas no modo padrão
-                document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
-                isPlaying = false;
         }
     }
-
-    updateTitleAndArtist(); // Atualiza informações do vídeo
+    updateTitleAndArtist();
 }
-
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
