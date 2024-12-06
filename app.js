@@ -2,7 +2,7 @@ let player;
 let maxQuality = 'medium'; // Definir resolução máxima
 let minQuality = 'low'; // Definir resolução mínima
 let isPlaying = false;
-let isShuffle = false;
+let isShuffle = false; // Variável de controle
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
