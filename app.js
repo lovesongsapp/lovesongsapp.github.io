@@ -139,25 +139,27 @@ function setupControlButtons() {
     });  
     
 
-    document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
-        switch (mode) {
-            case 'repeat':
-                mode = 'repeat_one';
-                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
-                break;
-            case 'repeat_one':
-                mode = 'shuffle';
-                this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-                isShuffle = true;
-                break;
-            case 'shuffle':
-                mode = 'repeat';
-                this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
-                isShuffle = false;
-                break;
-        }
-    });
-
+   document.querySelector('.control-button:nth-child(1)').addEventListener('click', function () {
+    switch (mode) {
+        case 'repeat':
+            mode = 'repeat_one';
+            this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
+            console.log('Modo atualizado: repeat_one');
+            break;
+        case 'repeat_one':
+            mode = 'shuffle';
+            this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
+            isShuffle = true;
+            console.log('Modo atualizado: shuffle');
+            break;
+        case 'shuffle':
+            mode = 'repeat';
+            this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
+            isShuffle = false;
+            console.log('Modo atualizado: repeat');
+            break;
+    }
+});
 
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
@@ -170,32 +172,35 @@ function setupControlButtons() {
 }
 
 function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.ENDED) {
+    if (event.data === YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
         isPlaying = false;
 
         switch (mode) {
-            case 'repeat_one': // Para repetir o mesmo vídeo
+            case 'repeat_one':
+                // Reiniciar o vídeo atual
                 player.seekTo(0); // Volta ao início do vídeo
-                player.playVideo(); // Reproduz novamente
+                player.playVideo(); // Reproduz o vídeo novamente
                 break;
-            case 'shuffle': // Para reproduzir aleatoriamente
+
+            case 'shuffle':
                 const playlist = player.getPlaylist();
-                const nextIndex = Math.floor(Math.random() * playlist.length);
-                player.playVideoAt(nextIndex); // Embaralha a playlist
+                const nextIndex = Math.floor(Math.random() * playlist.length); // Gera um índice aleatório
+                player.playVideoAt(nextIndex); // Toca o vídeo correspondente
                 break;
-            case 'repeat': // Para repetir a playlist
+
+            case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
-                if (currentIndex === player.getPlaylist().length - 1) {
-                    player.playVideoAt(0);
-                } else {
-                    player.nextVideo();
-                }
+                const playlistLength = player.getPlaylist().length;
+                const nextIndex = (currentIndex + 1) % playlistLength; // Próximo vídeo ou volta ao início
+                player.playVideoAt(nextIndex);
                 break;
         }
     }
+    // Atualizar título e artista sempre que o estado mudar
     updateTitleAndArtist();
 }
+
 
 
 function updateTitleAndArtist() {
