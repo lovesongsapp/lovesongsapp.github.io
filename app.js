@@ -160,6 +160,14 @@ function setupControlButtons() {
     });
 }
 
+// Função para lidar com a mudança de estado do player
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.ENDED && isRepeatOne) {
+        player.seekTo(0);  // Volta ao início do vídeo
+        player.playVideo();  // Reproduz novamente
+    }
+}
+
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
         renderPlaylist(playlistData);
