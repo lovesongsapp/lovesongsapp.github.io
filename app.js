@@ -194,6 +194,7 @@ function onPlayerStateChange(event) {
     updateTitleAndArtist();
 }
 
+
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
     document.getElementById('title').textContent = videoData.title;
