@@ -188,6 +188,9 @@ background: rgba(0,0,0,0.95) !important;
     word-wrap: break-word;
 }
 
+.swal-text-custom .highlight {
+    color: orange;
+}
 .swal2-styled {
     margin: .3125em;
     padding: .625em 1.4em;
