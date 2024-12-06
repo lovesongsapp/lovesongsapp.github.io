@@ -3,6 +3,7 @@ let maxQuality = 'medium'; // Definir resolução máxima
 let minQuality = 'low'; // Definir resolução mínima
 let isPlaying = false;
 let isShuffle = false;
+let isRepeatOne = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
@@ -137,27 +138,27 @@ function setupControlButtons() {
             player.playVideoAt(nextIndex); // Avança para o próximo vídeo
         }
     });  
-    
-    //controle do botão de alternância do modo
+
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
                 mode = 'repeat_one';
                 this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
+                isRepeatOne = true;  // Ativa o repeat-one
                 break;
             case 'repeat_one':
                 mode = 'shuffle';
                 this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-                isShuffle = true;
+                isRepeatOne = false;  // Desativa o repeat-one
                 break;
             case 'shuffle':
                 mode = 'repeat';
                 this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
-                isShuffle = false;
+                isRepeatOne = false;
                 break;
         }
     });
-
+}
 
     document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'flex';
@@ -167,6 +168,8 @@ function setupControlButtons() {
     document.getElementById('close-playlist').addEventListener('click', function() {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
+    
+
 }
 
 function onPlayerStateChange(event) {
@@ -195,6 +198,10 @@ function onPlayerStateChange(event) {
         }
     }
     updateTitleAndArtist();
+    if (event.data === YT.PlayerState.ENDED && isRepeatOne) {
+        player.seekTo(0);  // Volta ao início do vídeo
+        player.playVideo();  // Reproduz novamente
+    }
 }
 
 
