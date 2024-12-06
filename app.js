@@ -29,25 +29,24 @@ function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
     const videoId = urlParams.get('videoId') || 'jjnmICxvoVY'; // Video Inicial da Playlist
 
-    player = new YT.Player('music-player', {
-        height: '100%',
-        width: '100%',
-        videoId: videoId,
-        playerVars: {
-            'listType': 'playlist',
-            'list': 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
-            'autoplay': 0,
-            'controls': 0,
-            'iv_load_policy': 3,
-            'modestbranding': 1,
-            'rel': 0 // Evita mostrar vídeos relacionados ao final
-        },
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
-}
+player = new YT.Player('music-player', {
+    height: '100%',
+    width: '100%',
+    videoId: videoId,
+    playerVars: {
+        listType: 'playlist',
+        list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
+        autoplay: 0,
+        controls: 1,
+        loop: 1, // Habilita o loop (útil para repetir vídeos no modo repeat_one)
+        rel: 0 // Evita vídeos relacionados ao final
+    },
+    events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+    }
+});
+
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
@@ -173,20 +172,17 @@ function setupControlButtons() {
 
 function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.ENDED) {
-        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
-        isPlaying = false;
-
         switch (mode) {
             case 'repeat_one':
-                // Reiniciar o vídeo atual
+                // Reinicia o vídeo atual
                 player.seekTo(0); // Volta ao início do vídeo
-                player.playVideo(); // Reproduz o vídeo novamente
+                player.playVideo(); // Toca novamente o vídeo
                 break;
 
             case 'shuffle':
                 const playlist = player.getPlaylist();
-                const nextIndex = Math.floor(Math.random() * playlist.length); // Gera um índice aleatório
-                player.playVideoAt(nextIndex); // Toca o vídeo correspondente
+                const randomIndex = Math.floor(Math.random() * playlist.length); // Seleciona índice aleatório
+                player.playVideoAt(randomIndex); // Reproduz o vídeo correspondente
                 break;
 
             case 'repeat':
@@ -195,11 +191,17 @@ function onPlayerStateChange(event) {
                 const nextIndex = (currentIndex + 1) % playlistLength; // Próximo vídeo ou volta ao início
                 player.playVideoAt(nextIndex);
                 break;
+
+            default:
+                console.log('Nenhum modo de repetição selecionado.');
+                break;
         }
     }
-    // Atualizar título e artista sempre que o estado mudar
+
+    // Atualiza a interface do player (ex.: título, artista, ícones) sempre que o estado mudar
     updateTitleAndArtist();
 }
+
 
 
 
