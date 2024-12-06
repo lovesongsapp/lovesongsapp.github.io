@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'UXxRyNvTPr8'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || '0m38EM0QumI'; // Video Inicial da Playlist
 
 player = new YT.Player('music-player', {
     height: '100%',
@@ -38,8 +38,8 @@ player = new YT.Player('music-player', {
         list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
         autoplay: 0,
         controls: 1,
-        loop: 1, // Habilita o loop (útil para repetir vídeos no modo repeat_one)
-        rel: 0 // Evita vídeos relacionados ao final
+        rel: 0, // Evita vídeos relacionados ao final
+        disablekb: 1 // Desativa o controle do teclado
     },
     events: {
         'onReady': onPlayerReady,
