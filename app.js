@@ -170,14 +170,11 @@ function setupControlButtons() {
 }
 
 function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.ENDED) {
-        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
-        isPlaying = false;
-
+    if (event.data === YT.PlayerState.ENDED) {
         switch (mode) {
             case 'repeat_one':
-                player.seekTo(0);
-                player.playVideo();
+                player.seekTo(0); // Reinicia o vídeo
+                player.playVideo(); // Reproduz o vídeo
                 break;
             case 'shuffle':
                 const playlist = player.getPlaylist();
@@ -187,15 +184,21 @@ function onPlayerStateChange(event) {
             case 'repeat':
                 const currentIndex = player.getPlaylistIndex();
                 if (currentIndex === player.getPlaylist().length - 1) {
-                    player.playVideoAt(0);
+                    player.playVideoAt(0); // Volta ao início da playlist
                 } else {
-                    player.nextVideo();
+                    player.nextVideo(); // Próximo vídeo
                 }
                 break;
+            default:
+                // Atualiza o botão para "play" apenas no modo padrão
+                document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
+                isPlaying = false;
         }
     }
-    updateTitleAndArtist();
+
+    updateTitleAndArtist(); // Atualiza informações do vídeo
 }
+
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
