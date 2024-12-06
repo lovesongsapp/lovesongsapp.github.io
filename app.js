@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Um ou mais elementos DOM não foram encontrados.');
     }
 });
-}
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -47,7 +46,7 @@ player = new YT.Player('music-player', {
         'onStateChange': onPlayerStateChange
     }
 });
-
+}
 
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
