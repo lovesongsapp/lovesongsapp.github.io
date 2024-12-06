@@ -66,7 +66,7 @@ padding: 20px;
 background: #726232;
 background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://lovesongsapp.github.io/donate/donate-bg.jpg') no-repeat center center fixed;
 background-size: cover;
-height: 100vh;
+height: calc(100vh - 40px);
 align-items: center;
 display: flex;
 justify-content: center;
