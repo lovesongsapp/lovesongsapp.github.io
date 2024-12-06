@@ -4,9 +4,9 @@ margin: 0;
 padding: 0;
 }
 .texto{
-   display: flex;
-   align-items: center;
-   justify-content: center;
+display: flex;
+align-items: center;
+justify-content: center;
 }
 .logo-popup {display: flex;align-items: center;justify-content: center;margin-bottom: 30px;}
 .logo-popup img {
@@ -61,15 +61,15 @@ transform: translateY(100%);
 }
 }
 .popup-content {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    padding: 20px;
-    background: #726232;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://lovesongsapp.github.io/donate/donate-bg.jpg') no-repeat center center fixed;
-    background-size: cover;
-    height: 100vh;
-    align-items: center;
-    display: flex;
-    justify-content: center;
+font-family: 'Plus Jakarta Sans', sans-serif;
+padding: 20px;
+background: #726232;
+background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://lovesongsapp.github.io/donate/donate-bg.jpg') no-repeat center center fixed;
+background-size: cover;
+height: 100vh;
+align-items: center;
+display: flex;
+justify-content: center;
 }
 .qrcode {
 margin: 50px 0px;
@@ -78,11 +78,11 @@ margin: 50px 0px;
 border-radius: 5px;
 }
 .donate-btn {
-    margin: 15px 0px;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
+margin: 15px 0px;
+align-items: center;
+display: flex;
+justify-content: space-between;
+gap: 30px;
 }
 .key1 {
 padding: 10px 20px;
@@ -122,7 +122,6 @@ font-family: 'Plus Jakarta Sans', sans-serif;
 display: none;
 }
 /* Adicione as classes CSS para personalizar o estilo do SweetAlert */
-
 /*anime icon*/
 .swal2-header {
 padding: 0 !important;
@@ -147,57 +146,56 @@ border-radius: 50%;
 .swal2-container.swal2-backdrop-show, .swal2-container.swal2-noanimation {
 background: rgba(0,0,0,0.95) !important;
 }
-
 .swal2-popup {
-    display: none;
-    position: relative;
-    box-sizing: border-box;
-    flex-direction: column;
-    justify-content: center;
-    width: 32em;
-    max-width: 100%;
-    padding: 1.25em;
-    border: none;
-    border-radius: 5px;
-    background: #0f0225;
-    font-family: inherit;
-    font-size: 1rem;
+display: none;
+position: relative;
+box-sizing: border-box;
+flex-direction: column;
+justify-content: center;
+width: 32em;
+max-width: 100%;
+padding: 1.25em;
+border: none;
+border-radius: 5px;
+background: #0f0225;
+font-family: inherit;
+font-size: 1rem;
 }
-
 .swal2-title {
-   font-family: 'Roboto', sans-serif;
-    position: relative;
-    max-width: 100%;
-    margin: 0 0 .4em;
-    padding: 0;
-    color: #fff;
-    font-size: 1.875em;
-    font-weight: 500;
-    text-align: center;
-    text-transform: none;
-    word-wrap: break-word;
+font-family: 'Roboto', sans-serif;
+position: relative;
+max-width: 100%;
+margin: 0 0 .4em;
+padding: 0;
+color: #fff;
+font-size: 1.875em;
+font-weight: 500;
+text-align: center;
+text-transform: none;
+word-wrap: break-word;
 }
 .swal2-content {
-    font-family: 'Roboto', sans-serif;
-    padding: 0 !important;
-    color: #ddd;
-    font-size: 1.125em;
-    font-weight: 400;
-    line-height: normal;
-    text-align: center;
-    word-wrap: break-word;
+font-family: 'Roboto', sans-serif;
+padding: 0 !important;
+color: #ddd;
+font-size: 1.125em;
+font-weight: 400;
+line-height: normal;
+text-align: center;
+word-wrap: break-word;
 }
-
+.swal-text-title .highlight {
+color: orange;
+}
 .swal-text-custom .highlight {
-    color: orange;
+color: orange;
 }
 .swal2-styled {
-    margin: .3125em;
-    padding: .625em 1.4em;
-    box-shadow: none;
-    font-weight: 500;
+margin: .3125em;
+padding: .625em 1.4em;
+box-shadow: none;
+font-weight: 500;
 }
-
 .swal2-styled.swal2-confirm {
 border: 0;
 border-radius: 2em !important;
@@ -205,8 +203,8 @@ background-color: #f29200 !important;
 color: #fff !important;
 font-size: 1.0625em !important;
 }
-
 /*icones de direita*/
+/*
 .icons {
 position: fixed;
 bottom: 28%;
@@ -221,3 +219,4 @@ align-items: center;
 color: red;
 font-size: 30px;
 }
+*/
