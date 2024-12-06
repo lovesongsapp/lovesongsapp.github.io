@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Um ou mais elementos DOM não foram encontrados.');
     }
 });
+}
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
