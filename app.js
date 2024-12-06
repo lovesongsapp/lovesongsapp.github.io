@@ -1,9 +1,9 @@
 let player;
 let maxQuality = 'medium'; // Definir resolução máxima
 let minQuality = 'low'; // Definir resolução mínima
+let isRepeatOne = false;
 let isPlaying = false;
 let isShuffle = false;
-let isRepeatOne = false;
 let mode = 'repeat'; // 'repeat', 'repeat_one', 'shuffle'
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'PPKv7iQt8U0'; // Video Inicial da Playlist
+    const videoId = urlParams.get('videoId') || 'eT5_neXR3FI'; // Video Inicial da Playlist
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -110,6 +110,7 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 }
 
 function setupControlButtons() {
+    // Botão de Play/Pause
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function() {
         if (isPlaying) {
             player.pauseVideo();
@@ -121,10 +122,12 @@ function setupControlButtons() {
         isPlaying = !isPlaying;
     });
 
+    // Botão de Voltar (Vídeo anterior)
     document.querySelector('.control-button:nth-child(2)').addEventListener('click', function() {
         player.previousVideo();
     });
 
+    // Botão de Avançar (Vídeo seguinte)
     document.querySelector('.control-button:nth-child(4)').addEventListener('click', function() {
         if (isShuffle) {
             // Gera um índice aleatório para a playlist
@@ -137,8 +140,9 @@ function setupControlButtons() {
             const nextIndex = (currentIndex + 1) % playlistLength; // Calcula o próximo índice
             player.playVideoAt(nextIndex); // Avança para o próximo vídeo
         }
-    });  
+    });
 
+    // Botão de Modo de Repetição e Embaralhamento
     document.querySelector('.control-button:nth-child(1)').addEventListener('click', function() {
         switch (mode) {
             case 'repeat':
@@ -158,26 +162,6 @@ function setupControlButtons() {
                 break;
         }
     });
-}
-
-// Função para lidar com a mudança de estado do player
-function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.ENDED && isRepeatOne) {
-        player.seekTo(0);  // Volta ao início do vídeo
-        player.playVideo();  // Reproduz novamente
-    }
-}
-
-    document.querySelector('.control-button:nth-child(5)').addEventListener('click', function() {
-        document.getElementById('playlist-overlay').style.display = 'flex';
-        renderPlaylist(playlistData);
-    });
-
-    document.getElementById('close-playlist').addEventListener('click', function() {
-        document.getElementById('playlist-overlay').style.display = 'none';
-    });
-    
-
 }
 
 function onPlayerStateChange(event) {
@@ -206,12 +190,7 @@ function onPlayerStateChange(event) {
         }
     }
     updateTitleAndArtist();
-    if (event.data === YT.PlayerState.ENDED && isRepeatOne) {
-        player.seekTo(0);  // Volta ao início do vídeo
-        player.playVideo();  // Reproduz novamente
-    }
 }
-
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
