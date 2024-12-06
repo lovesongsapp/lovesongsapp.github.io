@@ -47,7 +47,6 @@ player = new YT.Player('music-player', {
     }
 });
 }
-
 function onPlayerReady(event) {
     setVideoQuality(minQuality); // Define a qualidade inicial para 'medium'
     setupControlButtons();
