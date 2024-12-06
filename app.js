@@ -1,43 +1,3 @@
-
-
-const savedTheme = localStorage.getItem('theme');
-const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-const themeToggleIcon = document.querySelector('#theme-toggle ion-icon');
-
-if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-    themeToggleIcon.setAttribute('name', savedTheme === 'dark' ? 'sunny-outline' : 'moon-outline');
-    metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#13051f' : '#f0f4f9');
-} else {
-    // Apply dark theme by default
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.body.classList.add('dark-mode');
-    themeToggleIcon.setAttribute('name', 'sunny-outline');
-    metaThemeColor.setAttribute('content', '#13051f');
-    localStorage.setItem('theme', 'dark');
-}
-
-document.getElementById('theme-toggle').addEventListener('click', function() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    if (currentTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        document.body.classList.remove('dark-mode');
-        themeToggleIcon.setAttribute('name', 'moon-outline');
-        metaThemeColor.setAttribute('content', '#f0f4f9');
-        localStorage.setItem('theme', 'light');
-    } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.body.classList.add('dark-mode');
-        themeToggleIcon.setAttribute('name', 'sunny-outline');
-        metaThemeColor.setAttribute('content', '#13051f');
-        localStorage.setItem('theme', 'dark');
-    }
-});
-
-    fetchPlaylistData();
-}
-
 let player;
 let maxQuality = 'medium'; // Definir resolução máxima
 let minQuality = 'low'; // Definir resolução mínima
@@ -280,15 +240,25 @@ function renderPlaylist(videos) {
 
         // Cria a miniatura do vídeo
         const thumbnail = document.createElement('img');
-        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
-        listItem.appendChild(thumbnail);
-
-        // Cria o título e autor
+        thumbnail.src = `https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`; // URL da miniatura
+        thumbnail.alt = video.title;
+        thumbnail.classList.add('playlist-thumbnail');
+        
+        // Cria o título do vídeo
         const title = document.createElement('span');
-        title.textContent = `${video.title} - ${video.author}`;
-        listItem.appendChild(title);
+        title.classList.add('playlist-title');
+        title.textContent = video.title;
 
-        // Ação ao clicar no vídeo
+        // Cria o autor do vídeo
+        const author = document.createElement('span');
+        author.classList.add('playlist-author');
+        author.textContent = video.author;
+
+        // Adiciona o click event para reproduzir o vídeo ao clicar na miniatura
+        listItem.appendChild(thumbnail);
+        listItem.appendChild(title);
+        listItem.appendChild(author);
+        
         listItem.addEventListener('click', function() {
             player.playVideoAt(video.index);
             document.getElementById('playlist-overlay').style.display = 'none';
@@ -298,46 +268,72 @@ function renderPlaylist(videos) {
     });
 }
 
+// Função para compartilhar o vídeo atual via URL encurtada
+function shareVideo() {
+    const currentVideoId = player.getVideoData().video_id;
+    const url = `https://www.youtube.com/watch?v=${currentVideoId}`;
+    const shareUrl = `https://api-ssl.bitly.com/v4/shorten`;
+    const token = 'YOUR_BITLY_API_TOKEN'; // Substitua com seu token Bitly
 
-// Renderiza a playlist completa ao carregar a página
-renderPlaylist(playlistData);
-
-// Função para filtrar a playlist
-function filterPlaylist(searchText) {
-    return playlistData.filter(video => {
-        const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
-        const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
-        return titleMatch || authorMatch;
-    });
+    fetch(shareUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            long_url: url,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(`Compartilhe o vídeo: ${data.link}`);
+    })
+    .catch(error => console.error('Erro ao encurtar a URL:', error));
 }
 
-// Configuração da busca
-const searchInput = document.getElementById('search-input');
-searchInput.addEventListener('input', () => {
-    const searchText = searchInput.value.trim().toLowerCase();
-    const filteredPlaylist = filterPlaylist(searchText);
-    renderPlaylist(filteredPlaylist);
+// Função para alternar a visibilidade do player de vídeo
+function togglePlayerVisibility() {
+    const playerContainer = document.getElementById('music-player-container');
+    if (playerContainer.style.display === 'none') {
+        playerContainer.style.display = 'block';
+    } else {
+        playerContainer.style.display = 'none';
+    }
+}
+
+// Função para buscar um vídeo por título e iniciar a reprodução
+function searchVideo(query) {
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=YOUR_YOUTUBE_API_KEY`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.items && data.items.length > 0) {
+                const videoId = data.items[0].id.videoId;
+                player.loadVideoById(videoId);
+            } else {
+                alert('Nenhum vídeo encontrado.');
+            }
+        })
+        .catch(error => console.error('Erro ao buscar vídeo:', error));
+}
+
+// Evento de busca
+document.getElementById('search-button').addEventListener('click', function() {
+    const query = document.getElementById('search-input').value;
+    searchVideo(query);
 });
 
+// Evento de compartilhamento
+document.getElementById('share-button').addEventListener('click', shareVideo);
 
-// Compartilhamento
-document.getElementById('share-icon').addEventListener('click', function() {
-    const videoData = player.getVideoData();
-    const videoId = videoData.video_id;
-    const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
+// Evento para alternar visibilidade do player
+document.getElementById('toggle-player-visibility').addEventListener('click', togglePlayerVisibility);
 
-    if (navigator.share) {
-        navigator.share({
-            title: videoData.title,
-            text: `🥰 LoveSongs: ${videoData.title}`,
-            url: shareUrl,
-        }).then(() => {
-            console.log('Compartilhamento bem-sucedido');
-        }).catch((error) => {
-            console.error('Erro ao compartilhar:', error);
-        });
-    } else {
-        // Fallback para navegadores que não suportam a API de compartilhamento
-        alert(`🩷💚 Confira este vídeo: ${videoData.title}\n${shareUrl}`);
-    }
+// Código para redes sociais (usando o link do vídeo atual)
+document.getElementById('social-share-button').addEventListener('click', function() {
+    const currentVideoId = player.getVideoData().video_id;
+    const socialShareUrl = `https://www.youtube.com/watch?v=${currentVideoId}`;
+    alert(`Compartilhe: ${socialShareUrl}`);
 });
