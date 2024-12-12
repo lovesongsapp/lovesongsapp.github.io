@@ -44,7 +44,7 @@ function onYouTubeIframeAPIReady() {
         },
         events: {
             'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onStateChange': onPlayerStateChange //monitora o estado do Player
         }
     });
 }
@@ -168,7 +168,7 @@ function setupControlButtons() {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
 }
-
+/*
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
@@ -196,6 +196,48 @@ function onPlayerStateChange(event) {
     }
     updateTitleAndArtist();
 }
+*/
+
+//TESTE PARA PULAR ANUNCIOS
+function onPlayerStateChange(event) {
+    // Verifica se o player está "BUFFERING" (potencialmente devido a anúncios)
+    if (event.data === YT.PlayerState.BUFFERING) {
+        if (player.getVideoLoadedFraction() < 1) {
+            // Se o vídeo ainda não carregou completamente, pula para o final
+            player.seekTo(player.getDuration() - 1, true);
+        }
+    }
+
+    // Lógica para o estado "ENDED" (fim do vídeo)
+    if (event.data === YT.PlayerState.ENDED) {
+        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
+        isPlaying = false;
+
+        switch (mode) {
+            case 'repeat_one':
+                player.seekTo(0);
+                player.playVideo();
+                break;
+            case 'shuffle':
+                const playlist = player.getPlaylist();
+                const nextIndex = Math.floor(Math.random() * playlist.length);
+                player.playVideoAt(nextIndex); // Embaralha a playlist
+                break;
+            case 'repeat':
+                const currentIndex = player.getPlaylistIndex();
+                if (currentIndex === player.getPlaylist().length - 1) {
+                    player.playVideoAt(0);
+                } else {
+                    player.nextVideo();
+                }
+                break;
+        }
+    }
+
+    // Atualiza o título e o artista
+    updateTitleAndArtist();
+}
+//FIM DO TESTE PARA PULAR ANUNCIOS
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
