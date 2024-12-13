@@ -202,9 +202,12 @@ function onPlayerStateChange(event) {
 function onPlayerStateChange(event) {
     // Verifica se o player está "BUFFERING" (potencialmente devido a anúncios)
     if (event.data === YT.PlayerState.BUFFERING) {
-        if (player.getVideoLoadedFraction() < 1) {
-            // Se o vídeo ainda não carregou completamente, pula para o final
-            player.seekTo(player.getDuration() - 1, true);
+        const videoDuration = player.getDuration();
+
+        // Assume que vídeos muito curtos (menos de 10 segundos) são anúncios
+        if (videoDuration < 10) {
+            console.log("Anúncio detectado, tentando pular...");
+            player.seekTo(videoDuration - 1, true);
         }
     }
 
@@ -237,6 +240,7 @@ function onPlayerStateChange(event) {
     // Atualiza o título e o artista
     updateTitleAndArtist();
 }
+
 //FIM DO TESTE PARA PULAR ANUNCIOS
 
 function updateTitleAndArtist() {
