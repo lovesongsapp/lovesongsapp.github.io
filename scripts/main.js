@@ -1,0 +1,1 @@
+/*Script principal do app*/
