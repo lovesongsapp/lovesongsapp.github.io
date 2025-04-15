@@ -28,3 +28,21 @@ function checkAuthAndRedirect() {
 }
 
 checkAuthAndRedirect();
+
+// Inicializa o Firebase apenas se ainda não foi inicializado
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+// Verifica o estado da autenticação
+firebase.auth().onAuthStateChanged(user => {
+  if (!user) {
+    // Usuário não autenticado, redireciona para a página de login
+    window.location.href = "login.html";
+  } else {
+    console.log("Usuário autenticado:", user.email);
+    // Se quiser, você pode armazenar dados aqui
+    localStorage.setItem('userLogged', 'true');
+  }
+});
