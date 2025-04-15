@@ -1,11 +1,3 @@
-// Configuração do Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
-  authDomain: "lovesongs-1285e.firebaseapp.com",
-  projectId: "lovesongs-1285e",
-  appId: "1:940749066428:web:4bc067e8721fa576fe40b9"
-};
-
 // Inicializa o Firebase se ainda não estiver inicializado
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
