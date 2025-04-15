@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
    <head>
-      <!--FIREBASE-->
-      <script type="module" src="./scripts/auth.js"></script>
+
    
       <link href="//www.youtube.com" rel="dns-prefetch" />
       <link crossorigin="" href="//www.youtube.com" rel="preconnect" />
@@ -229,13 +228,9 @@
       <script src="./script-sw.js"></script>
       <script src="./add-home.js"></script>
 
-      <!--firebase-->
-      <script src="./scripts/auth.js"></script>
-      <script src="./scripts/main.js"></script>
-     <!-- Firebase SDKs -->
+      <!-- Firebase SDKs -->
       <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
       <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
       <!-- Firebase Config -->
       <script>
         const firebaseConfig = {
@@ -246,7 +241,17 @@
           messagingSenderId: "940749066428",
           appId: "1:940749066428:web:4bc067e8721fa576fe40b9"
         };
+      // Inicializa o Firebase aqui mesmo, para evitar duplicidade
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
       </script>
+      <!--firebase-->
+      <script src="./scripts/auth.js"></script>
+      <script src="./scripts/main.js"></script>
+     
+
+      
 
 
 
