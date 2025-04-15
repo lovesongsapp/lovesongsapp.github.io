@@ -229,7 +229,33 @@
       <script src="app.js"></script>
       <script src="https://www.youtube.com/iframe_api"></script>
       <script src="script-sw.js"></script>
-      <script src="./login/login.js"></script>
       <script src="add-home.js"></script>
+
+
+
+      
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<!-- Firebase Config -->
+<script>
+  const firebaseConfig = {
+    apiKey: "SUA_CHAVE",
+    authDomain: "SEU_DOMINIO",
+    projectId: "SEU_PROJETO",
+    storageBucket: "SEU_BUCKET",
+    messagingSenderId: "SEU_SENDER_ID",
+    appId: "SEU_APP_ID"
+  };
+</script>
+
+<!-- Verificação de login -->
+<script src="scripts/auth.js"></script>
+
+<!-- Script principal do app -->
+<script src="scripts/main.js"></script>
+
+      
    </body>
 </html>
