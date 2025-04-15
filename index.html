@@ -2,7 +2,7 @@
 <html lang="pt-br">
    <head>
       <!--FIREBASE-->
-      <script src="/scripts/auth.js"></script>
+      <script type="module" src="/scripts/auth.js"></script>
    
       <link href="//www.youtube.com" rel="dns-prefetch" />
       <link crossorigin="" href="//www.youtube.com" rel="preconnect" />
@@ -220,10 +220,9 @@
       </section>
 <!-- END DONATE -->
 
-<!-- Scripts Globais -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="./donate/donate.js"></script>
-
+      <!-- Scripts Globais -->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+      <script src="./donate/donate.js"></script>
       
       <script src="volume.js"></script>
       <script src="app.js"></script>
@@ -231,30 +230,27 @@
       <script src="script-sw.js"></script>
       <script src="add-home.js"></script>
 
+      <!--firebase-->
+      <script src="scripts/auth.js"></script>
+      <script src="scripts/main.js"></script>
+     <!-- Firebase SDKs -->
+      <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+      <!-- Firebase Config -->
+      <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
+          authDomain: "lovesongs-1285e.firebaseapp.com",
+          projectId: "lovesongs-1285e",
+          storageBucket: "lovesongs-1285e.firebasestorage.app",
+          messagingSenderId: "940749066428",
+          appId: "1:940749066428:web:4bc067e8721fa576fe40b9"
+        };
+      </script>
 
 
-      
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-<!-- Firebase Config -->
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
-    authDomain: "lovesongs-1285e.firebaseapp.com",
-    projectId: "lovesongs-1285e",
-    storageBucket: "lovesongs-1285e.firebasestorage.app",
-    messagingSenderId: "940749066428",
-    appId: "1:940749066428:web:4bc067e8721fa576fe40b9"
-  };
-</script>
-
-<!-- Verificação de login -->
-<script src="scripts/auth.js"></script>
-
-<!-- Script principal do app -->
-<script src="scripts/main.js"></script>
 
       
    </body>
