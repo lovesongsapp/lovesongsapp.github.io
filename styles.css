@@ -114,6 +114,7 @@ display: flex;
 flex-direction: column;
 justify-content: space-between;
 flex: 1;
+background: green;
 }
 .gradient-overlay {
 top: 0;
@@ -333,7 +334,6 @@ cursor: pointer;
 .dark-mode .player-controls {
 color: #f1f1f1;
 background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.9) 80%, #000000 100%), url(https://lovesongsapp.github.io/bg-controls.jpg) no-repeat center center;
-/*background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg-controls.jpg) no-repeat center center;*/
 background-size: cover;
 }
 .dark-mode .player-header-items {
