@@ -6,7 +6,7 @@ margin: 0;
 padding: 0;
 }
 body {
-background: #fdefff;
+background: #0f0f0f;
 font-family: 'Roboto', sans-serif;
 font-size: 16px;
 color: #311E56;
@@ -29,7 +29,7 @@ justify-content: space-between;
 height: 35px;
 position: fixed;
 width: 45%;
-background: #fff;
+background: #0f0f0f;
 top: 5px;
 border-radius: 20px;
 border: 1px solid #ccc;
