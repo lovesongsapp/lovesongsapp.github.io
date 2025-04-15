@@ -8,10 +8,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "SUA_KEY",
-  authDomain: "SUA_AUTH_DOMAIN",
-  projectId: "SUA_PROJECT_ID",
-  appId: "SUA_APP_ID"
+  apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
+  authDomain: "lovesongs-1285e.firebaseapp.com",
+  projectId: "lovesongs-1285e",
+  appId: "1:940749066428:web:4bc067e8721fa576fe40b9"
 };
 
 const app = initializeApp(firebaseConfig);
