@@ -11,7 +11,7 @@ const firebaseConfig = {
   appId: "1:940749066428:web:4bc067e8721fa576fe40b9"
 };
 
-const app = initializeApp(firebaseConfig);
+//const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Protege a página inicial
