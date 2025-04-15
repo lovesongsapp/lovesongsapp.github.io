@@ -4,7 +4,8 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
-  GoogleAuthProvider
+  GoogleAuthProvider,
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -31,10 +32,30 @@ document.getElementById("emailLogin").addEventListener("click", () => {
   const email = document.getElementById("email").value;
   const pass = document.getElementById("password").value;
 
+  if (email === "" || pass === "") {
+    alert("Preencha todos os campos!");
+    return;
+  }
+
   signInWithEmailAndPassword(auth, email, pass)
     .then(() => {
       localStorage.setItem("loggedIn", "true");
       window.location.href = "sucesso.html";
+    })
+    .catch(err => alert("Erro: " + err.message));
+});
+
+// Recuperar senha
+document.getElementById("forgotPassword").addEventListener("click", () => {
+  const email = document.getElementById("email").value;
+  if (email === "") {
+    alert("Por favor, insira seu e-mail.");
+    return;
+  }
+
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      alert("Link de redefinição de senha enviado para o seu e-mail!");
     })
     .catch(err => alert("Erro: " + err.message));
 });
