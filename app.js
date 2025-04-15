@@ -247,3 +247,24 @@ function renderPlaylist(videos) {
         playlistContainer.appendChild(listItem);
     });
 }
+// Compartilhamento
+document.getElementById('share-icon').addEventListener('click', function() {
+    const videoData = player.getVideoData();
+    const videoId = videoData.video_id;
+    const shareUrl = `https://lovesongsapp.github.io/?videoId=${videoId}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: videoData.title,
+            text: `🥰 LoveSongs: ${videoData.title}`,
+            url: shareUrl,
+        }).then(() => {
+            console.log('Compartilhamento bem-sucedido');
+        }).catch((error) => {
+            console.error('Erro ao compartilhar:', error);
+        });
+    } else {
+        // Fallback para navegadores que não suportam a API de compartilhamento
+        alert(`🩷💚 Confira este vídeo: ${videoData.title}\n${shareUrl}`);
+    }
+});
