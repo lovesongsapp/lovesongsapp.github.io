@@ -1,7 +1,7 @@
 //Controle de autenticação
 // scripts/auth.js
-//import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-//import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 // Firebase config (use a sua aqui)
 const firebaseConfig = {
@@ -11,7 +11,7 @@ const firebaseConfig = {
   appId: "1:940749066428:web:4bc067e8721fa576fe40b9"
 };
 
-//const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Protege a página inicial
