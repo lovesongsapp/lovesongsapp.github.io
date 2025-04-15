@@ -1,1 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Entrar no LoveSongsApp</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"/>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #fff;
+    }
+
+    .logo {
+      margin-bottom: 30px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 360px;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .btn, .google-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .btn {
+      background-color: #ff3366;
+      color: white;
+    }
+
+    .google-btn {
+      background-color: #eeeeee;
+      color: #222;
+    }
+
+    .google-btn:hover {
+      background-color: #dddddd;
+    }
+
+    .toggle {
+      position: relative;
+    }
+
+    .toggle ion-icon {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      cursor: pointer;
+    }
+
+    .small-text {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 15px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <img class="logo" src="icons/icon76.png" width="50" alt="LoveSongsApp logo">
+
+  <div class="container">
+    <h1>Entrar no LoveSongsApp</h1>
+    <input type="email" id="email" placeholder="Email" />
+    <div class="toggle">
+      <input type="password" id="password" placeholder="Senha" />
+      <ion-icon name="eye-outline" id="togglePassword"></ion-icon>
+    </div>
+    <button class="btn" id="emailLogin">Entrar com Email</button>
+    <button class="google-btn" id="googleLogin">Entrar com Google</button>
+    <div class="small-text">Ao entrar, você concorda com os termos românticos de uso 💌</div>
+  </div>
+
+  <script type="module" src="scripts/login.js"></script>
+</body>
+</html>
 
