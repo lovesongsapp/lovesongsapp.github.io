@@ -1,224 +1,147 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta name="theme-color" content="#17062B">
-        <title>Entrar no LoveSongsApp</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"/>
-        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-        <style>
-            * {
-                outline: none;
-            }
-            html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden; /* impede rolagem */
-  background: #482e78;
-background: radial-gradient(circle,rgba(72, 46, 120, 1) 0%, rgba(23, 6, 43, 1) 100%);
-}
-            body {
-                margin: 0;
-                font-family: 'Inter', sans-serif;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-                
-                color: #fff;
-                padding: 20px;
-
-            }
-
-            .logo {
-                margin-bottom: 20px;
-                text-align: center;
-            }
-
-            .logo img {
-                width: 70px;
-                border-radius: 50%;
-            }
-
-            .container {
-                width: 100%;
-                max-width: 360px;
-                
-                padding: 30px;
-                border-radius: 18px;
-                
-            }
-
-            h1 {
-                font-size: 22px;
-                font-weight: 600;
-                text-align: center;
-                margin-bottom: 25px;
-            }
-            input:focus {
-                background-color: transparent;
-                border: 2px solid #5D2C86;
-            }
-
-            input {
-                width: 100%;
-                padding: 12px 10px;
-                margin: 8px auto;
-                border: none;
-                border-radius: 10px;
-                background: #2d1c4a;
-                color: #00FFBF;
-                font-size: 18px;
-                box-sizing: border-box;
-            }
-
-            input::placeholder {
-                color: #aaa;
-            }
-
-            .btn, .google-btn {
-                width: 100%;
-                padding: 12px;
-                border: none;
-                border-radius: 25px;
-                font-size: 18px;
-                margin-top: 12px;
-                cursor: pointer;
-                transition: background 0.3s ease;
-            }
-
-            .btn {
-                background-color: #5D2C86;
-                color: #d8baf1;
-            }
-
-            .btn:hover {
-                background-color: #5D2C86;
-            }
-
-            .google-btn {
-                background: none;
-                border: 2px solid #5D2C86;
-                color: #d8baf1;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .google-btn:hover {
-                background-color: none;
-            }
-
-            .toggle {
-                position: relative;
-            }
-
-            .toggle ion-icon {
-                position: absolute;
-                top: 50%;
-                right: 18px;
-                transform: translateY(-50%);
-                color: #aaa;
-                cursor: pointer;
-            }
-
-            .small-text {
-                text-align: center;
-                font-size: 13px;
-                margin-top: 20px;
-                color: #d8baf1;
-            }
-
-            .switch-text {
-                text-align: center;
-                margin-top: 15px;
-                font-size: 14px;
-                cursor: pointer;
-                color: #00FFBF;
-            }
-
-            .hidden {
-                display: none;
-            }
-
-            @media (max-width: 480px) {
-                .container {
-                    padding: 25px 20px;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <!-- LOGIN -->
-            <div id="login-section">
-                <div class="logo">
-                    <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongsApp logo">
-                </div>
-                <input type="email" id="email" placeholder="Email"/>
-                <div class="toggle">
-                    <input type="password" id="password" placeholder="Senha"/>
-                    <ion-icon name="eye-outline" id="togglePassword"></ion-icon>
-                </div>
-
-        <div style="display:flex; gap: 20px;">
-                
-
-                <button class="google-btn" id="emailLogin">
-                    <ion-icon name="mail-outline"></ion-icon>
-                    Emal
-                  </button>
-
-                <button class="google-btn" id="googleLogin">
-                    <ion-icon name="logo-google"></ion-icon>
-                    Google
-                  </button>
-        </div>        
-
-
-                <div class="switch-text" onclick="toggleSection()">Não tem uma conta? Cadastre-se</div>
-                <div class="small-text">Ao entrar, você concorda com os termos românticos de uso 💌</div>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="theme-color" content="#17062B">
+    <title>Entrar no LoveSongsApp</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"/>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <style>
+        * { outline: none; }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: radial-gradient(circle, rgba(72, 46, 120, 1) 0%, rgba(23, 6, 43, 1) 100%);
+        }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        .logo img {
+            width: 70px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 360px;
+            padding: 30px;
+            border-radius: 18px;
+        }
+        h1 { font-size: 22px; font-weight: 600; text-align: center; margin-bottom: 25px; }
+        input:focus { background-color: transparent; border: 2px solid #5D2C86; }
+        input {
+            width: 100%;
+            padding: 12px 10px;
+            margin: 8px auto;
+            border: none;
+            border-radius: 10px;
+            background: #2d1c4a;
+            color: #00FFBF;
+            font-size: 18px;
+            box-sizing: border-box;
+        }
+        input::placeholder { color: #aaa; }
+        .btn, .google-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .btn { background-color: #5D2C86; color: #d8baf1; }
+        .btn:hover { background-color: #5D2C86; }
+        .google-btn {
+            background: none;
+            border: 2px solid #5D2C86;
+            color: #d8baf1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .google-btn:hover { background-color: none; }
+        .toggle { position: relative; }
+        .toggle ion-icon {
+            position: absolute;
+            top: 50%;
+            right: 18px;
+            transform: translateY(-50%);
+            color: #aaa;
+            cursor: pointer;
+        }
+        .small-text { text-align: center; font-size: 13px; margin-top: 20px; color: #d8baf1; }
+        .switch-text { text-align: center; margin-top: 15px; font-size: 14px; cursor: pointer; color: #00FFBF; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="login-section">
+            <div class="logo">
+                <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongsApp logo">
             </div>
-            <!-- CADASTRO -->
-            <div id="register-section" class="hidden">
-                <h1>Cadastre-se no LoveSongsApp</h1>
-                <input type="text" id="name" placeholder="Nome completo"/>
-                <input type="email" id="registerEmail" placeholder="Email"/>
-                <div class="toggle">
-                    <input type="password" id="registerPassword" placeholder="Senha"/>
-                    <ion-icon name="eye-outline" id="toggleRegisterPassword"></ion-icon>
-                </div>
-                <input type="password" id="confirmPassword" placeholder="Confirmar Senha"/>
-                <button class="btn" id="registerBtn">Cadastrar</button>
-                <div class="switch-text" onclick="toggleSection()">Já tem uma conta? Entrar</div>
+            <input type="email" id="email" placeholder="Email" />
+            <div class="toggle">
+                <input type="password" id="password" placeholder="Senha" />
+                <ion-icon name="eye-outline" id="togglePassword"></ion-icon>
+            </div>
+            <button class="google-btn" id="googleLogin">
+                <ion-icon name="logo-google"></ion-icon> Google
+            </button>
+            <button class="btn" id="emailLogin">Entrar com Email</button>
+            <div class="small-text">Ao entrar, você concorda com os termos românticos de uso 💌</div>
+            <div class="switch-text" onclick="toggleSection()">Não tem uma conta? Cadastre-se</div>
+            <div class="switch-text">
+                <span id="forgotPassword" style="cursor: pointer;">Esqueci minha senha</span>
             </div>
         </div>
-        <script type="module" src="scripts/login.js"></script>
-        <script>
-            const loginSection = document.getElementById("login-section");
-            const registerSection = document.getElementById("register-section");
 
-            function toggleSection() {
-                loginSection.classList.toggle("hidden");
-                registerSection.classList.toggle("hidden");
-            }
+        <div id="register-section" class="hidden">
+            <h1>Cadastre-se no LoveSongsApp</h1>
+            <input type="text" id="name" placeholder="Nome completo" />
+            <input type="email" id="registerEmail" placeholder="Email" />
+            <div class="toggle">
+                <input type="password" id="registerPassword" placeholder="Senha" />
+                <ion-icon name="eye-outline" id="toggleRegisterPassword"></ion-icon>
+            </div>
+            <input type="password" id="confirmPassword" placeholder="Confirmar Senha" />
+            <button class="btn" id="registerBtn">Cadastrar</button>
+            <div class="switch-text" onclick="toggleSection()">Já tem uma conta? Entrar</div>
+        </div>
+    </div>
+    <script type="module" src="scripts/login.js"></script>
+    <script>
+        const loginSection = document.getElementById("login-section");
+        const registerSection = document.getElementById("register-section");
 
-            // Alternar visibilidade da senha
-            document.getElementById('togglePassword').addEventListener('click', () => {
-                const pwd = document.getElementById('password');
-                pwd.type = pwd.type === 'password' ? 'text' : 'password';
-            }
-            );
+        function toggleSection() {
+            loginSection.classList.toggle("hidden");
+            registerSection.classList.toggle("hidden");
+        }
 
-            document.getElementById('toggleRegisterPassword').addEventListener('click', () => {
-                const pwd = document.getElementById('registerPassword');
-                pwd.type = pwd.type === 'password' ? 'text' : 'password';
-            }
-            );
-        </script>
-    </body>
+        document.getElementById('togglePassword').addEventListener('click', () => {
+            const pwd = document.getElementById('password');
+            pwd.type = pwd.type === 'password' ? 'text' : 'password';
+        });
+
+        document.getElementById('toggleRegisterPassword').addEventListener('click', () => {
+            const pwd = document.getElementById('registerPassword');
+            pwd.type = pwd.type === 'password' ? 'text' : 'password';
+        });
+    </script>
+</body>
 </html>
