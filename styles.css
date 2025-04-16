@@ -300,7 +300,7 @@ object-position: center;
 margin-right: 10px;
 position: absolute;
 }
-#playlist ul li span {
+#playlist ul li span, p {
 flex: 1;
 position: relative;
 margin-left: 160px;
