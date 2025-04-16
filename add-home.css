@@ -67,13 +67,12 @@ font-weight: 500;
 width: 100%;
 background: #602C89;
 color: #fff;
-border-radius: 20px;
+border-radius: 10px;
 border: none;
 padding: 10px;
 cursor: pointer;
 text-align: center;
 display: block;
-font-family: 'PT Sans', sans-serif;
 }
 .header-app {
 top: 7px;
