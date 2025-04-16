@@ -29,7 +29,7 @@ justify-content: space-between;
 height: 35px;
 position: fixed;
 width: 45%;
-background: #0f0f0f;
+background: #fff;
 top: 5px;
 border-radius: 20px;
 border: 1px solid #ccc;
@@ -300,7 +300,7 @@ object-position: center;
 margin-right: 10px;
 position: absolute;
 }
-#playlist ul li span, p {
+#playlist ul li span {
 flex: 1;
 position: relative;
 margin-left: 160px;
@@ -332,6 +332,7 @@ cursor: pointer;
 .dark-mode .player-controls {
 color: #f1f1f1;
 background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.9) 80%, #000000 100%), url(https://lovesongsapp.github.io/bg-controls.jpg) no-repeat center center;
+/*background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg-controls.jpg) no-repeat center center;*/
 background-size: cover;
 }
 .dark-mode .player-header-items {
@@ -386,20 +387,24 @@ font-size: 0.9em;
 position: relative;
 margin-left: 160px;
 }
+
 .dark-mode .header-icons{
 display:flex;align-items:center;
 padding: 5px 10px;
-color: #fafafa;
+color: #00ffbf;
 border-radius:20px;
-background: #272727;
+background: #242424;
 font-size: 14px;
 cursor: pointer;
 }
 .dark-mode .header-icons ion-icon{
 font-size: 16px !important;
-color: #fafafa !important;
+color: #00ffbf !important;
 cursor: pointer;
 }
+
+
+
 
 /* PREENCHIMENTO DINAMICO */
 input[type="range"]::-webkit-slider-runnable-track {
@@ -500,7 +505,6 @@ align-items: center;
 justify-content: space-around;
 position: fixed;
 bottom: 5px;
-background: transparent;
 }
 #playlist {
 padding: 10px;
@@ -511,7 +515,7 @@ top: 0;
 border-radius: none;
 }
 #playlist ul {
-/*margin-top: 20px;*/
+margin-top: 20px;
 }
 #playlist h2 {
 display: none;
@@ -577,17 +581,17 @@ background: #000;
 outline: none;
 }
 .header-icons{
-display:flex;
-align-items:center;
+display:flex;align-items:center;
 padding: 5px 10px;
-color:#272727;
+color: #272727;
 border-radius:20px;
+background: #ddd;
 font-size: 14px;
 cursor: pointer;
 }
 .header-icons ion-icon{
 font-size: 16px !important;
-color: #272727 !important;
+color: #242424 !important;
 cursor: pointer;
 }
 #playlist-items .title{
