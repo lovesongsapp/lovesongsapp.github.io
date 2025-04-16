@@ -514,9 +514,7 @@ position: absolute;
 top: 0;
 border-radius: none;
 }
-#playlist ul {
-margin-top: 20px;
-}
+
 #playlist h2 {
 display: none;
 }
