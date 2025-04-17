@@ -1,228 +1,206 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta name="theme-color" content="#17062B">
-        <title>Entrar no LoveSongsApp</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"/>
-        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-        <style>
-            * {
-                outline: none;
-            }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17062B" />
+    <title>Entrar no LoveSongsApp</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <style>
+      * {
+        outline: none;
+      }
 
-            html, body {
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                background: radial-gradient(circle, rgba(72, 46, 120, 1) 0%, rgba(23, 6, 43, 1) 100%);
-                box-sizing: border-box;
-            }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: radial-gradient(circle, rgba(72, 46, 120, 1) 0%, rgba(23, 6, 43, 1) 100%);
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
 
-            body {
-                margin: 0;
-                font-family: 'Inter', sans-serif;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-                color: #fff;
-                padding: 20px;
-            }
+      }
 
-            .logo {
-                text-align: center;
-                margin-bottom: 15px;
-            }
+      body {
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        padding: 20px;
+      }
 
-            .logo img {
-                width: 70px;
-                border-radius: 50%;
-            }
+      .logo {
+        text-align: center;
+      }
 
-            .container {
-                width: 100%;
-                max-width: 360px;
-                border-radius: 18px;
-            }
+      .logo img {
+        width: 70px;
+        border-radius: 50%;
+      }
 
-            h1 {
-                font-size: 22px;
-                font-weight: 600;
-                text-align: center;
-                margin-bottom: 25px;
-            }
+      .container {
+        width: 100%;
+        max-width: 360px;
+        border-radius: 18px;
+      }
 
-            input:focus {
-                background-color: transparent;
-                border: 2px solid #5D2C86;
-            }
+      h1 {
+        font-size: 22px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 25px;
+      }
 
-            input {
-                width: 100%;
-                padding: 12px 10px;
-                margin: 8px auto;
-                border: none;
-                border-radius: 10px;
-                background: #2d1c4a;
-                color: #00FFBF;
-                font-size: 18px;
-                box-sizing: border-box;
-            }
+      input:focus {
+        background-color: transparent;
+        border: 2px solid #5D2C86;
+      }
 
-            input::placeholder {
-                color: #aaa;
-                font-size: 16px;
-                opacity: 0.7;
-            }
+      input {
+        width: 100%;
+        padding: 12px 10px;
+        margin: 8px auto;
+        border: none;
+        border-radius: 10px;
+        background: #2d1c4a;
+        color: #00FFBF;
+        font-size: 18px;
+        box-sizing: border-box;
+      }
 
-            .btn, .google-btn, .email-btn {
-                width: 100%;
-                padding: 12px;
-                border: none;
-                border-radius: 25px;
-                font-size: 18px;
-                margin-top: 12px;
-                cursor: pointer;
-                transition: background 0.3s ease;
-            }
+      input::placeholder {
+        color: #aaa;
+        font-size: 16px;
+        opacity: 0.7;
+      }
 
-            .btn {
-                background-color: #5D2C86;
-                color: #d8baf1;
-            }
+      .btn,
+      .google-btn,
+      .email-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        margin-top: 12px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
 
-            .btn:hover {
-                background-color: #5D2C86;
-            }
+      .btn {
+        background-color: #5D2C86;
+        color: #d8baf1;
+      }
 
-            .google-btn {
-                background: none;
-                border: 2px solid #5D2C86;
-                color: #d8baf1;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
+      .google-btn,
+      .email-btn {
+        background: none;
+        border: 2px solid #5D2C86;
+        color: #d8baf1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
 
-            .email-btn {
-                background: none;
-                border: 2px solid #5D2C86;
-                color: #d8baf1;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
+      .toggle {
+        position: relative;
+      }
 
-            .google-btn:hover {
-                background-color: none;
-            }
+      .toggle ion-icon {
+        position: absolute;
+        top: 50%;
+        right: 18px;
+        transform: translateY(-50%);
+        color: #aaa;
+        cursor: pointer;
+      }
 
-            .toggle {
-                position: relative;
-            }
+      .small-text {
+        text-align: center;
+        font-size: 13px;
+        margin-top: 20px;
+        color: #d8baf1;
+      }
 
-            .toggle ion-icon {
-                position: absolute;
-                top: 50%;
-                right: 18px;
-                transform: translateY(-50%);
-                color: #aaa;
-                cursor: pointer;
-            }
+      .switch-text {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+        cursor: pointer;
+        color: #00FFBF;
+      }
 
-            .small-text {
-                text-align: center;
-                font-size: 13px;
-                margin-top: 20px;
-                color: #d8baf1;
-            }
+      .btn-login {
+        gap: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-            .switch-text {
-                text-align: center;
-                margin-top: 15px;
-                font-size: 14px;
-                cursor: pointer;
-                color: #00FFBF;
-            }
-
-            .hidden {
-                display: none;
-            }
-
-            .btn-login {
-                gap: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div id="login-section">
-                <div class="logo">
-                    <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongsApp logo">
-                </div>
-                <input type="email" id="email" placeholder="Email"/>
-                <div class="toggle">
-                    <input type="password" id="password" placeholder="Senha"/>
-                    <ion-icon name="eye-outline" id="toggleLoginPassword"></ion-icon>
-                </div>
-                <div class="btn-login">
-                    <button class="email-btn" id="emailLogin">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        Email
-                    </button>
-                    <button class="google-btn" id="googleLogin">
-                        <ion-icon name="logo-google"></ion-icon>
-                        Google
-                    </button>
-                </div>
-                <div class="small-text">Ao entrar, você concorda com os termos românticos de uso 💖.</div>
-                <div class="switch-text" onclick="toggleSection()">Não tem uma conta? Cadastre-se</div>
-                <div class="switch-text">
-                    <span id="forgotPassword" style="cursor: pointer;">Esqueci minha senha</span>
-                </div>
-            </div>
-            <div id="register-section" class="hidden">
-                <h1>Cadastre-se no LoveSongsApp</h1>
-                <input type="text" id="name" placeholder="Nome completo"/>
-                <input type="email" id="registerEmail" placeholder="Email"/>
-                <div class="toggle">
-                    <input type="password" id="registerPassword" placeholder="Senha"/>
-                    <ion-icon name="eye-outline" id="toggleRegisterPassword"></ion-icon>
-                </div>
-                <input type="password" id="confirmPassword" placeholder="Confirmar Senha"/>
-                <button class="btn" id="registerBtn">Cadastrar</button>
-                <div class="switch-text" onclick="toggleSection()">Já tem uma conta? Entrar</div>
-            </div>
+      #registerForm {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- LOGIN -->
+      <div id="loginForm">
+        <div class="logo">
+          <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongsApp logo" />
         </div>
-        <script type="module" src="scripts/login.js"></script>
-        <script>
-    const loginSection = document.getElementById("login-section");
-    const registerSection = document.getElementById("register-section");
+        <input type="email" id="email" placeholder="Email" />
+        <div class="toggle">
+          <input type="password" id="password" placeholder="Senha" />
+          <ion-icon name="eye-outline" id="toggleLoginPassword"></ion-icon>
+        </div>
+        <div class="btn-login">
+          <button class="email-btn" id="emailLogin">
+            <ion-icon name="mail-outline"></ion-icon>
+            Email
+          </button>
+          <button class="google-btn" id="googleLogin">
+            <ion-icon name="logo-google"></ion-icon>
+            Google
+          </button>
+        </div>
+        <div class="small-text">
+          Ao entrar, você concorda com os termos românticos de uso 💖.
+        </div>
+        <div class="switch-text" id="showRegister">Não tem uma conta? Cadastre-se!</div>
+        <div class="switch-text">
+          <span id="forgotPassword" style="cursor: pointer;">Esqueci minha senha</span>
+        </div>
+      </div>
 
-    function toggleSection() {
-        loginSection.classList.toggle("hidden");
-        registerSection.classList.toggle("hidden");
-    }
-
-    document.getElementById('toggleLoginPassword').addEventListener('click', () => {
-        const pwd = document.getElementById('password');
-        pwd.type = pwd.type === 'password' ? 'text' : 'password';
-    });
-
-    document.getElementById('toggleRegisterPassword').addEventListener('click', () => {
-        const pwd = document.getElementById('registerPassword');
-        pwd.type = pwd.type === 'password' ? 'text' : 'password';
-    });
-</script>
-
-    </body>
+      <!-- CADASTRO -->
+      <div id="registerForm">
+        <div class="logo">
+          <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongsApp logo" />
+        </div>
+        <input type="text" id="name" placeholder="Nome completo" />
+        <input type="email" id="registerEmail" placeholder="Email" />
+        <div class="toggle">
+          <input type="password" id="registerPassword" placeholder="Senha" />
+          <ion-icon name="eye-outline" id="toggleRegisterPassword"></ion-icon>
+        </div>
+        <input type="password" id="confirmPassword" placeholder="Confirmar Senha" />
+        <button class="btn" id="registerAccount">Cadastrar</button>
+        <div class="switch-text" id="showLogin">Já tem uma conta? Entrar!</div>
+      </div>
+    </div>
+    <script type="module" src="scripts/login.js"></script>
+  </body>
 </html>
