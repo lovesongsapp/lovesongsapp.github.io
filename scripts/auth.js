@@ -1,15 +1,30 @@
-// Inicializa o Firebase se ainda não estiver inicializado
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+// auth.js
+import { auth } from './firebase-config.js';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
+
+// Login com e-mail e senha
+export function loginUser(email, password) {
+  return signInWithEmailAndPassword(auth, email, password);
 }
 
-// Verifica autenticação do usuário
-firebase.auth().onAuthStateChanged(user => {
-  if (!user) {
-    console.log("Usuário não autenticado. Redirecionando para login.");
-    window.location.href = "/login.html";
-  } else {
-    console.log("Usuário autenticado:", user.email);
-    localStorage.setItem("userLogged", "true");
-  }
-});
+// Cadastro com e-mail e senha
+export function registerUser(email, password) {
+  return createUserWithEmailAndPassword(auth, email, password);
+}
+
+// Redefinir senha
+export function resetPassword(email) {
+  return sendPasswordResetEmail(auth, email);
+}
+
+// Login com Google
+export function loginWithGoogle() {
+  const provider = new GoogleAuthProvider();
+  return signInWithPopup(auth, provider);
+}
