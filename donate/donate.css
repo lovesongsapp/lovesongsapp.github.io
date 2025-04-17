@@ -3,35 +3,13 @@ margin: 0;
 padding: 0;
 box-sizing: border-box;
 }
-.popup {
-padding: 20px;
-display: none;
-bottom: 0;
-height: 100%;
-position: absolute;
-align-items: center;
-justify-content: center;
-left: 0;
-width: 100%;
-background-color: rgba(0, 0, 0, 0.9);
-border-top: 2px solid #00FFBF;
-overflow: hidden;
-color: #fff;
-z-index: 2;
--webkit-border-top-left-radius: 15px;
--webkit-border-top-right-radius: 15px;
--moz-border-radius-topleft: 15px;
--moz-border-radius-topright: 15px;
-border-top-left-radius: 20px;
-border-top-right-radius: 20px;
-animation: slideUp 2s ease-out forwards;
-}
+.popup {/* padding: 20px; */display: none;bottom: 0;min-height: 100%;position: absolute;align-items: center;justify-content: center;left: 0;width: 100%;background-color: rgba(0, 0, 0, 0.9);border-top: 2px solid #00FFBF;overflow: hidden;color: #fff;z-index: 2;-webkit-border-top-left-radius: 15px;-webkit-border-top-right-radius: 15px;-moz-border-radius-topleft: 15px;-moz-border-radius-topright: 15px;border-top-left-radius: 20px;border-top-right-radius: 20px;animation: slideUp 2s ease-out forwards;}
 .popup-content {
 
 background: #726232;
 background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://lovesongsapp.github.io/donate/donate-bg.jpg') no-repeat center center fixed;
 background-size: cover;
-height: calc(100vh - 42px);
+height: calc(100vh - 2px);
 align-items: center;
 display: flex;
 justify-content: center;
