@@ -26,6 +26,17 @@ border-top-left-radius: 20px;
 border-top-right-radius: 20px;
 animation: slideUp 2s ease-out forwards;
 }
+.popup-content {
+font-family: 'Plus Jakarta Sans', sans-serif;
+padding: 20px;
+background: #726232;
+background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://lovesongsapp.github.io/donate/donate-bg.jpg') no-repeat center center fixed;
+background-size: cover;
+height: calc(100vh - 42px);
+align-items: center;
+display: flex;
+justify-content: center;
+}
 .logo-popup {
 display: flex;
 align-items: center;
