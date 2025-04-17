@@ -12,6 +12,21 @@ const registerForm = document.getElementById("register-form");
 const googleBtn = document.getElementById("google-login");
 const errorMessage = document.getElementById("error-message");
 
+//redefini senha
+const resetPasswordLink = document.getElementById("reset-password");
+
+resetPasswordLink?.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const email = prompt("Digite seu e-mail para redefinir a senha:");
+  if (!email) return;
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert("Enviamos um link de redefinição para seu e-mail.");
+  } catch (error) {
+    alert("Erro ao enviar o email de redefinição: " + error.message);
+  }
+});
 // Login com email e senha
 loginForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -34,7 +49,7 @@ registerForm?.addEventListener("submit", async (e) => {
 
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-    window.location.href = "index.html";
+    window.location.href = "sucesso.html";
   } catch (error) {
     errorMessage.textContent = error.message;
   }
