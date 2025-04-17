@@ -214,26 +214,28 @@ color: #311e56 !important;
 font-size: 1.0625em !important;
 }
 /*moblile config*/
-@media (orientation: landscape) {
+@media  (orientation: landscape) {
 .logo-popup {
 position: absolute;
 left: 20px;
 display: flex;
 bottom: 160px;
 }
-.donate-btn {
-right: 20px;
-float: right;
-display: flex;
-gap: 20px;
-justify-content:flex-end;
-position: absolute;
-}
+.donate-btn {display: flex;
+             
+             align-items: center;
+             right: 20px;
+             left: 50%;
+             position: absolute;
+             top: 100px;
+            }
 .qrcode {
 position: absolute;
 margin-left: 20px;
 margin-right: 20px;        
 width: auto;
 }
-
+.popup{
+   height: 100%;
+}
 }
