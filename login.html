@@ -26,9 +26,6 @@
         overflow: hidden;
         background: radial-gradient(circle, rgba(72, 46, 120, 1) 0%, rgba(23, 6, 43, 1) 100%);
         box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-        user-select: none;
-
       }
 
       body {
@@ -42,6 +39,7 @@
 
       .logo {
         text-align: center;
+        margin-bottom: 15px;
       }
 
       .logo img {
@@ -92,7 +90,7 @@
         padding: 12px;
         border: none;
         border-radius: 25px;
-        font-size: 16px;
+        font-size: 18px;
         margin-top: 12px;
         cursor: pointer;
         transition: background 0.3s ease;
@@ -179,7 +177,7 @@
         <div class="small-text">
           Ao entrar, você concorda com os termos românticos de uso 💖.
         </div>
-        <div class="switch-text" id="showRegister">Não tem uma conta? Cadastre-se!</div>
+        <div class="switch-text" id="showRegister">Não tem uma conta? Cadastre-se</div>
         <div class="switch-text">
           <span id="forgotPassword" style="cursor: pointer;">Esqueci minha senha</span>
         </div>
@@ -187,9 +185,7 @@
 
       <!-- CADASTRO -->
       <div id="registerForm">
-        <div class="logo">
-          <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongsApp logo" />
-        </div>
+        <h1>Cadastre-se no LoveSongsApp</h1>
         <input type="text" id="name" placeholder="Nome completo" />
         <input type="email" id="registerEmail" placeholder="Email" />
         <div class="toggle">
@@ -198,7 +194,7 @@
         </div>
         <input type="password" id="confirmPassword" placeholder="Confirmar Senha" />
         <button class="btn" id="registerAccount">Cadastrar</button>
-        <div class="switch-text" id="showLogin">Já tem uma conta? Entrar!</div>
+        <div class="switch-text" id="showLogin">Já tem uma conta? Entrar</div>
       </div>
     </div>
     <script type="module" src="scripts/login.js"></script>
