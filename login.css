@@ -64,7 +64,7 @@ input {
 .password-container ion-icon {
   position: absolute;
   right: 1rem;
-  top: 40%;
+  top: 50%;
   color: #999;
   fobt-size: 24px;
   transform: translateY(-50%);
@@ -73,7 +73,7 @@ input {
 button {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid purple;
+  border: 1px solid #d8baf1;
   border-radius: 50px;
   background: transparent;
   color: #fff;
@@ -97,7 +97,7 @@ button:hover {
   border-radius: 50px;
   background: transparent;
   color: #fff;
-  border: 1px solid purple;
+  border: 1px solid #d8baf1;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -114,7 +114,7 @@ button:hover {
   text-align: center;
 }
 .form-switch a {
-  color: #007bff;
+  color: #00ffbf;
   text-decoration: none;
   cursor: pointer;
 }
@@ -167,8 +167,10 @@ input {
     color: #00FFBF;
     font-size: 18px;
     box-sizing: border-box;
+	
 }
 
 input::placeholder {
     color: #aaa;
+	opacity: 0.5;
 }
