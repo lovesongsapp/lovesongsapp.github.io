@@ -5,7 +5,7 @@
 a{
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
-  color: #fff;
+  color: #00ffbf;
   cursor: pointer;
 }
 body {
@@ -38,7 +38,8 @@ h1 {
   margin-bottom: 1rem;
   color: #ffffff;
   text-align: center;
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing:1px;
 }
 form {
   display: flex;
@@ -70,25 +71,32 @@ input {
   transform: translateY(-50%);
   cursor: pointer;
 }
+.botoes{
+	gap:20px;
+	width: 100%;
+	display:flex;
+	align-items: center;
+	padding:20px 0px
+}
 button {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #d8baf1;
+  border: 2px solid #5D2C86;
   border-radius: 50px;
   background: transparent;
   color: #fff;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease;
-  margin-bottom: 1rem;
+  
   font-family: 'Open Sans', sans-serif !important;
 }
 button:hover {
   background: purple;
 }
 .google-button {
-  font-family: 'Open Sans', sans-serif !important;
-  font-weight: 500;
+  
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,11 +105,11 @@ button:hover {
   border-radius: 50px;
   background: transparent;
   color: #fff;
-  border: 1px solid #d8baf1;
+  border: 2px solid #5D2C86;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease;
-  margin-top: 1rem;
+  
 }
 .google-button img {
   margin-right: 0.5rem;
