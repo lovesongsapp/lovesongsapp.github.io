@@ -1,82 +1,94 @@
-import { auth, provider } from "./firebase.js";
+// scripts/login.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
-  signInWithPopup,
+  getAuth,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
   sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-// Alternar formulários
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
+  authDomain: "lovesongs-1285e.firebaseapp.com",
+  projectId: "lovesongs-1285e",
+  appId: "1:940749066428:web:4bc067e8721fa576fe40b9"
+};
 
-document.getElementById("showRegister").addEventListener("click", () => {
-  loginForm.style.display = "none";
-  registerForm.style.display = "block";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// Mostrar/ocultar senha no login
+document.getElementById("toggleLoginPassword").addEventListener("click", () => {
+  const passInput = document.getElementById("password");
+  const icon = document.getElementById("toggleLoginPassword");
+  const isVisible = passInput.type === "text";
+  passInput.type = isVisible ? "password" : "text";
+  icon.name = isVisible ? "eye-outline" : "eye-off-outline";
 });
 
+// Mostrar/ocultar senha no cadastro
+document.getElementById("toggleRegisterPassword").addEventListener("click", () => {
+  const passInput = document.getElementById("registerPassword");
+  const icon = document.getElementById("toggleRegisterPassword");
+  const isVisible = passInput.type === "text";
+  passInput.type = isVisible ? "password" : "text";
+  icon.name = isVisible ? "eye-outline" : "eye-off-outline";
+});
+
+// Alternar para cadastro
+document.getElementById("showRegister").addEventListener("click", () => {
+  document.getElementById("loginForm").style.display = "none";
+  document.getElementById("registerForm").style.display = "block";
+});
+
+// Alternar para login
 document.getElementById("showLogin").addEventListener("click", () => {
-  registerForm.style.display = "none";
-  loginForm.style.display = "block";
+  document.getElementById("registerForm").style.display = "none";
+  document.getElementById("loginForm").style.display = "block";
 });
 
 // Login com Google
 document.getElementById("googleLogin").addEventListener("click", () => {
   signInWithPopup(auth, provider)
-    .then(() => window.location.href = "home.html")
-    .catch(error => alert("Erro no login com Google: " + error.message));
+    .then(() => {
+      localStorage.setItem("loggedIn", "true");
+      window.location.href = "sucesso.html";
+    })
+    .catch(err => alert("Erro: " + err.message));
 });
 
-// Login com Email/Senha
+// Login com email/senha
 document.getElementById("emailLogin").addEventListener("click", () => {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("password").value;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => window.location.href = "home.html")
-    .catch(error => alert("Erro ao entrar: " + error.message));
-});
-
-// Cadastro
-document.getElementById("registerAccount").addEventListener("click", () => {
-  const email = document.getElementById("registerEmail").value.trim();
-  const password = document.getElementById("registerPassword").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-
-  if (password !== confirmPassword) {
-    alert("As senhas não coincidem!");
+  if (email === "" || pass === "") {
+    alert("Preencha todos os campos!");
     return;
   }
 
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => window.location.href = "home.html")
-    .catch(error => alert("Erro ao cadastrar: " + error.message));
+  signInWithEmailAndPassword(auth, email, pass)
+    .then(() => {
+      localStorage.setItem("loggedIn", "true");
+      window.location.href = "sucesso.html";
+    })
+    .catch(err => alert("Erro: " + err.message));
 });
 
 // Recuperar senha
 document.getElementById("forgotPassword").addEventListener("click", () => {
-  const email = document.getElementById("email").value.trim();
-  if (!email) {
-    alert("Digite seu email para redefinir a senha.");
+  const email = document.getElementById("email").value;
+  if (email === "") {
+    alert("Por favor, insira seu e-mail.");
     return;
   }
 
   sendPasswordResetEmail(auth, email)
-    .then(() => alert("Enviamos um link de redefinição para seu email."))
-    .catch(error => alert("Erro: " + error.message));
+    .then(() => {
+      alert("Link de redefinição de senha enviado para o seu e-mail!");
+    })
+    .catch(err => alert("Erro: " + err.message));
 });
-
-// Alternar visibilidade da senha
-function togglePassword(inputId, iconId) {
-  const input = document.getElementById(inputId);
-  const icon = document.getElementById(iconId);
-
-  icon.addEventListener("click", () => {
-    const show = input.type === "password";
-    input.type = show ? "text" : "password";
-    icon.name = show ? "eye-off-outline" : "eye-outline";
-  });
-}
-
-togglePassword("password", "toggleLoginPassword");
-togglePassword("registerPassword", "toggleRegisterPassword");
