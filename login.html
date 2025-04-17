@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="theme-color" content="#17062B">
+        <title>Entrar no LoveSongsApp</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"/>
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <link rel="stylesheet" href="login.css">
+    </head>
+    <body>
+        <div class="container">
+            <!-- LOGIN -->
+            <div id="login-section">
+                <div class="logo">
+                    <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongsApp logo">
+                </div>
+                <input type="email" id="email" placeholder="Email"/>
+                <div class="toggle">
+                    <input type="password" id="password" placeholder="Senha"/>
+                    <ion-icon name="eye-outline" id="togglePassword"></ion-icon>
+                </div>
+
+        <div style="display:flex; gap: 20px;">
+                
+
+                <button class="google-btn" id="emailLogin">
+                    <ion-icon name="mail-outline"></ion-icon>
+                    Emal
+                  </button>
+
+                <button class="google-btn" id="googleLogin">
+                    <ion-icon name="logo-google"></ion-icon>
+                    Google
+                  </button>
+        </div>        
+
+
+                <div class="switch-text" onclick="toggleSection()">Não tem uma conta? Cadastre-se</div>
+                <div class="small-text">Ao entrar, você concorda com os termos românticos de uso 💌</div>
+            </div>
+            <!-- CADASTRO -->
+            <div id="register-section" class="hidden">
+                <h1>Cadastre-se no LoveSongsApp</h1>
+                <input type="text" id="name" placeholder="Nome completo"/>
+                <input type="email" id="registerEmail" placeholder="Email"/>
+                <div class="toggle">
+                    <input type="password" id="registerPassword" placeholder="Senha"/>
+                    <ion-icon name="eye-outline" id="toggleRegisterPassword"></ion-icon>
+                </div>
+                <input type="password" id="confirmPassword" placeholder="Confirmar Senha"/>
+                <button class="btn" id="registerBtn">Cadastrar</button>
+                <div class="switch-text" onclick="toggleSection()">Já tem uma conta? Entrar</div>
+            </div>
+        </div>
+        
+       
+
+        <script src="login.js" type="module"></script>
+        
+
+    </body>
+</html>
