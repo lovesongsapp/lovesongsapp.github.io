@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
+  onAuthStateChanged // ✅ Importação necessária para evitar erro!
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 const loginForm = document.getElementById("login-form");
@@ -11,6 +12,7 @@ const registerForm = document.getElementById("register-form");
 const googleBtn = document.getElementById("google-login");
 const errorMessage = document.getElementById("error-message");
 
+// Login com email e senha
 loginForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("email").value;
@@ -24,6 +26,7 @@ loginForm?.addEventListener("submit", async (e) => {
   }
 });
 
+// Cadastro com email e senha
 registerForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("reg-email").value;
@@ -37,6 +40,7 @@ registerForm?.addEventListener("submit", async (e) => {
   }
 });
 
+// Login com conta Google
 googleBtn?.addEventListener("click", async () => {
   try {
     await signInWithPopup(auth, provider);
@@ -46,9 +50,9 @@ googleBtn?.addEventListener("click", async () => {
   }
 });
 
-// Proteção de rota: se o usuário não estiver logado e tentar acessar index.html, redireciona para login
+// Proteção de rota: redireciona para login se o usuário não estiver autenticado
 onAuthStateChanged(auth, (user) => {
-  if (!user && window.location.pathname === '/index.html') {
-    window.location.href = '/login.html';
+  if (!user && window.location.pathname === "/index.html") {
+    window.location.href = "/login.html";
   }
 });
