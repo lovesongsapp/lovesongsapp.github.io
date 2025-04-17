@@ -63,7 +63,7 @@ document.getElementById("googleLogin").addEventListener("click", () => {
 // Login com email/senha
 document.getElementById("emailLogin").addEventListener("click", () => {
   const email = document.getElementById("email").value;
-  const pass = document.getElementById("password").value;
+const pass = document.getElementById("registerPassword").value;
 
   if (email === "" || pass === "") {
     alert("Preencha todos os campos!");
@@ -80,7 +80,7 @@ document.getElementById("emailLogin").addEventListener("click", () => {
 
 // Recuperar senha
 document.getElementById("forgotPassword").addEventListener("click", () => {
-  const email = document.getElementById("email").value;
+const email = document.getElementById("registerEmail").value;
   if (email === "") {
     alert("Por favor, insira seu e-mail.");
     return;
@@ -97,8 +97,8 @@ document.getElementById("forgotPassword").addEventListener("click", () => {
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 document.getElementById("register").addEventListener("click", () => {
-  const email = document.getElementById("email").value;
-  const pass = document.getElementById("password").value;
+const email = document.getElementById("registerEmail").value;
+const pass = document.getElementById("registerPassword").value;
 
   if (email === "" || pass === "") {
     alert("Preencha todos os campos para se cadastrar.");
