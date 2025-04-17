@@ -3,12 +3,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebas
 import {
   getAuth,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
   sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-// Firebase config
+// Configuração Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCOed1uYtjzkR1OpYS6z3-sbIVPQW6MohM",
   authDomain: "lovesongs-1285e.firebaseapp.com",
@@ -20,36 +21,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Mostrar/ocultar senha no login
-document.getElementById("toggleLoginPassword").addEventListener("click", () => {
-  const passInput = document.getElementById("password");
-  const icon = document.getElementById("toggleLoginPassword");
-  const isVisible = passInput.type === "text";
-  passInput.type = isVisible ? "password" : "text";
-  icon.name = isVisible ? "eye-outline" : "eye-off-outline";
-});
-
-// Mostrar/ocultar senha no cadastro
-document.getElementById("toggleRegisterPassword").addEventListener("click", () => {
-  const passInput = document.getElementById("registerPassword");
-  const icon = document.getElementById("toggleRegisterPassword");
-  const isVisible = passInput.type === "text";
-  passInput.type = isVisible ? "password" : "text";
-  icon.name = isVisible ? "eye-outline" : "eye-off-outline";
-});
-
-// Alternar para cadastro
-document.getElementById("showRegister").addEventListener("click", () => {
-  document.getElementById("loginForm").style.display = "none";
-  document.getElementById("registerForm").style.display = "block";
-});
-
-// Alternar para login
-document.getElementById("showLogin").addEventListener("click", () => {
-  document.getElementById("registerForm").style.display = "none";
-  document.getElementById("loginForm").style.display = "block";
-});
-
 // Login com Google
 document.getElementById("googleLogin").addEventListener("click", () => {
   signInWithPopup(auth, provider)
@@ -60,7 +31,7 @@ document.getElementById("googleLogin").addEventListener("click", () => {
     .catch(err => alert("Erro: " + err.message));
 });
 
-// Login com email/senha
+// Login com e-mail e senha
 document.getElementById("emailLogin").addEventListener("click", () => {
   const email = document.getElementById("email").value;
   const pass = document.getElementById("password").value;
@@ -78,7 +49,7 @@ document.getElementById("emailLogin").addEventListener("click", () => {
     .catch(err => alert("Erro: " + err.message));
 });
 
-// Recuperar senha
+// Redefinir senha
 document.getElementById("forgotPassword").addEventListener("click", () => {
   const email = document.getElementById("email").value;
   if (email === "") {
@@ -93,28 +64,50 @@ document.getElementById("forgotPassword").addEventListener("click", () => {
     .catch(err => alert("Erro: " + err.message));
 });
 
-//email Manual e Alertas
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+// Mostrar/ocultar senha do login
+document.getElementById("toggleLoginPassword").addEventListener("click", () => {
+  const passInput = document.getElementById("password");
+  const icon = document.getElementById("toggleLoginPassword");
+  const isVisible = passInput.type === "text";
+  passInput.type = isVisible ? "password" : "text";
+  icon.name = isVisible ? "eye-outline" : "eye-off-outline";
+});
 
-document.getElementById("register").addEventListener("click", () => {
-  const email = document.getElementById("email").value;
-  const pass = document.getElementById("password").value;
+// Mostrar/ocultar senha do cadastro
+document.getElementById("toggleRegisterPassword").addEventListener("click", () => {
+  const passInput = document.getElementById("registerPassword");
+  const icon = document.getElementById("toggleRegisterPassword");
+  const isVisible = passInput.type === "text";
+  passInput.type = isVisible ? "password" : "text";
+  icon.name = isVisible ? "eye-outline" : "eye-off-outline";
+});
+
+// Alternar entre login e cadastro
+document.getElementById("showRegister").addEventListener("click", () => {
+  document.getElementById("loginForm").style.display = "none";
+  document.getElementById("registerForm").style.display = "block";
+});
+
+document.getElementById("showLogin").addEventListener("click", () => {
+  document.getElementById("registerForm").style.display = "none";
+  document.getElementById("loginForm").style.display = "block";
+});
+
+// Cadastro de novo usuário
+document.getElementById("registerAccount").addEventListener("click", () => {
+  const email = document.getElementById("registerEmail").value;
+  const pass = document.getElementById("registerPassword").value;
 
   if (email === "" || pass === "") {
-    alert("Preencha todos os campos para se cadastrar.");
+    alert("Preencha todos os campos!");
     return;
   }
 
   createUserWithEmailAndPassword(auth, email, pass)
     .then(() => {
-      alert("Conta criada com sucesso! Você já pode fazer login.");
-      // window.location.href = "login.html";
+      alert("Conta criada com sucesso!");
+      document.getElementById("registerForm").style.display = "none";
+      document.getElementById("loginForm").style.display = "block";
     })
-    .catch(err => {
-      if (err.code === "auth/email-already-in-use") {
-        alert("Este e-mail já está em uso. Tente recuperar a senha.");
-      } else {
-        alert("Erro ao cadastrar: " + err.message);
-      }
-    });
+    .catch(err => alert("Erro: " + err.message));
 });
