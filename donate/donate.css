@@ -115,14 +115,8 @@ cursor: pointer;
 font-size: 36px;
 }
 .texto {
-display: flex;
-align-items: center;
-justify-content: center;
 color: #fafafa;
-font-size: 1.5rem;
-font-family: 'Open Sans', sans-serif;
-font-weight: 300;
-text-align: center;
+font-size: 0.9rem;
 }
 .donate-close {
 font-weight: 300;
