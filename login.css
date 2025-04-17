@@ -2,14 +2,9 @@
     outline: none;
 }
 
-a {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    color: #00ffbf;
-    cursor: pointer;
-}
-
 html, body {
+	-webkit-tap-highlight-color: transparent;
+    user-select: none;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -29,7 +24,11 @@ body {
     color: #fff;
     padding: 20px;
 }
-
+a {
+    font-weight: 500;
+    color: #00ffbf;
+    cursor: pointer;
+}
 .logo {
     border-radius: 50px;
     height: 50px;
