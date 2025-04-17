@@ -237,5 +237,6 @@ width: auto;
 }
 .popup{
    height: 100%;
+  display: none;
 }
 }
