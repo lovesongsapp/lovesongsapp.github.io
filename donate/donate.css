@@ -114,11 +114,7 @@ cursor: pointer;
 .key1 ion-icon, .key2 ion-icon {
 font-size: 36px;
 }
-.texto {
-color: #fafafa;
-font-weight: 400;
-font-size: 0.9rem;
-}
+
 .donate-close {
 font-weight: 300;
 width: 40px;
