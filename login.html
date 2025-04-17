@@ -11,49 +11,38 @@
     </head>
     <body>
         <div class="container">
-            <!-- LOGIN -->
-            <div id="login-section">
-                <div class="logo">
-                    <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongsApp logo">
-                </div>
-                <input type="email" id="email" placeholder="Email"/>
-                <div class="toggle">
-                    <input type="password" id="password" placeholder="Senha"/>
-                    <ion-icon name="eye-outline" id="togglePassword"></ion-icon>
-                </div>
-
-        <div style="display:flex; gap: 20px;">
-                
-
-                <button class="google-btn" id="emailLogin">
-                    <ion-icon name="mail-outline"></ion-icon>
-                    Emal
-                  </button>
-
-                <button class="google-btn" id="googleLogin">
-                    <ion-icon name="logo-google"></ion-icon>
-                    Google
-                  </button>
-        </div>        
-
-
-                <div class="switch-text" onclick="toggleSection()">Não tem uma conta? Cadastre-se</div>
-                <div class="small-text">Ao entrar, você concorda com os termos românticos de uso 💌</div>
+         <img src="./icons/icon192.png" alt="LoveSongs App" class="logo">
+         <h1>LoveSongs</h1>
+         <div id="success-message" class="message hidden"></div>
+         <div id="error-message" class="error-message"></div>
+         <form id="register-form" style="display: none;">
+            <input type="text" id="register-username" placeholder="Username" required>
+            <input type="email" id="register-email" placeholder="Email" required>
+            <div class="password-container">
+               <input type="password" id="register-password" placeholder="Password" required>
+               <ion-icon id="register-eye-icon" name="eye-outline"></ion-icon>
             </div>
-            <!-- CADASTRO -->
-            <div id="register-section" class="hidden">
-                <h1>Cadastre-se no LoveSongsApp</h1>
-                <input type="text" id="name" placeholder="Nome completo"/>
-                <input type="email" id="registerEmail" placeholder="Email"/>
-                <div class="toggle">
-                    <input type="password" id="registerPassword" placeholder="Senha"/>
-                    <ion-icon name="eye-outline" id="toggleRegisterPassword"></ion-icon>
-                </div>
-                <input type="password" id="confirmPassword" placeholder="Confirmar Senha"/>
-                <button class="btn" id="registerBtn">Cadastrar</button>
-                <div class="switch-text" onclick="toggleSection()">Já tem uma conta? Entrar</div>
+            <button type="submit">Register</button>
+            <div class="form-switch">
+               Já tem uma conta? <a id="show-login">Entrar</a>
             </div>
-        </div>
+         </form>
+         <form id="login-form">
+            <input type="email" id="login-email" placeholder="Email" required>
+            <div class="password-container">
+               <input type="password" id="login-password" placeholder="Password" required>
+               <ion-icon id="eye-icon" name="eye-outline"></ion-icon>
+            </div>
+            <button type="submit">Login</button>
+            <button type="button" id="google-login" class="google-button">
+            <img src="/g-logo.svg" alt="Google Icon" width="20" height="20"> Login com Google
+            </button>
+            <a type="button" id="reset-password">Esqueceu a senha?</a>
+            <div class="form-switch">
+               Não tem uma conta? <a id="show-register">Registrar</a>
+            </div>
+         </form>
+      </div>
         
        
 
