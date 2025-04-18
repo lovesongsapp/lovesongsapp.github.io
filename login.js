@@ -27,8 +27,16 @@ const provider = new GoogleAuthProvider();
 function checkAuthState() {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log('Usuário já autenticado:', user);
-      // Redirecionar para a página sucesso apenas se não estiver na página inicial
+      if (!user.emailVerified) {
+        auth.signOut();
+        displayErrorMessage('Por favor, verifique seu email antes de continuar.');
+        if (window.location.pathname !== '/login.html') {
+          window.location.href = '/login.html';
+        }
+        return;
+      }
+      
+      console.log('Usuário autenticado:', user);
       if (window.location.pathname === '/login.html') {
         window.location.href = '/sucesso.html';
       }
@@ -82,16 +90,24 @@ async function registerUser(email, password, username) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
+    // Envia email de verificação
+    await user.sendEmailVerification();
+
     await setDoc(doc(collection(db, 'users'), user.uid), {
       username: username,
       email: email,
-      createdAt: serverTimestamp()
+      createdAt: serverTimestamp(),
+      emailVerified: false
     });
 
-    console.log('Usuário cadastrado com sucesso:', user);
-    showSuccessMessage('Usuário cadastrado com sucesso!');
+    // Mensagem informando sobre a necessidade de verificação
+    showSuccessMessage('Cadastro realizado! Por favor, verifique seu email para continuar.');
+    
+    // Desloga o usuário até que ele verifique o email
+    await auth.signOut();
+    
     setTimeout(() => {
-      window.location.href = '/sucesso.html';
+      window.location.href = '/login.html';
     }, 3500);
   } catch (error) {
     displayErrorMessage(error.message);
@@ -104,16 +120,17 @@ async function loginUser(email, password) {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    if (user.emailVerified) {
-      console.log('Usuário logado com sucesso:', user);
-      showSuccessMessage('Usuário logado com sucesso!');
-      setTimeout(() => {
-        window.location.href = '/sucesso.html';
-      }, 3500);
-    } else {
-      displayErrorMessage('Seu e-mail ainda não foi verificado. Por favor, verifique sua caixa de entrada.');
-      auth.signOut(); // desloga o usuário se o e-mail não estiver verificado
+    if (!user.emailVerified) {
+      await auth.signOut();
+      displayErrorMessage('Por favor, verifique seu email antes de fazer login. Se necessário, faça login novamente para reenviar o email de verificação.');
+      return;
     }
+
+    console.log('Usuário logado com sucesso:', user);
+    showSuccessMessage('Usuário logado com sucesso!');
+    setTimeout(() => {
+      window.location.href = '/sucesso.html';
+    }, 3500);
 
   } catch (error) {
     displayErrorMessage(error.message);
@@ -241,6 +258,8 @@ const errorMessages = {
   'auth/user-not-found': 'Usuário não encontrado. Por favor, verifique o email e tente novamente.',
   'auth/wrong-password': 'Senha incorreta. Por favor, tente novamente.',
   'auth/email-already-in-use': 'Este email já está em uso. Por favor, use outro email.',
+  'auth/email-not-verified': 'Por favor, verifique seu email antes de fazer login.',
+  'auth/verification-pending': 'Verificação de email pendente. Verifique sua caixa de entrada.',
 };
 
 document.addEventListener('DOMContentLoaded', () => {
