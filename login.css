@@ -79,7 +79,7 @@ input {
     right: 1rem;
     top: 50%;
     color: #999;
-    fobt-size: 24px;
+    font-size: 24px;
     transform: translateY(-50%);
     cursor: pointer;
 }
