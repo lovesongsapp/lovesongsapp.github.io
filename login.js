@@ -90,8 +90,10 @@ async function registerUser(email, password, username) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Envia email de verificação
-    await user.sendEmailVerification();
+    // Envia email de verificação usando a API correta do Firebase
+    await userCredential.user.sendEmailVerification({
+      url: window.location.origin + '/login.html', // URL de redirecionamento após verificação
+    });
 
     await setDoc(doc(collection(db, 'users'), user.uid), {
       username: username,
@@ -100,17 +102,17 @@ async function registerUser(email, password, username) {
       emailVerified: false
     });
 
-    // Mensagem informando sobre a necessidade de verificação
-    showSuccessMessage('Cadastro realizado! Por favor, verifique seu email para continuar.');
+    console.log('Email de verificação enviado');
+    showSuccessMessage('Cadastro realizado! Por favor, verifique seu email para continuar. Verifique também sua caixa de spam.');
     
-    // Desloga o usuário até que ele verifique o email
     await auth.signOut();
     
     setTimeout(() => {
       window.location.href = '/login.html';
     }, 3500);
   } catch (error) {
-    displayErrorMessage(error.message);
+    console.error('Erro no registro:', error);
+    displayErrorMessage(error.code); // Usar error.code em vez de error.message
   }
 }
 
@@ -236,9 +238,11 @@ function togglePasswordVisibility(inputId, eyeIconId) {
 // Função para exibir mensagem de erro
 function displayErrorMessage(errorCode) {
   const errorMessageElement = document.getElementById('error-message');
-  const message = errorMessages[errorCode] || 'Ocorreu um erro. Por favor, tente novamente.';
   if (errorMessageElement) {
+    const message = errorMessages[errorCode] || errorMessages['default'];
+    console.log('Código do erro:', errorCode); // Para debug
     errorMessageElement.textContent = message;
+    errorMessageElement.style.display = 'block';
     errorMessageElement.classList.remove('hidden');
     errorMessageElement.classList.add('show');
   }
@@ -260,6 +264,13 @@ const errorMessages = {
   'auth/email-already-in-use': 'Este email já está em uso. Por favor, use outro email.',
   'auth/email-not-verified': 'Por favor, verifique seu email antes de fazer login.',
   'auth/verification-pending': 'Verificação de email pendente. Verifique sua caixa de entrada.',
+  'auth/weak-password': 'A senha deve ter pelo menos 6 caracteres.',
+  'auth/invalid-email': 'O endereço de email é inválido.',
+  'auth/operation-not-allowed': 'Operação não permitida.',
+  'auth/network-request-failed': 'Erro de conexão. Verifique sua internet.',
+  'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',
+  'auth/email-verification-failed': 'Não foi possível enviar o email de verificação. Tente novamente.',
+  'default': 'Ocorreu um erro. Por favor, tente novamente.'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
