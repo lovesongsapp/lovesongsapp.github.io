@@ -22,44 +22,46 @@ const db = getFirestore(app);
 const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider();
 
-// Verificação de autenticação
+
+// Função para verificar o estado da autenticação
 function checkAuthState() {
   onAuthStateChanged(auth, (user) => {
-    const pathname = window.location.pathname;
-
-    // Se usuário logado e email verificado
-    if (user && user.emailVerified) {
-      if (pathname === '/login.html') {
+    if (user) {
+      console.log('Usuário já autenticado:', user);
+      // Redirecionar para a página sucesso apenas se não estiver na página inicial
+      if (window.location.pathname === '/login.html') {
         window.location.href = '/sucesso.html';
       }
-    }
-
-    // Se não estiver logado ou email não verificado
-    if (!user || !user.emailVerified) {
-      if (pathname !== '/login.html') {
+    } else {
+      // Se o usuário não estiver autenticado e não estiver na página de login, redireciona para login
+      if (window.location.pathname !== '/login.html') {
         window.location.href = '/login.html';
       }
     }
   });
 }
 
+// Chama a função para verificar a autenticação quando a página carrega
 checkAuthState();
 
-// Mostrar mensagem de sucesso
+//fim da onda
+
+// Função para mostrar mensagem de sucesso
 function showSuccessMessage(message) {
   const successMessageElement = document.getElementById('success-message');
   if (successMessageElement) {
     successMessageElement.textContent = message;
     successMessageElement.classList.remove('hidden');
     successMessageElement.classList.add('show');
+
     setTimeout(() => {
       successMessageElement.classList.remove('show');
       successMessageElement.classList.add('hidden');
-    }, 5000);
+    }, 5000); // Ocultar mensagem após 5 segundos
   }
 }
 
-// Login com Google
+// Função para login com Google
 async function loginWithGoogle() {
   try {
     const result = await signInWithPopup(auth, provider);
@@ -74,13 +76,11 @@ async function loginWithGoogle() {
   }
 }
 
-// Registrar usuário
+// Função para registrar usuário
 async function registerUser(email, password, username) {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-
-    await user.sendEmailVerification();
 
     await setDoc(doc(collection(db, 'users'), user.uid), {
       username: username,
@@ -89,49 +89,16 @@ async function registerUser(email, password, username) {
     });
 
     console.log('Usuário cadastrado com sucesso:', user);
-    showSuccessMessage('Conta criada com sucesso! Verifique seu e-mail para ativar sua conta.');
-
-    await auth.signOut();
-
-  } catch (error) {
-    // TRADUZINDO MENSAGENS DE ERRO DO FIREBASE
-    let message = 'Ocorreu um erro. Por favor, tente novamente.';
-
-    switch (error.code) {
-      case 'auth/email-already-in-use':
-        message = 'Este e-mail já está em uso.';
-        break;
-      case 'auth/invalid-email':
-        message = 'O e-mail digitado não é válido.';
-        break;
-      case 'auth/weak-password':
-        message = 'A senha deve ter pelo menos 6 caracteres.';
-        break;
-      case 'auth/missing-email':
-        message = 'Por favor, digite um e-mail.';
-        break;
-      default:
-        message = error.message;
-        break;
-    }
-
-    displayErrorMessage(message);
-  }
-}
-
-
-    // Mostra mensagem para verificar o email
-    showSuccessMessage('Conta criada com sucesso! Verifique seu e-mail para ativar sua conta.');
-
-    // Faz logout para impedir acesso até verificação
-    await auth.signOut();
+    showSuccessMessage('Usuário cadastrado com sucesso!');
+    setTimeout(() => {
+      window.location.href = '/sucesso.html';
+    }, 3500);
   } catch (error) {
     displayErrorMessage(error.message);
   }
 }
 
-
-// Login com e-mail/senha
+// Função para login do usuário
 async function loginUser(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -145,14 +112,16 @@ async function loginUser(email, password) {
       }, 3500);
     } else {
       displayErrorMessage('Seu e-mail ainda não foi verificado. Por favor, verifique sua caixa de entrada.');
-      auth.signOut();
+      auth.signOut(); // desloga o usuário se o e-mail não estiver verificado
     }
+
   } catch (error) {
     displayErrorMessage(error.message);
   }
 }
 
-// Redefinir senha
+
+// Função para redefinir senha
 async function resetPassword(email) {
   try {
     await sendPasswordResetEmail(auth, email);
@@ -162,7 +131,7 @@ async function resetPassword(email) {
   }
 }
 
-// DOMContentLoaded
+// Adiciona listeners para os formulários e botões
 document.addEventListener('DOMContentLoaded', () => {
   const registerForm = document.getElementById('register-form');
   const loginForm = document.getElementById('login-form');
@@ -200,14 +169,17 @@ document.addEventListener('DOMContentLoaded', () => {
     resetPasswordButton.addEventListener('click', async () => {
       const email = document.getElementById('login-email').value;
       const errorMessage = document.getElementById('error-message');
+  
       if (email) {
         await resetPassword(email);
       } else {
+        // Exibe a mensagem de erro personalizada
         errorMessage.style.display = 'block';
         errorMessage.innerText = 'Por favor, insira seu e-mail para redefinir sua senha.';
       }
     });
   }
+  
 
   if (showRegisterButton) {
     showRegisterButton.addEventListener('click', (event) => {
@@ -231,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
   togglePasswordVisibility('login-password', 'eye-icon');
 });
 
-// Alternar visibilidade da senha
+// Função para alternar visibilidade da senha
 function togglePasswordVisibility(inputId, eyeIconId) {
   const passwordInput = document.getElementById(inputId);
   const eyeIcon = document.getElementById(eyeIconId);
@@ -244,7 +216,7 @@ function togglePasswordVisibility(inputId, eyeIconId) {
   }
 }
 
-// Exibir mensagem de erro
+// Função para exibir mensagem de erro
 function displayErrorMessage(errorCode) {
   const errorMessageElement = document.getElementById('error-message');
   const message = errorMessages[errorCode] || 'Ocorreu um erro. Por favor, tente novamente.';
@@ -255,7 +227,7 @@ function displayErrorMessage(errorCode) {
   }
 }
 
-// Limpar mensagem de erro
+// Função para limpar mensagem de erro
 function clearErrorMessage() {
   const errorMessageElement = document.getElementById('error-message');
   if (errorMessageElement) {
@@ -263,10 +235,28 @@ function clearErrorMessage() {
   }
 }
 
-// Mensagens de erro personalizadas
+// Mapeamento de mensagens de erro
 const errorMessages = {
   'auth/invalid-credential': 'Credenciais inválidas. Por favor, verifique e tente novamente.',
   'auth/user-not-found': 'Usuário não encontrado. Por favor, verifique o email e tente novamente.',
   'auth/wrong-password': 'Senha incorreta. Por favor, tente novamente.',
   'auth/email-already-in-use': 'Este email já está em uso. Por favor, use outro email.',
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Exemplo para Firebase Authentication:
+  firebase.auth().onAuthStateChanged((user) => {
+    if (!user) {
+      // Redireciona o usuário para a página de login caso não esteja logado
+      window.location.href = "login.html";
+    }
+  });
+
+  // Se estiver usando uma outra lógica de autenticação:
+  // Verifique se o token ou a sessão de login existe no localStorage ou sessionStorage
+  const isLoggedIn = localStorage.getItem("userLoggedIn"); // ou sessionStorage
+  if (!isLoggedIn) {
+    window.location.href = "login.html";
+  }
+});
+//end
