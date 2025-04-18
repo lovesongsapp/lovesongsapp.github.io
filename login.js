@@ -25,17 +25,24 @@ const provider = new GoogleAuthProvider();
 // Verificação de autenticação
 function checkAuthState() {
   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      if (window.location.pathname === '/login.html') {
+    const pathname = window.location.pathname;
+
+    // Se usuário logado e email verificado
+    if (user && user.emailVerified) {
+      if (pathname === '/login.html') {
         window.location.href = '/sucesso.html';
       }
-    } else {
-      if (window.location.pathname !== '/login.html') {
+    }
+
+    // Se não estiver logado ou email não verificado
+    if (!user || !user.emailVerified) {
+      if (pathname !== '/login.html') {
         window.location.href = '/login.html';
       }
     }
   });
 }
+
 checkAuthState();
 
 // Mostrar mensagem de sucesso
@@ -76,6 +83,7 @@ async function registerUser(email, password, username) {
     // Envia e-mail de verificação
     await user.sendEmailVerification();
 
+    // Salva no Firestore
     await setDoc(doc(collection(db, 'users'), user.uid), {
       username: username,
       email: email,
@@ -83,12 +91,17 @@ async function registerUser(email, password, username) {
     });
 
     console.log('Usuário cadastrado com sucesso:', user);
+
+    // Mostra mensagem para verificar o email
     showSuccessMessage('Conta criada com sucesso! Verifique seu e-mail para ativar sua conta.');
-    auth.signOut();
+
+    // Faz logout para impedir acesso até verificação
+    await auth.signOut();
   } catch (error) {
     displayErrorMessage(error.message);
   }
 }
+
 
 // Login com e-mail/senha
 async function loginUser(email, password) {
