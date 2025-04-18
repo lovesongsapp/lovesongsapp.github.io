@@ -80,10 +80,8 @@ async function registerUser(email, password, username) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Envia e-mail de verificação
     await user.sendEmailVerification();
 
-    // Salva no Firestore
     await setDoc(doc(collection(db, 'users'), user.uid), {
       username: username,
       email: email,
@@ -91,6 +89,36 @@ async function registerUser(email, password, username) {
     });
 
     console.log('Usuário cadastrado com sucesso:', user);
+    showSuccessMessage('Conta criada com sucesso! Verifique seu e-mail para ativar sua conta.');
+
+    await auth.signOut();
+
+  } catch (error) {
+    // TRADUZINDO MENSAGENS DE ERRO DO FIREBASE
+    let message = 'Ocorreu um erro. Por favor, tente novamente.';
+
+    switch (error.code) {
+      case 'auth/email-already-in-use':
+        message = 'Este e-mail já está em uso.';
+        break;
+      case 'auth/invalid-email':
+        message = 'O e-mail digitado não é válido.';
+        break;
+      case 'auth/weak-password':
+        message = 'A senha deve ter pelo menos 6 caracteres.';
+        break;
+      case 'auth/missing-email':
+        message = 'Por favor, digite um e-mail.';
+        break;
+      default:
+        message = error.message;
+        break;
+    }
+
+    displayErrorMessage(message);
+  }
+}
+
 
     // Mostra mensagem para verificar o email
     showSuccessMessage('Conta criada com sucesso! Verifique seu e-mail para ativar sua conta.');
