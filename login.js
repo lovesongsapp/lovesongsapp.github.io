@@ -103,15 +103,23 @@ async function loginUser(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    console.log('Usuário logado com sucesso:', user);
-    showSuccessMessage('Usuário logado com sucesso!');
-    setTimeout(() => {
-      window.location.href = '/sucesso.html';
-    }, 3500);
+
+    if (user.emailVerified) {
+      console.log('Usuário logado com sucesso:', user);
+      showSuccessMessage('Usuário logado com sucesso!');
+      setTimeout(() => {
+        window.location.href = '/sucesso.html';
+      }, 3500);
+    } else {
+      displayErrorMessage('Seu e-mail ainda não foi verificado. Por favor, verifique sua caixa de entrada.');
+      auth.signOut(); // desloga o usuário se o e-mail não estiver verificado
+    }
+
   } catch (error) {
     displayErrorMessage(error.message);
   }
 }
+
 
 // Função para redefinir senha
 async function resetPassword(email) {
@@ -160,13 +168,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (resetPasswordButton) {
     resetPasswordButton.addEventListener('click', async () => {
       const email = document.getElementById('login-email').value;
+      const errorMessage = document.getElementById('error-message');
+  
       if (email) {
         await resetPassword(email);
       } else {
-        alert('Por favor, insira seu email para redefinir sua senha.');
+        // Exibe a mensagem de erro personalizada
+        errorMessage.style.display = 'block';
+        errorMessage.innerText = 'Por favor, insira seu e-mail para redefinir sua senha.';
       }
     });
   }
+  
 
   if (showRegisterButton) {
     showRegisterButton.addEventListener('click', (event) => {
@@ -231,18 +244,20 @@ const errorMessages = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Exemplo para Firebase Authentication:
-    firebase.auth().onAuthStateChanged((user) => {
-        if (!user) {
-            // Redireciona o usuário para a página de login caso não esteja logado
-            window.location.href = "login.html";
-        }
-    });
-
- // Se estiver usando uma outra lógica de autenticação:
-    // Verifique se o token ou a sessão de login existe no localStorage ou sessionStorage
-    const isLoggedIn = localStorage.getItem("userLoggedIn"); // ou sessionStorage
-    if (!isLoggedIn) {
-        window.location.href = "login.html";
+  // Exemplo para Firebase Authentication:
+  firebase.auth().onAuthStateChanged((user) => {
+    if (!user) {
+      // Redireciona o usuário para a página de login caso não esteja logado
+      window.location.href = "login.html";
     }
+  });
+
+  // Se estiver usando uma outra lógica de autenticação:
+  // Verifique se o token ou a sessão de login existe no localStorage ou sessionStorage
+  const isLoggedIn = localStorage.getItem("userLoggedIn"); // ou sessionStorage
+  if (!isLoggedIn) {
+    window.location.href = "login.html";
+  }
 });
+
+// end
