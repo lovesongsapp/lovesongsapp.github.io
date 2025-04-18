@@ -1,6 +1,15 @@
 // Importações do Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { 
+    getAuth, 
+    onAuthStateChanged, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    sendPasswordResetEmail,
+    fetchSignInMethodsForEmail 
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
 
@@ -87,32 +96,63 @@ async function loginWithGoogle() {
 // Função para registrar usuário
 async function registerUser(email, password, username) {
   try {
+    // Primeiro verifica se o email já existe
+    const emailExists = await checkEmailExists(email);
+    if (emailExists) {
+      throw { code: 'auth/email-already-in-use' };
+    }
+
+    // Tenta criar o usuário
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Envia email de verificação usando a API correta do Firebase
-    await userCredential.user.sendEmailVerification({
-      url: window.location.origin + '/login.html', // URL de redirecionamento após verificação
-    });
+    try {
+      // Envia email de verificação
+      await user.sendEmailVerification();
+      
+      // Só salva no banco após confirmação de envio do email
+      await setDoc(doc(collection(db, 'users'), user.uid), {
+        username: username,
+        email: email,
+        createdAt: serverTimestamp(),
+        emailVerified: false
+      });
 
-    await setDoc(doc(collection(db, 'users'), user.uid), {
-      username: username,
-      email: email,
-      createdAt: serverTimestamp(),
-      emailVerified: false
-    });
+      showSuccessMessage('Conta criada com sucesso! Verifique seu email para ativar sua conta.');
+      console.log('Usuário registrado:', user.email);
+      
+      setTimeout(() => {
+        window.location.href = '/login.html';
+      }, 3500);
 
-    console.log('Email de verificação enviado');
-    showSuccessMessage('Cadastro realizado! Por favor, verifique seu email para continuar. Verifique também sua caixa de spam.');
-    
-    await auth.signOut();
-    
-    setTimeout(() => {
-      window.location.href = '/login.html';
-    }, 3500);
+    } catch (verificationError) {
+      // Se falhar o envio do email, deleta a conta criada
+      await user.delete();
+      throw { code: 'auth/verification-email-failed' };
+    }
+
   } catch (error) {
     console.error('Erro no registro:', error);
-    displayErrorMessage(error.code); // Usar error.code em vez de error.message
+    // Remove o usuário do Firebase Auth se algo der errado
+    try {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await currentUser.delete();
+      }
+    } catch (deleteError) {
+      console.error('Erro ao limpar usuário:', deleteError);
+    }
+    displayErrorMessage(error.code);
+  }
+}
+
+// Adicionar função para verificar email existente
+async function checkEmailExists(email) {
+  try {
+    const methods = await fetchSignInMethodsForEmail(auth, email);
+    return methods.length > 0;
+  } catch (error) {
+    return false;
   }
 }
 
@@ -261,16 +301,18 @@ const errorMessages = {
   'auth/invalid-credential': 'Credenciais inválidas. Por favor, verifique e tente novamente.',
   'auth/user-not-found': 'Usuário não encontrado. Por favor, verifique o email e tente novamente.',
   'auth/wrong-password': 'Senha incorreta. Por favor, tente novamente.',
-  'auth/email-already-in-use': 'Este email já está em uso. Por favor, use outro email.',
+  'auth/email-already-in-use': 'Este email já está registrado. Por favor, use outro email ou faça login.',
   'auth/email-not-verified': 'Por favor, verifique seu email antes de fazer login.',
   'auth/verification-pending': 'Verificação de email pendente. Verifique sua caixa de entrada.',
   'auth/weak-password': 'A senha deve ter pelo menos 6 caracteres.',
-  'auth/invalid-email': 'O endereço de email é inválido.',
+  'auth/invalid-email': 'Email inválido. Por favor, verifique o formato do email.',
   'auth/operation-not-allowed': 'Operação não permitida.',
   'auth/network-request-failed': 'Erro de conexão. Verifique sua internet.',
   'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',
   'auth/email-verification-failed': 'Não foi possível enviar o email de verificação. Tente novamente.',
-  'default': 'Ocorreu um erro. Por favor, tente novamente.'
+  'auth/verification-email-failed': 'Erro ao enviar email de verificação. Tente novamente.',
+  'auth/network-error': 'Erro de conexão. Verifique sua internet e tente novamente.',
+  'default': 'Ocorreu um erro inesperado. Tente novamente.'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
