@@ -94,23 +94,19 @@ async function loginWithGoogle() {
 // Função para registrar usuário
 async function registerUser(email, password, username) {
     try {
+        // Primeiro verifica se o email já existe
         const emailExists = await checkEmailExists(email);
         if (emailExists) {
             throw { code: 'auth/email-already-in-use' };
         }
 
+        // Cria o usuário
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
         if (user) {
             try {
-                // Configura e envia o email de verificação
-                await sendEmailVerification(user, {
-                    url: window.location.origin + '/login.html',
-                    handleCodeInApp: false
-                });
-
-                // Salva os dados do usuário
+                // Salva os dados do usuário primeiro
                 await setDoc(doc(collection(db, 'users'), user.uid), {
                     username: username,
                     email: email,
@@ -118,23 +114,28 @@ async function registerUser(email, password, username) {
                     emailVerified: false
                 });
 
-                showSuccessMessage('Conta criada! Verifique seu email para ativar sua conta.');
-                console.log('Email de verificação enviado para:', user.email);
+                // Depois envia o email de verificação
+                await user.sendEmailVerification();
 
+                showSuccessMessage('Conta criada! Verifique seu email para ativar sua conta.');
+                console.log('Usuário registrado:', email);
+
+                // Desloga o usuário até verificar email
                 await auth.signOut();
-                
+
                 setTimeout(() => {
                     window.location.href = '/login.html';
                 }, 3500);
 
-            } catch (verificationError) {
-                console.error('Erro ao enviar verificação:', verificationError);
+            } catch (error) {
+                console.error('Erro ao finalizar registro:', error);
+                // Se falhar após criar o usuário, limpa tudo
                 await user.delete();
-                throw { code: 'auth/verification-email-failed' };
+                throw { code: 'auth/registration-failed' };
             }
         }
     } catch (error) {
-        console.error('Erro detalhado:', error);
+        console.error('Erro no registro:', error);
         displayErrorMessage(error.code || 'auth/unknown-error');
     }
 }
@@ -308,6 +309,8 @@ const errorMessages = {
     'auth/missing-continue-uri': 'Erro na configuração do email de verificação.',
     'auth/unauthorized-continue-uri': 'Erro na configuração do email de verificação.',
     'auth/internal-error': 'Erro interno do servidor. Por favor, tente novamente mais tarde.',
+    'auth/registration-failed': 'Erro ao completar o registro. Por favor, tente novamente.',
+    'auth/invalid-action-code': 'Link de verificação inválido ou expirado.',
     'default': 'Ocorreu um erro inesperado. Tente novamente.'
 };
 
