@@ -164,7 +164,7 @@ async function loginUser(email, password) {
 
     if (!user.emailVerified) {
       await auth.signOut();
-      displayErrorMessage('Por favor, verifique seu email antes de fazer login. Se necessário, faça login novamente para reenviar o email de verificação.');
+      displayErrorMessage('auth/email-not-verified');
       return;
     }
 
@@ -175,10 +175,10 @@ async function loginUser(email, password) {
     }, 3500);
 
   } catch (error) {
-    displayErrorMessage(error.message);
+    console.error('Erro de login:', error); // Para debug
+    displayErrorMessage(error.code); // Usar error.code em vez de error.message
   }
 }
-
 
 // Função para redefinir senha
 async function resetPassword(email) {
