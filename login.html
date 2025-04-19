@@ -1,51 +1,83 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta name="theme-color" content="#17062B">
-        <title>LoveSongsApp | Login</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"/>
-        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-        <link rel="stylesheet" href="login.css">
-    </head>
-    <body>
-        <div class="container">
-            <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongs App" class="logo">
-            <h1>LoveSongs</h1>
-            <div id="success-message" class="message hidden"></div>
-            <div id="error-message" class="error-message"></div>
-            <form id="register-form" style="display: none;">
-                <input type="text" id="register-username" placeholder="Usuário" required>
-                <input type="email" id="register-email" placeholder="Email" required>
-                <div class="password-container">
-                    <input type="password" id="register-password" placeholder="Senha" required>
-                    <ion-icon id="register-eye-icon" name="eye-outline"></ion-icon>
-                </div>
-                <button type="submit">Registrar</button>
-                <div class="form-switch">
-                    Já tem uma conta? <a id="show-login">Entrar</a>
-                </div>
-            </form>
-            <form id="login-form">
-                <input type="email" id="login-email" placeholder="Email" required>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17062B">
+    <title>LoveSongs - Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" />
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="assets/heart-music.png" alt="LoveSongs Logo" class="logo">
+            <h1 class="form-title">LoveSongs</h1>
+            <p class="subtitle">Onde a música encontra o amor ♪♥</p>
+        </div>
+
+        <!-- Formulário de Login -->
+        <form id="login-form">
+            <div class="input-group">
+                <input type="email" id="login-email" placeholder="E-mail" required>
+            </div>
+            <div class="input-group">
                 <div class="password-container">
                     <input type="password" id="login-password" placeholder="Senha" required>
-                    <ion-icon id="eye-icon" name="eye-outline"></ion-icon>
+                    <ion-icon name="eye-outline" id="eye-icon" class="password-toggle"></ion-icon>
                 </div>
-                <div class="botoes">
-                    <button type="submit">Login</button>
-                    <button type="button" id="google-login" class="google-button"> 
-                        <ion-icon name="logo-google"></ion-icon>
-                        oogle 
-                    </button>
+            </div>
+            <button type="submit" class="btn login-btn">Entrar</button>
+            <button type="button" id="reset-password" class="btn reset-btn">Esqueci minha senha</button>
+            
+            <div class="divider">
+                <span>ou</span>
+            </div>
+
+            <button type="button" id="google-login" class="google-btn">
+                <img src="assets/google-icon.png" alt="Google Icon">
+                <span>Continuar com Google</span>
+            </button>
+        </form>
+
+        <!-- Formulário de Registro (inicialmente oculto) -->
+        <form id="register-form" style="display: none;">
+            <div class="input-group">
+                <input type="text" id="register-username" placeholder="Nome de usuário" required>
+            </div>
+            <div class="input-group">
+                <input type="email" id="register-email" placeholder="E-mail" required>
+            </div>
+            <div class="input-group">
+                <div class="password-container">
+                    <input type="password" id="register-password" placeholder="Senha" required>
+                    <ion-icon name="eye-outline" id="register-eye-icon" class="password-toggle"></ion-icon>
                 </div>
-                <a type="button" id="reset-password">Esqueceu a senha?</a>
-                <div class="form-switch">
-                    Não tem uma conta? <a id="show-register">Registrar</a>
-                </div>
-            </form>
+            </div>
+            <button type="submit" class="btn register-btn">Criar Conta</button>
+        </form>
+
+        <!-- Mensagens de Sucesso e Erro -->
+        <div id="success-message" class="hidden"></div>
+        <div id="error-message" class="hidden"></div>
+
+        <!-- Links para alternar entre formulários -->
+        <div class="toggle-forms">
+            <p id="show-register">
+                Não tem uma conta? <a href="#">Registre-se</a>
+            </p>
+            <p id="show-login" style="display: none;">
+                Já tem uma conta? <a href="#">Faça login</a>
+            </p>
         </div>
-        <script src="login.js" type="module"></script>
-    </body>
+    </div>
+
+    <script type="module" src="login.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
 </html>
