@@ -94,7 +94,6 @@ async function loginWithGoogle() {
 // Função para registrar usuário (reescrita)
 async function registerUser(email, password, username) {
     try {
-        // Limpa mensagens anteriores
         clearErrorMessage();
         
         // Verifica email primeiro
@@ -104,53 +103,44 @@ async function registerUser(email, password, username) {
             return;
         }
 
-        // Tenta criar o usuário
+        // Cria o usuário
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        if (!user) {
-            throw { code: 'auth/registration-failed' };
-        }
-
-        // Salva dados do usuário
-        try {
-            await setDoc(doc(collection(db, 'users'), user.uid), {
-                username: username,
-                email: email,
-                createdAt: serverTimestamp(),
-                emailVerified: false
-            });
-        } catch (dbError) {
-            console.error('Erro ao salvar dados:', dbError);
-            await user.delete();
-            throw { code: 'auth/database-error' };
-        }
+        // Salva dados do usuário no Firestore
+        await setDoc(doc(collection(db, 'users'), user.uid), {
+            username: username,
+            email: email,
+            createdAt: serverTimestamp(),
+            emailVerified: false
+        });
 
         // Envia email de verificação
-        try {
-            await sendEmailVerification(user);
-            showSuccessMessage('Conta criada! Verifique seu email para ativar sua conta.');
-            console.log('Email de verificação enviado para:', email);
-            
-            await auth.signOut();
-            setTimeout(() => {
-                window.location.href = '/login.html';
-            }, 3500);
-        } catch (emailError) {
-            console.error('Erro ao enviar email:', emailError);
-            throw { code: 'auth/verification-email-failed' };
-        }
+        await sendEmailVerification(user);
+        showSuccessMessage('Conta criada! Por favor, verifique seu email para ativar sua conta.');
+        
+        // Faz logout do usuário após registro bem-sucedido
+        await auth.signOut();
+        
+        // Redireciona após 3.5 segundos
+        setTimeout(() => {
+            window.location.href = '/login.html';
+        }, 3500);
 
     } catch (error) {
         console.error('Erro no registro:', error);
-        // Garante que o usuário seja removido se algo der errado
-        try {
-            const currentUser = auth.currentUser;
-            if (currentUser) await currentUser.delete();
-        } catch (deleteError) {
-            console.error('Erro ao limpar usuário:', deleteError);
+        let errorCode = error.code || 'auth/unknown-error';
+
+        if (auth.currentUser) {
+            try {
+                // Remove o usuário se algo deu errado
+                await auth.currentUser.delete();
+            } catch (deleteError) {
+                console.error('Erro ao remover usuário:', deleteError);
+            }
         }
-        displayErrorMessage(error.code || 'auth/unknown-error');
+
+        displayErrorMessage(errorCode);
     }
 }
 
