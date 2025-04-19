@@ -36,12 +36,10 @@ const provider = new GoogleAuthProvider();
 function checkAuthState() {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            if (!user.emailVerified) {
+            // Não exibe mensagem de erro durante o processo de registro
+            if (!user.emailVerified && window.location.pathname !== '/login.html') {
                 auth.signOut();
-                displayErrorMessage('Por favor, verifique seu email antes de continuar.');
-                if (window.location.pathname !== '/login.html') {
-                    window.location.href = '/login.html';
-                }
+                window.location.href = '/login.html';
                 return;
             }
             
@@ -95,11 +93,15 @@ async function loginWithGoogle() {
 async function registerUser(email, password, username) {
     try {
         clearErrorMessage();
-
+        
+        // Desativa temporariamente o listener de auth state
+        const unsubscribe = onAuthStateChanged(auth, () => {});
+        
         // Verifica se o email já está em uso
         const emailExists = await checkEmailExists(email);
         if (emailExists) {
             displayErrorMessage('auth/email-already-in-use');
+            unsubscribe();
             return;
         }
 
@@ -126,6 +128,8 @@ async function registerUser(email, password, username) {
         // Exibe mensagem de sucesso e redireciona para a página de login
         showSuccessMessage('Conta criada com sucesso! Verifique seu email para ativar sua conta.');
         await auth.signOut();
+        unsubscribe(); // Remove o listener temporário
+        
         setTimeout(() => {
             window.location.href = '/login.html';
         }, 3500);
@@ -311,4 +315,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-//end-end
