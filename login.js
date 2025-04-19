@@ -108,12 +108,15 @@ async function registerUser(email, password, username) {
 
     if (user) {
       try {
-        // Envia email de verificação com URL de continuação
-        await user.sendEmailVerification({
-          url: window.location.origin + '/login.html'
-        });
+        // Envia email de verificação com URL personalizada
+        const actionCodeSettings = {
+          url: window.location.origin + '/login.html',
+          handleCodeInApp: true
+        };
+
+        await user.sendEmailVerification(actionCodeSettings);
         
-        // Só salva no banco após confirmação de envio do email
+        // Salva no banco após criar o usuário
         await setDoc(doc(collection(db, 'users'), user.uid), {
           username: username,
           email: email,
@@ -124,7 +127,8 @@ async function registerUser(email, password, username) {
         showSuccessMessage('Conta criada! Verifique seu email para ativar sua conta.');
         console.log('Email de verificação enviado para:', user.email);
         
-        await auth.signOut(); // Desloga o usuário até verificar email
+        // Desloga o usuário até verificar email
+        await auth.signOut();
         
         setTimeout(() => {
           window.location.href = '/login.html';
@@ -132,28 +136,12 @@ async function registerUser(email, password, username) {
 
       } catch (verificationError) {
         console.error('Erro ao enviar verificação:', verificationError);
-        // Se falhar o envio do email, deleta a conta criada
-        await user.delete();
-        throw { code: 'auth/verification-email-failed', originalError: verificationError };
+        displayErrorMessage('auth/verification-email-failed');
       }
     }
-
   } catch (error) {
     console.error('Erro detalhado:', error);
-    
-    // Remove o usuário se ele foi criado mas houve erro
-    try {
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        await currentUser.delete();
-      }
-    } catch (deleteError) {
-      console.error('Erro ao limpar usuário:', deleteError);
-    }
-
-    // Trata o código de erro específico
-    const errorCode = error.code || 'auth/unknown-error';
-    displayErrorMessage(errorCode);
+    displayErrorMessage(error.code || 'auth/unknown-error');
   }
 }
 
@@ -333,19 +321,10 @@ const errorMessages = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Exemplo para Firebase Authentication:
-  firebase.auth().onAuthStateChanged((user) => {
-    if (!user) {
-      // Redireciona o usuário para a página de login caso não esteja logado
-      window.location.href = "login.html";
+  onAuthStateChanged(auth, (user) => {
+    if (!user && window.location.pathname !== '/login.html') {
+      window.location.href = '/login.html';
     }
   });
-
-  // Se estiver usando uma outra lógica de autenticação:
-  // Verifique se o token ou a sessão de login existe no localStorage ou sessionStorage
-  const isLoggedIn = localStorage.getItem("userLoggedIn"); // ou sessionStorage
-  if (!isLoggedIn) {
-    window.location.href = "login.html";
-  }
 });
 //end
