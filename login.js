@@ -91,61 +91,76 @@ async function loginWithGoogle() {
     }
 }
 
-// Função para registrar usuário
+// Função para registrar usuário (reescrita)
 async function registerUser(email, password, username) {
     try {
-        // Primeiro verifica se o email já existe
+        // Limpa mensagens anteriores
+        clearErrorMessage();
+        
+        // Verifica email primeiro
         const emailExists = await checkEmailExists(email);
         if (emailExists) {
-            throw { code: 'auth/email-already-in-use' };
+            displayErrorMessage('auth/email-already-in-use');
+            return;
         }
 
-        // Cria o usuário
+        // Tenta criar o usuário
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        if (user) {
-            try {
-                // Salva os dados do usuário primeiro
-                await setDoc(doc(collection(db, 'users'), user.uid), {
-                    username: username,
-                    email: email,
-                    createdAt: serverTimestamp(),
-                    emailVerified: false
-                });
-
-                // Depois envia o email de verificação
-                await user.sendEmailVerification();
-
-                showSuccessMessage('Conta criada! Verifique seu email para ativar sua conta.');
-                console.log('Usuário registrado:', email);
-
-                // Desloga o usuário até verificar email
-                await auth.signOut();
-
-                setTimeout(() => {
-                    window.location.href = '/login.html';
-                }, 3500);
-
-            } catch (error) {
-                console.error('Erro ao finalizar registro:', error);
-                // Se falhar após criar o usuário, limpa tudo
-                await user.delete();
-                throw { code: 'auth/registration-failed' };
-            }
+        if (!user) {
+            throw { code: 'auth/registration-failed' };
         }
+
+        // Salva dados do usuário
+        try {
+            await setDoc(doc(collection(db, 'users'), user.uid), {
+                username: username,
+                email: email,
+                createdAt: serverTimestamp(),
+                emailVerified: false
+            });
+        } catch (dbError) {
+            console.error('Erro ao salvar dados:', dbError);
+            await user.delete();
+            throw { code: 'auth/database-error' };
+        }
+
+        // Envia email de verificação
+        try {
+            await sendEmailVerification(user);
+            showSuccessMessage('Conta criada! Verifique seu email para ativar sua conta.');
+            console.log('Email de verificação enviado para:', email);
+            
+            await auth.signOut();
+            setTimeout(() => {
+                window.location.href = '/login.html';
+            }, 3500);
+        } catch (emailError) {
+            console.error('Erro ao enviar email:', emailError);
+            throw { code: 'auth/verification-email-failed' };
+        }
+
     } catch (error) {
         console.error('Erro no registro:', error);
+        // Garante que o usuário seja removido se algo der errado
+        try {
+            const currentUser = auth.currentUser;
+            if (currentUser) await currentUser.delete();
+        } catch (deleteError) {
+            console.error('Erro ao limpar usuário:', deleteError);
+        }
         displayErrorMessage(error.code || 'auth/unknown-error');
     }
 }
 
-// Adicionar função para verificar email existente
+// Adicionar função para verificar email existente (melhorada)
 async function checkEmailExists(email) {
     try {
         const methods = await fetchSignInMethodsForEmail(auth, email);
-        return methods.length > 0;
+        return methods && methods.length > 0;
     } catch (error) {
+        console.error('Erro ao verificar email:', error);
         return false;
     }
 }
@@ -266,16 +281,23 @@ function togglePasswordVisibility(inputId, eyeIconId) {
     }
 }
 
-// Função para exibir mensagem de erro
+// Função para exibir mensagem de erro (atualizada)
 function displayErrorMessage(errorCode) {
     const errorMessageElement = document.getElementById('error-message');
     if (errorMessageElement) {
-        const message = errorMessages[errorCode] || 'Erro no cadastro: ' + errorCode;
-        console.log('Código do erro:', errorCode);
-        errorMessageElement.textContent = message;
-        errorMessageElement.style.display = 'block';
-        errorMessageElement.classList.remove('hidden');
-        errorMessageElement.classList.add('show');
+        // Remove mensagens antigas
+        errorMessageElement.classList.remove('show');
+        errorMessageElement.classList.add('hidden');
+        
+        // Adiciona nova mensagem
+        setTimeout(() => {
+            const message = errorMessages[errorCode] || `Erro: ${errorCode}`;
+            console.log('Código do erro:', errorCode);
+            errorMessageElement.textContent = message;
+            errorMessageElement.style.display = 'block';
+            errorMessageElement.classList.remove('hidden');
+            errorMessageElement.classList.add('show');
+        }, 100);
     }
 }
 
@@ -287,7 +309,7 @@ function clearErrorMessage() {
     }
 }
 
-// Mapeamento de mensagens de erro
+// Mapeamento de mensagens de erro (atualizado)
 const errorMessages = {
     'auth/invalid-credential': 'Credenciais inválidas. Por favor, verifique e tente novamente.',
     'auth/user-not-found': 'Usuário não encontrado. Por favor, verifique o email e tente novamente.',
@@ -311,6 +333,9 @@ const errorMessages = {
     'auth/internal-error': 'Erro interno do servidor. Por favor, tente novamente mais tarde.',
     'auth/registration-failed': 'Erro ao completar o registro. Por favor, tente novamente.',
     'auth/invalid-action-code': 'Link de verificação inválido ou expirado.',
+    'auth/database-error': 'Erro ao salvar dados. Por favor, tente novamente.',
+    'auth/invalid-email-verified': 'Não foi possível verificar o email.',
+    'auth/email-verification-needed': 'É necessário verificar seu email antes de continuar.',
     'default': 'Ocorreu um erro inesperado. Tente novamente.'
 };
 
