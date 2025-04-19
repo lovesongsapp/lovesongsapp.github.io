@@ -3,6 +3,8 @@
 
 * {
     outline: none;
+    -webkit-tap-highlight-color: transparent;
+    
 }
 
 html,
@@ -41,7 +43,7 @@ a {
 }
 
 .container {
-    background: rgba(255, 255, 255, 0.95);
+    background: transparent;
     padding: 2rem;
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -55,7 +57,7 @@ a {
 h1 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #ffffff;
+    color: #00ffbf;
     text-align: center;
     font-weight: 400;
     letter-spacing: 1px;
@@ -88,7 +90,7 @@ form {
     border-radius: 10px;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.9);
+    background: transparent;
 }
 
 .input-group input:focus {
@@ -373,7 +375,6 @@ button:hover {
     color: #ff4081;
     font-size: 1.1rem;
     margin-top: -0.5rem;
-    font-family: 'Playfair Display', serif;
 }
 
 .divider {
