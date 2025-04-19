@@ -96,211 +96,205 @@ async function registerUser(email, password, username) {
     try {
         clearErrorMessage();
         
-        // Verifica email primeiro
         const emailExists = await checkEmailExists(email);
         if (emailExists) {
             displayErrorMessage('auth/email-already-in-use');
             return;
         }
 
-        // Cria o usuáriousuário
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Envia email de verificação
+        // Primeiro tenta enviar o email de verificação
         try {
-            await sendEmailVerification(user);fication(user);
-        } catch (error) {
-            await auth.currentUser.delete();m-sucedido, salva os dados do usuário
-            displayErrorMessage('auth/verification-email-failed');lection(db, 'users'), user.uid), {
-            return;     username: username,
-        }                email: email,
-stamp(),
-        // Salva dados do usuário no Firestore
+            await sendEmailVerification(user);
+        } catch (verificationError) {
+            console.error('Erro ao enviar verificação:', verificationError);
+            await user.delete(); // Remove o usuário se falhar o envio do email
+            displayErrorMessage('auth/verification-email-failed');
+            return;
+        }
+
+        // Se o email foi enviado com sucesso, salva os dados do usuário
         await setDoc(doc(collection(db, 'users'), user.uid), {
             username: username,
             email: email,
-            createdAt: serverTimestamp(),e('Conta criada com sucesso! Verifique seu email para ativar sua conta.');
-            emailVerified: false    
+            createdAt: serverTimestamp(),
+            emailVerified: false
         });
-nOut();
-        showSuccessMessage('Conta criada! Por favor, verifique seu email para ativar sua conta.');
-        mpa qualquer mensagem de erro
-        // Faz logout do usuário após registro bem-sucedido            clearErrorMessage();
+
+        showSuccessMessage('Conta criada! Verifique seu email para ativar sua conta.');
         await auth.signOut();
         
-        // Redireciona após 3.5 segundos
-        setTimeout(() => {                window.location.href = '/login.html';
+        setTimeout(() => {
             window.location.href = '/login.html';
         }, 3500);
 
-    } catch (error) { remove o usuário
+    } catch (error) {
         console.error('Erro no registro:', error);
-        let errorCode = error.code || 'auth/unknown-error';
-
+        
         if (auth.currentUser) {
-            try {    } catch (error) {
-                // Remove o usuário se algo deu errado:', error);
-                await auth.currentUser.delete();   
-            } catch (deleteError) {       // Remove o usuário se ele existir e houver erro
-                console.error('Erro ao remover usuário:', deleteError);        if (auth.currentUser) {
+            try {
+                await auth.currentUser.delete();
+            } catch (deleteError) {
+                console.error('Erro ao remover usuário:', deleteError);
             }
-        }elete();
-   } catch (deleteError) {
-        displayErrorMessage(errorCode);;
+        }
+        
+        displayErrorMessage(error.code || 'auth/unknown-error');
     }
 }
 
-// Adicionar função para verificar email existente (melhorada)nsagem de erro
-async function checkEmailExists(email) {   if (error.message === 'Erro ao enviar email de verificação') {
-    try {           displayErrorMessage('auth/verification-email-failed');
-        const methods = await fetchSignInMethodsForEmail(auth, email);        } else {
-        return methods && methods.length > 0;(error.code || 'auth/unknown-error');
+// Adicionar função para verificar email existente (melhorada)
+async function checkEmailExists(email) {
+    try {
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+        return methods && methods.length > 0;
     } catch (error) {
         console.error('Erro ao verificar email:', error);
         return false;
     }
-}// Adicionar função para verificar email existente (melhorada)
-ail) {
+}
+
 // Função para login do usuário
-async function loginUser(email, password) {th, email);
-    try {ods && methods.length > 0;
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);ch (error) {
-        const user = userCredential.user;        console.error('Erro ao verificar email:', error);
+async function loginUser(email, password) {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
         if (!user.emailVerified) {
             await auth.signOut();
             displayErrorMessage('auth/email-not-verified');
-            return;gin do usuário
-        }ser(email, password) {
+            return;
+        }
 
-        console.log('Usuário logado com sucesso:', user);rd);
-        showSuccessMessage('Usuário logado com sucesso!');   const user = userCredential.user;
+        console.log('Usuário logado com sucesso:', user);
+        showSuccessMessage('Usuário logado com sucesso!');
         setTimeout(() => {
-            window.location.href = '/sucesso.html';        if (!user.emailVerified) {
-        }, 3500);();
-    } catch (error) {/email-not-verified');
-        console.error('Erro de login:', error); // Para debug   return;
+            window.location.href = '/sucesso.html';
+        }, 3500);
+    } catch (error) {
+        console.error('Erro de login:', error); // Para debug
         displayErrorMessage(error.code); // Usar error.code em vez de error.message
     }
-}Usuário logado com sucesso:', user);
-com sucesso!');
-// Função para redefinir senha   setTimeout(() => {
-async function resetPassword(email) {           window.location.href = '/sucesso.html';
-    try {        }, 3500);
+}
+
+// Função para redefinir senha
+async function resetPassword(email) {
+    try {
         await sendPasswordResetEmail(auth, email);
-        showSuccessMessage('Enviamos um link para redefinir sua senha. Verifique seu email.');ra debug
-    } catch (error) { de error.message
+        showSuccessMessage('Enviamos um link para redefinir sua senha. Verifique seu email.');
+    } catch (error) {
         displayErrorMessage(error.message);
     }
 }
 
 // Adiciona listeners para os formulários e botões
-document.addEventListener('DOMContentLoaded', () => {    try {
-    const registerForm = document.getElementById('register-form');ordResetEmail(auth, email);
-    const loginForm = document.getElementById('login-form');nha. Verifique seu email.');
+document.addEventListener('DOMContentLoaded', () => {
+    const registerForm = document.getElementById('register-form');
+    const loginForm = document.getElementById('login-form');
     const googleLoginButton = document.getElementById('google-login');
     const resetPasswordButton = document.getElementById('reset-password');
     const showRegisterButton = document.getElementById('show-register');
     const showLoginButton = document.getElementById('show-login');
 
-    if (registerForm) { listeners para os formulários e botões
-        registerForm.addEventListener('submit', async (event) => {ent.addEventListener('DOMContentLoaded', () => {
-            event.preventDefault();    const registerForm = document.getElementById('register-form');
-            const username = document.getElementById('register-username').value;= document.getElementById('login-form');
-            const email = document.getElementById('register-email').value;ogin');
-            const password = document.getElementById('register-password').value;ument.getElementById('reset-password');
-            await registerUser(email, password, username);;
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            await registerUser(email, password, username);
         });
     }
-isterForm) {
-    if (loginForm) {   registerForm.addEventListener('submit', async (event) => {
-        loginForm.addEventListener('submit', async (event) => {            event.preventDefault();
-            event.preventDefault(); document.getElementById('register-username').value;
-            const email = document.getElementById('login-email').value;').value;
-            const password = document.getElementById('login-password').value;t.getElementById('register-password').value;
-            await loginUser(email, password); await registerUser(email, password, username);
-        });   });
-    }    }
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            await loginUser(email, password);
+        });
+    }
 
     if (googleLoginButton) {
         googleLoginButton.addEventListener('click', async () => {
             await loginWithGoogle();
-        });= document.getElementById('login-email').value;
-    }ementById('login-password').value;
-ginUser(email, password);
+        });
+    }
+
     if (resetPasswordButton) {
         resetPasswordButton.addEventListener('click', async () => {
             const email = document.getElementById('login-email').value;
-            const errorMessage = document.getElementById('error-message');eLoginButton) {
-            if (email) {gleLoginButton.addEventListener('click', async () => {
-                await resetPassword(email);       await loginWithGoogle();
-            } else {        });
+            const errorMessage = document.getElementById('error-message');
+            if (email) {
+                await resetPassword(email);
+            } else {
                 // Exibe a mensagem de erro personalizada
                 errorMessage.style.display = 'block';
                 errorMessage.innerText = 'Por favor, insira seu e-mail para redefinir sua senha.';
             }
         });
-    } document.getElementById('error-message');
- if (email) {
-    if (showRegisterButton) {           await resetPassword(email);
-        showRegisterButton.addEventListener('click', (event) => {            } else {
-            event.preventDefault(); mensagem de erro personalizada
+    }
+
+    if (showRegisterButton) {
+        showRegisterButton.addEventListener('click', (event) => {
+            event.preventDefault();
             document.getElementById('login-form').style.display = 'none';
-            document.getElementById('register-form').style.display = 'block';ext = 'Por favor, insira seu e-mail para redefinir sua senha.';
+            document.getElementById('register-form').style.display = 'block';
             clearErrorMessage();
         });
     }
 
-    if (showLoginButton) {f (showRegisterButton) {
-        showLoginButton.addEventListener('click', (event) => {        showRegisterButton.addEventListener('click', (event) => {
+    if (showLoginButton) {
+        showLoginButton.addEventListener('click', (event) => {
             event.preventDefault();
-            document.getElementById('register-form').style.display = 'none';play = 'none';
-            document.getElementById('login-form').style.display = 'block';         document.getElementById('register-form').style.display = 'block';
-            clearErrorMessage();            clearErrorMessage();
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+            clearErrorMessage();
         });
     }
 
     togglePasswordVisibility('register-password', 'register-eye-icon');
-    togglePasswordVisibility('login-password', 'eye-icon');tener('click', (event) => {
+    togglePasswordVisibility('login-password', 'eye-icon');
 });
- 'none';
-// Função para alternar visibilidade da senha;
+
+// Função para alternar visibilidade da senha
 function togglePasswordVisibility(inputId, eyeIconId) {
     const passwordInput = document.getElementById(inputId);
     const eyeIcon = document.getElementById(eyeIconId);
     if (passwordInput && eyeIcon) {
-        eyeIcon.addEventListener('click', () => {    togglePasswordVisibility('register-password', 'register-eye-icon');
-            const isPasswordVisible = passwordInput.type === 'text';-icon');
+        eyeIcon.addEventListener('click', () => {
+            const isPasswordVisible = passwordInput.type === 'text';
             passwordInput.type = isPasswordVisible ? 'password' : 'text';
             eyeIcon.setAttribute('name', isPasswordVisible ? 'eye-outline' : 'eye-off-outline');
-        });lidade da senha
-    }nputId, eyeIconId) {
-}utId);
-d);
-// Função para exibir mensagem de erro (atualizada)passwordInput && eyeIcon) {
-function displayErrorMessage(errorCode) {'click', () => {
-    const errorMessageElement = document.getElementById('error-message');rdVisible = passwordInput.type === 'text';
+        });
+    }
+}
+
+// Função para exibir mensagem de erro (atualizada)
+function displayErrorMessage(errorCode) {
+    const errorMessageElement = document.getElementById('error-message');
     if (errorMessageElement) {
-        // Remove mensagens antigasible ? 'eye-outline' : 'eye-off-outline');
+        // Remove mensagens antigas
         errorMessageElement.classList.remove('show');
         errorMessageElement.classList.add('hidden');
         
         // Adiciona nova mensagem
-        setTimeout(() => {xibir mensagem de erro (atualizada)
-            const message = errorMessages[errorCode] || `Erro: ${errorCode}`;ion displayErrorMessage(errorCode) {
-            console.log('Código do erro:', errorCode);   const errorMessageElement = document.getElementById('error-message');
-            errorMessageElement.textContent = message;    if (errorMessageElement) {
+        setTimeout(() => {
+            const message = errorMessages[errorCode] || `Erro: ${errorCode}`;
+            console.log('Código do erro:', errorCode);
+            errorMessageElement.textContent = message;
             errorMessageElement.style.display = 'block';
-            errorMessageElement.classList.remove('hidden');assList.remove('show');
+            errorMessageElement.classList.remove('hidden');
             errorMessageElement.classList.add('show');
         }, 100);
     }
-}   setTimeout(() => {
-           const message = errorMessages[errorCode] || `Erro: ${errorCode}`;
-// Função para limpar mensagem de erro            console.log('Código do erro:', errorCode);
-function clearErrorMessage() {essage;
-    const errorMessageElement = document.getElementById('error-message');eElement.style.display = 'block';
+}
+
+// Função para limpar mensagem de erro
+function clearErrorMessage() {
+    const errorMessageElement = document.getElementById('error-message');
     if (errorMessageElement) {
         errorMessageElement.textContent = '';
     }
@@ -309,7 +303,7 @@ function clearErrorMessage() {essage;
 // Mapeamento de mensagens de erro (atualizado)
 const errorMessages = {
     'auth/invalid-credential': 'Credenciais inválidas. Por favor, verifique e tente novamente.',
-    'auth/user-not-found': 'Usuário não encontrado. Por favor, verifique o email e tente novamente.',or-message');
+    'auth/user-not-found': 'Usuário não encontrado. Por favor, verifique o email e tente novamente.',
     'auth/wrong-password': 'Senha incorreta. Por favor, tente novamente.',
     'auth/email-already-in-use': 'Este email já está registrado. Por favor, use outro email ou faça login.',
     'auth/email-not-verified': 'Por favor, verifique seu email antes de fazer login.',
@@ -317,34 +311,18 @@ const errorMessages = {
     'auth/weak-password': 'A senha deve ter pelo menos 6 caracteres.',
     'auth/invalid-email': 'Email inválido. Por favor, verifique o formato do email.',
     'auth/operation-not-allowed': 'Operação não permitida.',
-    'auth/network-request-failed': 'Erro de conexão. Verifique sua internet.',te novamente.',
-    'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',e tente novamente.',
+    'auth/network-request-failed': 'Erro de conexão. Verifique sua internet.',
+    'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',
     'auth/email-verification-failed': 'Não foi possível enviar o email de verificação. Tente novamente.',
-    'auth/verification-email-failed': 'Não foi possível enviar o email de verificação. Por favor, tente novamente mais tarde.', faça login.',
+    'auth/verification-email-failed': 'Não foi possível enviar o email de verificação. Por favor, tente novamente mais tarde.',
     'auth/network-error': 'Erro de conexão. Verifique sua internet e tente novamente.',
-    'auth/invalid-verification-code': 'Código de verificação inválido. Tente novamente.',ua caixa de entrada.',
+    'auth/invalid-verification-code': 'Código de verificação inválido. Tente novamente.',
     'auth/unknown-error': 'Erro ao criar conta. Por favor, tente novamente.',
-    'auth/invalid-continue-uri': 'Erro na configuração do email de verificação.', do email.',
+    'auth/invalid-continue-uri': 'Erro na configuração do email de verificação.',
     'auth/missing-continue-uri': 'Erro na configuração do email de verificação.',
-    'auth/unauthorized-continue-uri': 'Erro na configuração do email de verificação.',e sua internet.',
-    'auth/internal-error': 'Erro interno do servidor. Por favor, tente novamente mais tarde.',  'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',
-    'auth/registration-failed': 'Erro ao completar o registro. Por favor, tente novamente.',    'auth/email-verification-failed': 'Não foi possível enviar o email de verificação. Tente novamente.',
-    'auth/invalid-action-code': 'Link de verificação inválido ou expirado.', email de verificação. Tente novamente.',
-    'auth/database-error': 'Erro ao salvar dados. Por favor, tente novamente.',ão. Verifique sua internet e tente novamente.',
-    'auth/invalid-email-verified': 'Não foi possível verificar o email.',ido. Tente novamente.',
-    'auth/email-verification-needed': 'É necessário verificar seu email antes de continuar.',or favor, tente novamente.',
-    'default': 'Ocorreu um erro inesperado. Tente novamente.'/invalid-continue-uri': 'Erro na configuração do email de verificação.',
-};th/missing-continue-uri': 'Erro na configuração do email de verificação.',
- 'auth/unauthorized-continue-uri': 'Erro na configuração do email de verificação.',
-document.addEventListener('DOMContentLoaded', () => {    'auth/internal-error': 'Erro interno do servidor. Por favor, tente novamente mais tarde.',
-
-
-
-
-
-
-
-});    });        }            window.location.href = '/login.html';        if (!user && window.location.pathname !== '/login.html') {    onAuthStateChanged(auth, (user) => {    'auth/registration-failed': 'Erro ao completar o registro. Por favor, tente novamente.',
+    'auth/unauthorized-continue-uri': 'Erro na configuração do email de verificação.',
+    'auth/internal-error': 'Erro interno do servidor. Por favor, tente novamente mais tarde.',
+    'auth/registration-failed': 'Erro ao completar o registro. Por favor, tente novamente.',
     'auth/invalid-action-code': 'Link de verificação inválido ou expirado.',
     'auth/database-error': 'Erro ao salvar dados. Por favor, tente novamente.',
     'auth/invalid-email-verified': 'Não foi possível verificar o email.',
