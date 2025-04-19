@@ -107,32 +107,28 @@ async function registerUser(email, password, username) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
+        // Tenta enviar o email de verificação
         try {
-            // Tenta enviar o email de verificação
             await sendEmailVerification(user);
-
-            // Salva os dados do usuário no Firestore
-            await setDoc(doc(collection(db, 'users'), user.uid), {
-                username,
-                email,
-                createdAt: serverTimestamp(),
-                emailVerified: false
-            });
-
-            // Exibe mensagem de sucesso e redireciona para a página de login
-            showSuccessMessage('Conta criada com sucesso! Verifique seu email para ativar sua conta.');
-            await auth.signOut();
-            setTimeout(() => {
-                window.location.href = '/login.html';
-            }, 3500);
-
         } catch (verificationError) {
-            console.error('Erro ao enviar email de verificação:', verificationError);
-
-            // Remove o usuário se o envio do email falhar
-            await user.delete();
-            displayErrorMessage('auth/verification-email-failed');
+            console.warn('Aviso: Não foi possível enviar o email de verificação imediatamente.', verificationError);
+            // Continua o fluxo mesmo que o envio do email falhe
         }
+
+        // Salva os dados do usuário no Firestore
+        await setDoc(doc(collection(db, 'users'), user.uid), {
+            username,
+            email,
+            createdAt: serverTimestamp(),
+            emailVerified: false
+        });
+
+        // Exibe mensagem de sucesso e redireciona para a página de login
+        showSuccessMessage('Conta criada com sucesso! Verifique seu email para ativar sua conta.');
+        await auth.signOut();
+        setTimeout(() => {
+            window.location.href = '/login.html';
+        }, 3500);
 
     } catch (error) {
         console.error('Erro no registro:', error);
@@ -315,4 +311,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-//end2
+//end-end
