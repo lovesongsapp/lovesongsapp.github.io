@@ -106,34 +106,42 @@ async function registerUser(email, password, username) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    try {
-      // Envia email de verificação
-      await user.sendEmailVerification();
-      
-      // Só salva no banco após confirmação de envio do email
-      await setDoc(doc(collection(db, 'users'), user.uid), {
-        username: username,
-        email: email,
-        createdAt: serverTimestamp(),
-        emailVerified: false
-      });
+    if (user) {
+      try {
+        // Envia email de verificação com URL de continuação
+        await user.sendEmailVerification({
+          url: window.location.origin + '/login.html'
+        });
+        
+        // Só salva no banco após confirmação de envio do email
+        await setDoc(doc(collection(db, 'users'), user.uid), {
+          username: username,
+          email: email,
+          createdAt: serverTimestamp(),
+          emailVerified: false
+        });
 
-      showSuccessMessage('Conta criada com sucesso! Verifique seu email para ativar sua conta.');
-      console.log('Usuário registrado:', user.email);
-      
-      setTimeout(() => {
-        window.location.href = '/login.html';
-      }, 3500);
+        showSuccessMessage('Conta criada! Verifique seu email para ativar sua conta.');
+        console.log('Email de verificação enviado para:', user.email);
+        
+        await auth.signOut(); // Desloga o usuário até verificar email
+        
+        setTimeout(() => {
+          window.location.href = '/login.html';
+        }, 3500);
 
-    } catch (verificationError) {
-      // Se falhar o envio do email, deleta a conta criada
-      await user.delete();
-      throw { code: 'auth/verification-email-failed' };
+      } catch (verificationError) {
+        console.error('Erro ao enviar verificação:', verificationError);
+        // Se falhar o envio do email, deleta a conta criada
+        await user.delete();
+        throw { code: 'auth/verification-email-failed', originalError: verificationError };
+      }
     }
 
   } catch (error) {
-    console.error('Erro no registro:', error);
-    // Remove o usuário do Firebase Auth se algo der errado
+    console.error('Erro detalhado:', error);
+    
+    // Remove o usuário se ele foi criado mas houve erro
     try {
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -142,7 +150,10 @@ async function registerUser(email, password, username) {
     } catch (deleteError) {
       console.error('Erro ao limpar usuário:', deleteError);
     }
-    displayErrorMessage(error.code);
+
+    // Trata o código de erro específico
+    const errorCode = error.code || 'auth/unknown-error';
+    displayErrorMessage(errorCode);
   }
 }
 
@@ -279,8 +290,8 @@ function togglePasswordVisibility(inputId, eyeIconId) {
 function displayErrorMessage(errorCode) {
   const errorMessageElement = document.getElementById('error-message');
   if (errorMessageElement) {
-    const message = errorMessages[errorCode] || errorMessages['default'];
-    console.log('Código do erro:', errorCode); // Para debug
+    const message = errorMessages[errorCode] || 'Erro no cadastro: ' + errorCode;
+    console.log('Código do erro:', errorCode);
     errorMessageElement.textContent = message;
     errorMessageElement.style.display = 'block';
     errorMessageElement.classList.remove('hidden');
@@ -312,6 +323,12 @@ const errorMessages = {
   'auth/email-verification-failed': 'Não foi possível enviar o email de verificação. Tente novamente.',
   'auth/verification-email-failed': 'Erro ao enviar email de verificação. Tente novamente.',
   'auth/network-error': 'Erro de conexão. Verifique sua internet e tente novamente.',
+  'auth/invalid-verification-code': 'Código de verificação inválido. Tente novamente.',
+  'auth/unknown-error': 'Erro ao criar conta. Por favor, tente novamente.',
+  'auth/invalid-continue-uri': 'Erro na configuração do email de verificação.',
+  'auth/missing-continue-uri': 'Erro na configuração do email de verificação.',
+  'auth/unauthorized-continue-uri': 'Erro na configuração do email de verificação.',
+  'auth/internal-error': 'Erro interno do servidor. Por favor, tente novamente mais tarde.',
   'default': 'Ocorreu um erro inesperado. Tente novamente.'
 };
 
