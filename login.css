@@ -363,3 +363,46 @@ button:hover {
     opacity: 1;
     transform: translateY(0);
 }
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.subtitle {
+    color: #ff4081;
+    font-size: 1.1rem;
+    margin-top: -0.5rem;
+    font-family: 'Playfair Display', serif;
+}
+
+.divider {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    line-height: 0.1em;
+    margin: 20px 0;
+}
+
+.divider span {
+    background: #fff;
+    padding: 0 10px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.login-btn {
+    background: linear-gradient(45deg, #e91e63, #ff4081);
+}
+
+.reset-btn {
+    background: transparent;
+    color: #666;
+    border: 1px solid #e0e0e0;
+    margin-top: 0.5rem;
+}
+
+.reset-btn:hover {
+    border-color: #e91e63;
+    color: #e91e63;
+}
