@@ -56,7 +56,7 @@ a {
 
 h1 {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 20px;
     color: #00ffbf;
     text-align: center;
     font-weight: 400;
@@ -80,7 +80,7 @@ form {
 
 .input-group {
     position: relative;
-    margin-bottom: 1.5rem;
+    
 }
 
 .input-group input {
@@ -209,7 +209,7 @@ button:hover {
     border-radius: 50px;
     background: transparent;
     color: #ddd;
-    border: 2px solid #5D2C86;
+    border: 2px solid #fc3b7d4f;
     font-size: 1rem;
     cursor: pointer;
     transition: background 0.3s ease;
@@ -223,29 +223,9 @@ button:hover {
     background: #2D1C4A;
 }
 
-.google-btn {
-    background: white;
-    color: #666;
-    border: 2px solid #e0e0e0;
-    padding: 10px 20px;
-    border-radius: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-}
-
 .google-btn:hover {
-    background: #f5f5f5;
+    
     border-color: #e91e63;
-}
-
-.google-btn img {
-    width: 20px;
-    height: 20px;
 }
 
 .form-switch {
