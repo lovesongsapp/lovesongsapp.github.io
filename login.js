@@ -235,9 +235,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (email) {
                 await resetPassword(email);
             } else {
-                // Exibe a mensagem de erro personalizada
                 errorMessage.style.display = 'block';
                 errorMessage.innerText = 'Por favor, insira seu e-mail para redefinir sua senha.';
+                
+                // Adiciona temporizador para remover a mensagem após 10 segundos
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                    errorMessage.innerText = '';
+                }, 10000);
             }
         });
     }
