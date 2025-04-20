@@ -182,15 +182,15 @@ input::placeholder {
 }
 
 #success-message {
-    background: rgba(76, 175, 80, 0.2);
-    border: 1px solid #4CAF50;
-    color: #4CAF50;
+    background: rgba(74, 4, 121, 0.2)
+    border: 1px solid #00ffbf;
+    color: #00ffbf;
 }
 
 #error-message {
-    background: rgba(244, 67, 54, 0.2);
-    border: 1px solid #F44336;
-    color: #F44336;
+    background: rgb(27 4 37 / 91%);
+    border: 1px solid #00ffbf;
+    color: #00ffbf;
 }
 
 .hidden {
