@@ -175,7 +175,7 @@ async function loginUser(email, password) {
 
         showSuccessMessage('Usuário logado com sucesso!');
         setTimeout(() => {
-            window.location.href = '/sucesso.html';
+            window.location.href = '/sucesso-user.html';
         }, 3500);
 
     } catch (error) {
