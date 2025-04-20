@@ -18,6 +18,7 @@ body {
     justify-content: center;
     color: #fff;
     padding: 20px;
+    min-height: 100dvh;
 }
 
 .container {
@@ -30,20 +31,20 @@ body {
 
 .logo-container {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .logo {
     width: 60px;
     height: 60px;
-    margin-bottom: 1rem;
+    border-radius: 50%;
 }
 
 .form-title {
-    font-family: "Playfair Display', serif;
+    font-family:'Playfair Display', serif;
     font-size: 2rem;
     font-weight: 500;
-    color: #fff;
+    color: #00ffbf;
     margin-bottom: 0.5rem;
 }
 
@@ -194,4 +195,36 @@ input::placeholder {
 
 .hidden {
     display: none;
+}
+
+/* Estilo específico para o botão do Google */
+#google-login {
+    width: 100%;
+    padding: 12px;
+    background: rgba(45, 28, 74, 0.95);
+    border: 1px solid rgba(179, 136, 255, 0.2);
+    border-radius: 5px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+}
+
+#google-login:hover {
+    background: rgba(72, 46, 120, 0.3);
+}
+
+#google-login img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+#google-login span {
+    color: #fff;
 }
