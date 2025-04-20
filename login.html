@@ -5,10 +5,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#17062B">
-    <title>LoveSongs - Login</title>
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" />
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <link rel="stylesheet" href="login.css">
+    <!-- SEO -->
+    <title>LoveSongs - Login</title>
+    <link rel="canonical" href="https://lovesongsapp.github.io/" />
+    <meta name="description" content="A trilha sonora do amor com músicas internacionais dos anos 80 e 90. Curta, compartilhe e viva esse clima romântico." />
+
+    <!-- OG -->
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="love songs, músicas internacionais anos 80 e 90" name="keywords" />
+    <meta content="LoveSongsApp - Login" property="og:title" />
+    <meta content="A trilha sonora do amor" property="og:description" />
+    <meta content="https://lovesongsapp.github.io/" property="og:url" />
+    <meta content="https://lovesongsapp.github.io/og-image.jpg" property="og:image" />
+    <meta content="Imagem de capa do LoveSongs App com clima romântico e visual moderno" property="og:image:alt" />
+    <meta content="website" property="og:type" />
+    <meta content="LoveSongs App" property="og:site_name" />
+    <meta content="yes" name="mobile-web-app-capable" />
+
+    <!-- TWITTER -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LoveSongs App" />
+    <meta name="twitter:description" content="A trilha sonora do amor" />
+    <meta name="twitter:image" content="https://lovesongsapp.github.io/og-image.jpg" />
+    <link href="add-home.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+    <link href="https://lovesongsapp.github.io/icons/favicon32.png" rel="shortcut icon" />
+    <link href="https://lovesongsapp.github.io/icons/favicon.ico" rel="shortcut icon" />
+    <link href="https://lovesongsapp.github.io/icons/favicon32.png" rel="icon" sizes="32x32" type="image/png" />
+    <link href="https://lovesongsapp.github.io/icons/favicon16.png" rel="icon" sizes="16x16" type="image/png" />
+    <!--AppleTouchIcon-->
+    <link href="https://lovesongsapp.github.io/icons/icon76.png" rel="apple-touch-icon" sizes="76x76" />
+    <link href="https://lovesongsapp.github.io/icons/icon120.png" rel="apple-touch-icon" sizes="120x120" />
+    <link href="https://lovesongsapp.github.io/icons/icon152.png" rel="apple-touch-icon" sizes="152x152" />
+    <link href="https://lovesongsapp.github.io/icons/icon180.png" rel="apple-touch-icon" sizes="180x180" />
+    <link href="https://lovesongsapp.github.io/icons/icon512.png" rel="apple-touch-icon" sizes="512x512" />
+    <link color="#fc6700" href="https://lovesongsapp.github.io/icons/safari-pinned-tab.svg" rel="mask-icon" />
 </head>
 
 <body>
@@ -32,7 +69,7 @@
             </div>
             <button type="submit" class="btn login-btn">Entrar</button>
             <button type="button" id="reset-password" class="btn reset-btn">Esqueci minha senha</button>
-            
+
             <div class="divider">
                 <span>ou</span>
             </div>
@@ -46,7 +83,7 @@
         <!-- Formulário de Registro (inicialmente oculto) -->
         <form id="register-form" style="display: none;">
             <div class="input-group">
-                <input type="text" id="register-username" placeholder="Nome de completo" required>
+                <input type="text" id="register-username" placeholder="Nome Completo" required>
             </div>
             <div class="input-group">
                 <input type="email" id="register-email" placeholder="E-mail" required>
