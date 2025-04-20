@@ -247,6 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('register-form').style.display = 'block';
+            document.getElementById('show-register').style.display = 'none';
+            document.getElementById('show-login').style.display = 'block';
             clearErrorMessage();
         });
     }
@@ -256,6 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             document.getElementById('register-form').style.display = 'none';
             document.getElementById('login-form').style.display = 'block';
+            document.getElementById('show-login').style.display = 'none';
+            document.getElementById('show-register').style.display = 'block';
             clearErrorMessage();
         });
     }
@@ -298,7 +302,7 @@ function clearErrorMessage() {
 
 // Mapeamento de mensagens de erro (atualizado)
 const errorMessages = {
-    'auth/email-already-in-use': 'Email já registrado. Use outro email ou faça login.',
+    'auth/email-already-in-use': 'Este email já está registrado. Por favor, use outro email ou faça login.',
     'auth/email-not-verified': 'Por favor, verifique seu email antes de fazer login.',
     'auth/weak-password': 'A senha deve ter pelo menos 6 caracteres.',
     'auth/invalid-email': 'Email inválido. Por favor, verifique o formato do email.',
