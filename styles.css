@@ -299,11 +299,15 @@ object-position: center;
 margin-right: 10px;
 position: absolute;
 }
-#playlist ul li span, p {
+#playlist ul li span {
 flex: 1;
 position: relative;
 margin-left: 160px;
 }
+#playlist ul li p {
+margin-left: 160px;
+}
+
 #playlist ul li:hover {
 background: #00ffbf;
 cursor: pointer;
