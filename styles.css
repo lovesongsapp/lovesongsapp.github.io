@@ -6,7 +6,7 @@ margin: 0;
 padding: 0;
 }
 body {
-background: #0f0f0f;
+background: #fdefff;
 font-family: 'Roboto', sans-serif;
 font-size: 16px;
 color: #311E56;
@@ -29,6 +29,7 @@ justify-content: space-between;
 height: 35px;
 position: fixed;
 width: 45%;
+background: #fff;
 top: 5px;
 border-radius: 20px;
 border: 1px solid #ccc;
@@ -259,7 +260,7 @@ justify-content: center;
 align-items: center;
 }
 #playlist {
-
+background: #fff;
 padding: 10px;
 text-align: left;
 height: 100%;
@@ -386,24 +387,20 @@ font-size: 0.9em;
 position: relative;
 margin-left: 160px;
 }
-
 .dark-mode .header-icons{
 display:flex;align-items:center;
 padding: 5px 10px;
-color: #aaaaaa;
+color: #fafafa;
 border-radius:20px;
-background: #242424;
+background: #272727;
 font-size: 14px;
 cursor: pointer;
 }
 .dark-mode .header-icons ion-icon{
 font-size: 16px !important;
-color: #aaaaaa !important;
+color: #fafafa !important;
 cursor: pointer;
 }
-
-
-
 
 /* PREENCHIMENTO DINAMICO */
 input[type="range"]::-webkit-slider-runnable-track {
@@ -431,7 +428,7 @@ height: 3px;
 border-radius: 5px;
 }
 input[type="range"]::-ms-fill-upper {
-background: #0f0f0f;
+background: #ddd;
 height: 3px;
 /* Define a altura do preenchimento dinâmico */
 border-radius: 5px;
@@ -513,7 +510,9 @@ position: absolute;
 top: 0;
 border-radius: none;
 }
-
+#playlist ul {
+margin-top: 20px;
+}
 #playlist h2 {
 display: none;
 }
@@ -578,16 +577,18 @@ background: #000;
 outline: none;
 }
 .header-icons{
-display:flex;align-items:center;
+display:flex;
+align-items:center;
 padding: 5px 10px;
-color: #272727;
+color:#272727;
 border-radius:20px;
+background:#fafafa;
 font-size: 14px;
 cursor: pointer;
 }
 .header-icons ion-icon{
 font-size: 16px !important;
-color: #242424 !important;
+color: #272727 !important;
 cursor: pointer;
 }
 #playlist-items .title{
@@ -649,3 +650,4 @@ cursor: pointer;
 .volume-value {
 font-size: 14px;
 }
+/*light*/
