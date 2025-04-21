@@ -387,21 +387,6 @@ font-size: 0.9em;
 position: relative;
 margin-left: 160px;
 }
-.dark-mode .header-icons{
-display:flex;align-items:center;
-padding: 5px 10px;
-color: #fafafa;
-border-radius:20px;
-background: #272727;
-font-size: 14px;
-cursor: pointer;
-}
-.dark-mode .header-icons ion-icon{
-font-size: 16px !important;
-color: #fafafa !important;
-cursor: pointer;
-}
-
 /* PREENCHIMENTO DINAMICO */
 input[type="range"]::-webkit-slider-runnable-track {
 background: linear-gradient(to right, #00FFBF, #00FFBF) 0% / var(--slider-value) 100% no-repeat, #311e56;
@@ -580,15 +565,15 @@ outline: none;
 display:flex;
 align-items:center;
 padding: 5px 10px;
-color:#272727;
+color:#fafafa;
 border-radius:20px;
-background:#fafafa;
+background:#272727;
 font-size: 14px;
 cursor: pointer;
 }
 .header-icons ion-icon{
 font-size: 16px !important;
-color: #272727 !important;
+color: #fff !important;
 cursor: pointer;
 }
 #playlist-items .title{
@@ -650,4 +635,4 @@ cursor: pointer;
 .volume-value {
 font-size: 14px;
 }
-/*light*/
+/*end2*/
