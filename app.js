@@ -7,7 +7,7 @@ let mode = 'repeat';
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
 let sharedVideoId = null;
-let isRepeatEnabled = false;
+let checkAdInterval;
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('videoId') || 'ozv8ugNm0P0';
+    const videoId = urlParams.get('videoId') || 'kPBzTxZQG5Q';
 
     player = new YT.Player('music-player', {
         height: '100%',
@@ -141,45 +141,75 @@ function setupControlButtons() {
     document.getElementById('close-playlist').addEventListener('click', function () {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
-
-    // Adicionar o listener para o botão de repetição
-    document.getElementById('repeat-button').addEventListener('click', () => {
-        isRepeatEnabled = !isRepeatEnabled;
-        const repeatButton = document.getElementById('repeat-button');
-        const repeatIcon = repeatButton.querySelector('ion-icon');
-        
-        if (isRepeatEnabled) {
-            repeatButton.classList.add('active');
-            repeatIcon.setAttribute('name', 'repeat');
-        } else {
-            repeatButton.classList.remove('active');
-            repeatIcon.setAttribute('name', 'repeat-outline');
-        }
-    });
 }
 
-// Detecção de anúncios e avanço automático
+// Detecção e controle de anúncios
 function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.BUFFERING) {
-        const videoDuration = player.getDuration();
-        if (videoDuration < 10) {
+    // Detector de anúncios
+    if (event.data === YT.PlayerState.PLAYING) {
+        const videoUrl = player.getVideoUrl();
+        if (videoUrl.includes('&ad=')) {
             console.log("Anúncio detectado, tentando pular...");
-            player.seekTo(videoDuration - 1, true);
+            trySkipAd();
         }
     }
 
+    // Verifica o estado do vídeo a cada segundo quando estiver reproduzindo
+    if (event.data === YT.PlayerState.PLAYING) {
+        checkAdInterval = setInterval(() => {
+            const skipButton = document.querySelector('.ytp-ad-skip-button') || 
+                             document.querySelector('.videoAdUiSkipButton') ||
+                             document.querySelector('.ytp-skip-ad-button');
+            
+            if (skipButton) {
+                console.log("Botão de pular anúncio encontrado, pulando...");
+                skipButton.click();
+            }
+        }, 1000);
+    } else {
+        if (checkAdInterval) {
+            clearInterval(checkAdInterval);
+        }
+    }
+
+    // Resto do código existente para tratamento do final do vídeo
     if (event.data === YT.PlayerState.ENDED) {
-        if (isRepeatEnabled) {
-            // Repete o vídeo atual
-            player.seekTo(0);
-            player.playVideo();
-        } else {
-            // Vai para o próximo vídeo
-            playNextVideo();
+        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
+        isPlaying = false;
+
+        switch (mode) {
+            case 'repeat_one':
+                player.seekTo(0);
+                player.playVideo();
+                break;
+            case 'shuffle':
+                const playlist = player.getPlaylist();
+                const nextIndex = Math.floor(Math.random() * playlist.length);
+                player.playVideoAt(nextIndex);
+                break;
+            case 'repeat':
+                const currentIndex = player.getPlaylistIndex();
+                if (currentIndex === player.getPlaylist().length - 1) {
+                    player.playVideoAt(0);
+                } else {
+                    player.nextVideo();
+                }
+                break;
         }
     }
 
     updateTitleAndArtist();
+}
+
+// Função auxiliar para tentar pular anúncios
+function trySkipAd() {
+    const adElement = document.querySelector('.video-ads');
+    if (adElement) {
+        const videoDuration = player.getDuration();
+        if (videoDuration) {
+            player.seekTo(videoDuration, true);
+        }
+    }
 }
 
 function updateTitleAndArtist() {
