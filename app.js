@@ -7,6 +7,7 @@ let mode = 'repeat';
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
 let sharedVideoId = null;
+let isRepeatEnabled = false;
 
 function setVideoQuality(quality) {
     player.setPlaybackQuality(quality);
@@ -140,6 +141,21 @@ function setupControlButtons() {
     document.getElementById('close-playlist').addEventListener('click', function () {
         document.getElementById('playlist-overlay').style.display = 'none';
     });
+
+    // Adicionar o listener para o botão de repetição
+    document.getElementById('repeat-button').addEventListener('click', () => {
+        isRepeatEnabled = !isRepeatEnabled;
+        const repeatButton = document.getElementById('repeat-button');
+        const repeatIcon = repeatButton.querySelector('ion-icon');
+        
+        if (isRepeatEnabled) {
+            repeatButton.classList.add('active');
+            repeatIcon.setAttribute('name', 'repeat');
+        } else {
+            repeatButton.classList.remove('active');
+            repeatIcon.setAttribute('name', 'repeat-outline');
+        }
+    });
 }
 
 // Detecção de anúncios e avanço automático
@@ -153,27 +169,13 @@ function onPlayerStateChange(event) {
     }
 
     if (event.data === YT.PlayerState.ENDED) {
-        document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
-        isPlaying = false;
-
-        switch (mode) {
-            case 'repeat_one':
-                player.seekTo(0);
-                player.playVideo();
-                break;
-            case 'shuffle':
-                const playlist = player.getPlaylist();
-                const nextIndex = Math.floor(Math.random() * playlist.length);
-                player.playVideoAt(nextIndex);
-                break;
-            case 'repeat':
-                const currentIndex = player.getPlaylistIndex();
-                if (currentIndex === player.getPlaylist().length - 1) {
-                    player.playVideoAt(0);
-                } else {
-                    player.nextVideo();
-                }
-                break;
+        if (isRepeatEnabled) {
+            // Repete o vídeo atual
+            player.seekTo(0);
+            player.playVideo();
+        } else {
+            // Vai para o próximo vídeo
+            playNextVideo();
         }
     }
 
