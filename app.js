@@ -247,6 +247,25 @@ function renderPlaylist(videos) {
         playlistContainer.appendChild(listItem);
     });
 }
+// Renderiza a playlist completa ao carregar a página
+renderPlaylist(playlistData);
+
+// Função para filtrar a playlist
+function filterPlaylist(searchText) {
+    return playlistData.filter(video => {
+        const titleMatch = video.title && video.title.toLowerCase().includes(searchText);
+        const authorMatch = video.author && video.author.toLowerCase().includes(searchText);
+        return titleMatch || authorMatch;
+    });
+}
+
+// Configuração da busca
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', () => {
+    const searchText = searchInput.value.trim().toLowerCase();
+    const filteredPlaylist = filterPlaylist(searchText);
+    renderPlaylist(filteredPlaylist);
+});
 // Compartilhamento
 document.getElementById('share-icon').addEventListener('click', function() {
     const videoData = player.getVideoData();
