@@ -33,7 +33,7 @@ body {
     border-radius: 20px;
     border: 1px solid #ccc;
     padding-left: 20px;
-    z-index: 3;
+    z-index: 5;
 }
 
 .dark-mode .playlist-header {
@@ -417,6 +417,7 @@ input[type="range"]::-ms-thumb {
     background: #00000070;
     color: #ffffff;
     bottom: 0;
+    z-index: 4;
 }
 
 .dark-mode #playlist ul li {
