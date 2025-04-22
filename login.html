@@ -12,7 +12,8 @@
     <!-- SEO -->
     <title>LoveSongs - Login</title>
     <link rel="canonical" href="https://lovesongsapp.github.io/" />
-    <meta name="description" content="A trilha sonora do amor com músicas internacionais dos anos 80 e 90. Curta, compartilhe e viva esse clima romântico." />
+    <meta name="description"
+        content="A trilha sonora do amor com músicas internacionais dos anos 80 e 90. Curta, compartilhe e viva esse clima romântico." />
 
     <!-- OG -->
     <meta content="yes" name="apple-mobile-web-app-capable" />
@@ -31,6 +32,7 @@
     <meta name="twitter:title" content="LoveSongs App" />
     <meta name="twitter:description" content="A trilha sonora do amor" />
     <meta name="twitter:image" content="https://lovesongsapp.github.io/og-image.jpg" />
+
     <link href="add-home.css" rel="stylesheet" />
     <link href="manifest.json" rel="manifest" />
     <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -53,62 +55,67 @@
         <div class="logo-container">
             <img src="https://lovesongsapp.github.io/icons/icon192.png" alt="LoveSongs Logo" class="logo">
             <h1 class="form-title">LoveSongs</h1>
-            <p class="subtitle">A trilha sonora do amor ♪♥</p>
+            <p class="subtitle">A trilha sonora do amor</p>
         </div>
 
-        <!-- Formulário de Login -->
-        <form id="login-form">
-            <div class="input-group">
-                <input type="email" id="login-email" placeholder="E-mail" required>
-            </div>
-            <div class="input-group">
-                <div class="password-container">
-                    <input type="password" id="login-password" placeholder="Senha" required>
-                    <ion-icon name="eye-outline" id="eye-icon" class="password-toggle"></ion-icon>
+        <div class="form-container">
+            <!-- Formulário de Login -->
+            <form id="login-form">
+                <div class="input-group">
+                    <input type="email" id="login-email" placeholder="E-mail" required>
                 </div>
-            </div>
-            <button type="submit" class="btn login-btn">Entrar</button>
-            <button type="button" id="reset-password" class="btn reset-btn">Esqueci minha senha</button>
-
-            <div class="divider">
-                <span>ou</span>
-            </div>
-
-            <button type="button" id="google-login">
-                <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="google icon" />
-                <span>Continuar com Google</span>
-            </button>
-        </form>
-
-        <!-- Formulário de Registro (inicialmente oculto) -->
-        <form id="register-form" style="display: none;">
-            <div class="input-group">
-                <input type="text" id="register-username" placeholder="Nome Completo" required>
-            </div>
-            <div class="input-group">
-                <input type="email" id="register-email" placeholder="E-mail" required>
-            </div>
-            <div class="input-group">
-                <div class="password-container">
-                    <input type="password" id="register-password" placeholder="Senha" required>
-                    <ion-icon name="eye-outline" id="register-eye-icon" class="password-toggle"></ion-icon>
+                <div class="input-group">
+                    <div class="password-container">
+                        <input type="password" id="login-password" placeholder="Senha" required>
+                        <ion-icon name="eye-outline" id="eye-icon" class="password-toggle"></ion-icon>
+                    </div>
                 </div>
+                
+                <div class="buttons-container">
+                    <button type="submit" class="btn login-btn">Entrar</button>
+                    <button type="button" id="reset-password" class="btn reset-btn">Esqueci minha senha</button>
+                </div>
+
+                <div class="divider">
+                    <span>ou</span>
+                </div>
+
+                <button type="button" id="google-login">
+                    <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="google icon" />
+                    <span>Continuar com Google</span>
+                </button>
+            </form>
+
+            <!-- Formulário de Registro (inicialmente oculto) -->
+            <form id="register-form" style="display: none;">
+                <div class="input-group">
+                    <input type="text" id="register-username" placeholder="Nome Completo" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="register-email" placeholder="E-mail" required>
+                </div>
+                <div class="input-group">
+                    <div class="password-container">
+                        <input type="password" id="register-password" placeholder="Senha" required>
+                        <ion-icon name="eye-outline" id="register-eye-icon" class="password-toggle"></ion-icon>
+                    </div>
+                </div>
+                <button type="submit" class="btn register-btn">Criar Conta</button>
+            </form>
+
+            <!-- Mensagens de Sucesso e Erro -->
+            <div id="success-message" class="hidden"></div>
+            <div id="error-message" class="hidden"></div>
+
+            <!-- Links para alternar entre formulários -->
+            <div class="toggle-forms">
+                <p id="show-register">
+                    Não tem uma conta? <a href="#">Registre-se</a>
+                </p>
+                <p id="show-login" style="display: none;">
+                    Já tem uma conta? <a href="#">Faça login</a>
+                </p>
             </div>
-            <button type="submit" class="btn register-btn">Criar Conta</button>
-        </form>
-
-        <!-- Mensagens de Sucesso e Erro -->
-        <div id="success-message" class="hidden"></div>
-        <div id="error-message" class="hidden"></div>
-
-        <!-- Links para alternar entre formulários -->
-        <div class="toggle-forms">
-            <p id="show-register">
-                Não tem uma conta? <a href="#">Registre-se</a>
-            </p>
-            <p id="show-login" style="display: none;">
-                Já tem uma conta? <a href="#">Faça login</a>
-            </p>
         </div>
     </div>
 
