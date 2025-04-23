@@ -298,7 +298,6 @@ input::placeholder {
     }
 
     .buttons-container {
-        flex-direction: row;
         gap: 10px;
         flex-direction: column;
     }
