@@ -110,6 +110,7 @@ input::placeholder {
     background: #b388ff;
     color: #17062B;
     font-weight: 500;
+    pading: 10px;
 }
 
 .login-btn:hover,
@@ -207,7 +208,7 @@ input::placeholder {
 /* Estilo específico para o botão do Google */
 #google-login {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     background: rgba(45, 28, 74, 0.95);
     border: 1px solid rgba(179, 136, 255, 0.2);
     border-radius: 5px;
