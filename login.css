@@ -240,7 +240,7 @@ input::placeholder {
     display: flex;
     gap: 10px;
     width: 100%;
-
+    flex-direction: column;
 }
 
 .buttons-container .login-btn,
