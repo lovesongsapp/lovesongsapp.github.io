@@ -5,7 +5,7 @@
 }
 
 .popup {
-    /* padding: 20px; */
+     padding: 20px;
     display: none;
     bottom: 0;
     min-height: 100%;
@@ -13,29 +13,36 @@
     align-items: center;
     justify-content: center;
     left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    border-top: 2px solid #00FFBF;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.95), #311e56d9), url(donate.css) no-repeat center center fixed;
+    /*border-top: 5px solid #00FFBF;*/
     overflow: hidden;
     color: #fff;
     z-index: 2;
-    -webkit-border-top-left-radius: 15px;
+    /*-webkit-border-top-left-radius: 15px;
     -webkit-border-top-right-radius: 15px;
     -moz-border-radius-topleft: 15px;
     -moz-border-radius-topright: 15px;
     border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-top-right-radius: 20px;*/
     animation: slideUp 2s ease-out forwards;
+    right: 0;
+    margin: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .popup-content {
-    background: #311e56;
+    /* background: #311e56; */
     /* background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://lovesongsapp.github.io/donate/donate-bg.jpg') no-repeat center center fixed; */
     background-size: cover;
-    height: calc(100vh - 2px);
+    height: 70%;
     align-items: center;
     display: flex;
     justify-content: center;
+    margin: auto;
+    bottom: 0;
+    position: absolute;
+    width: 95%;
 }
 
 .logo-popup {
