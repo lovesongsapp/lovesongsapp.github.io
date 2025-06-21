@@ -86,7 +86,7 @@ body {
     flex-direction: column;
     color: mediumpurple;
     font-weight: 400;
-    font-size: 14px;
+    
     display: flex;
     align-items: center;
     color: #311E56;
@@ -101,7 +101,7 @@ body {
 .player-header button {
     background: none;
     border: none;
-    font-size: 24px;
+
     cursor: pointer;
     color: #311E56;
     transition: color 0.3s;
@@ -113,7 +113,7 @@ body {
 .player-header ion-icon {
     background: none;
     border: none;
-    font-size: 16px;
+    
     cursor: pointer;
     transition: color 0.3s;
     display: flex;
@@ -234,18 +234,18 @@ input[type="range"]::-ms-thumb {
 .control-button {
     background: none;
     border: none;
-    font-size: 32px;
+  
     cursor: pointer;
     color: #311E56;
     transition: color 0.3s;
 }
 
 .play-outline {
-    font-size: 50px;
+
 }
 
 .pause-outline {
-    font-size: 50px;
+    
 }
 
 .control-button:hover {
@@ -269,7 +269,7 @@ input[type="range"]::-ms-thumb {
 }
 
 .repeat-number {
-    font-size: 14px;
+  
     color: #00ffbf;
     display: flex;
     position: fixed;
@@ -303,7 +303,7 @@ input[type="range"]::-ms-thumb {
 #playlist h2 {
     margin-top: 0;
     font-weight: 400;
-    font-size: 18px;
+
     height: 40px;
 }
 
@@ -357,7 +357,7 @@ input[type="range"]::-ms-thumb {
     border: none;
     color: #000;
     cursor: pointer;
-    font-size: 32px;
+ 
     margin-right: 10px;
     margin-top: 5px;
     right: 0;
@@ -391,12 +391,11 @@ input[type="range"]::-ms-thumb {
 
 .dark-mode .player-header button {
     color: #00FFBF;
-    font-size: 24px;
+
 }
 
 .dark-mode .player-header ion-icon {
     color: #fafafa;
-    font-size: 16px;
     cursor: pointer;
 }
 
@@ -442,7 +441,7 @@ input[type="range"]::-ms-thumb {
 
 .dark-mode #playlist-items .author {
     color: #AAAAAA;
-    font-size: 0.9em;
+    
     position: relative;
     margin-left: 160px;
 }
@@ -454,12 +453,12 @@ input[type="range"]::-ms-thumb {
     color: #aaaaaa;
     border-radius: 20px;
     background: #242424;
-    font-size: 14px;
+   
     cursor: pointer;
 }
 
 .dark-mode .header-icons ion-icon {
-    font-size: 16px !important;
+   
     color: #aaaaaa !important;
     cursor: pointer;
 }
@@ -593,7 +592,7 @@ input[type="range"]::-ms-fill-upper {
     }
 
     .repeat-number {
-        font-size: 10px;
+        
         color: #000;
         background: #00ffbf;
         border-radius: 50%;
@@ -633,11 +632,11 @@ input[type="range"]::-ms-fill-upper {
 }
 
 #playlist-items .author {
-    font-size: 0.8em;
+  
 }
 
 .busca {
-    font-size: 18px;
+    
     font-weight: 500;
     text-transform: uppercase;
     width: 90%;
@@ -648,7 +647,7 @@ input[type="range"]::-ms-fill-upper {
 }
 
 .dark-mode .busca {
-    font-size: 18px;
+ 
     font-weight: 500;
     text-transform: uppercase;
     width: 90%;
@@ -668,12 +667,12 @@ input[type="range"]::-ms-fill-upper {
     padding: 5px 10px;
     color: #272727;
     border-radius: 20px;
-    font-size: 14px;
+
     cursor: pointer;
 }
 
 .header-icons ion-icon {
-    font-size: 16px !important;
+  
     color: #242424 !important;
     cursor: pointer;
 }
@@ -691,7 +690,7 @@ input[type="range"]::-ms-fill-upper {
 }
 
 .volume-icon {
-    font-size: 24px;
+  
     cursor: pointer;
     color: #00ffbf;
 }
@@ -741,5 +740,5 @@ input[type="range"]::-ms-fill-upper {
 }
 
 .volume-value {
-    font-size: 14px;
+
 }
