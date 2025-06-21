@@ -234,18 +234,18 @@ input[type="range"]::-ms-thumb {
 .control-button {
     background: none;
     border: none;
-  
+    font-size: 32px;
     cursor: pointer;
     color: #311E56;
     transition: color 0.3s;
 }
 
 .play-outline {
-
+font-size: 50px;
 }
 
 .pause-outline {
-    
+font-size: 50px;    
 }
 
 .control-button:hover {
