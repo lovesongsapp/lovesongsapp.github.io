@@ -1,12 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'); @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap'); @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'); * {
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+* {
     margin: 0;
     padding: 0;
+}
+
+html {
+    font-size: clamp(1rem, 1.2vw + 0.5rem, 1.5rem);
 }
 
 body {
     background: #0f0f0f;
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
     color: #311E56;
     transition: background-color 0.3s, color 0.3s;
     user-select: none;
@@ -73,7 +80,6 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0px;
-    
 }
 
 .player-header-items {
@@ -153,15 +159,12 @@ body {
 }
 
 .info .title {
-    font-size: 19px;
-    font-weight: 500;
     font-family: 'Roboto', sans-serif;
     margin-left: 5px;
     margin-right: 5px;
 }
 
 .info .artist {
-    font-size: 16px;
     font-weight: 400;
     color: #311E56;
 }
