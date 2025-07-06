@@ -5,7 +5,18 @@ let isShuffle = false;
 let mode = 'repeat';
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
-let sharedVideoId = null; // Removido: controle de anúncios/ads não utilizado
+let sharedVideoId = null;
+// Fix para evitar erro postMessage com o YouTube
+(function() {
+  const originalPostMessage = window.postMessage;
+  window.postMessage = function(message, targetOrigin, transfer) {
+    if (typeof targetOrigin === 'string' && targetOrigin.includes('youtube.com')) {
+      targetOrigin = '*';
+    }
+    return originalPostMessage.call(this, message, targetOrigin, transfer);
+  };
+})();
+
 
 document.addEventListener('DOMContentLoaded', function () {
     progressBar = document.getElementById('progress');
