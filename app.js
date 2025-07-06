@@ -1,6 +1,5 @@
+// Versão ajustada do app.js (controle de qualidade seguro removendo erros no console)
 let player;
-let maxQuality = 'medium';
-let minQuality = 'low';
 let isPlaying = false;
 let isShuffle = false;
 let mode = 'repeat';
@@ -8,10 +7,6 @@ let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
 let sharedVideoId = null;
 let checkAdInterval;
-
-function setVideoQuality(quality) {
-    player.setPlaybackQuality(quality);
-}
 
 document.addEventListener('DOMContentLoaded', function () {
     progressBar = document.getElementById('progress');
@@ -50,10 +45,25 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-    setVideoQuality(minQuality);
+    // Tentativa segura de definir a qualidade sem causar erro no console
+    const tentarDefinirQualidade = () => {
+        const qualidade = 'medium';
+        const checkInterval = setInterval(() => {
+            if (player && typeof player.setPlaybackQuality === 'function') {
+                try {
+                    player.setPlaybackQuality(qualidade);
+                    console.log(`Qualidade definida para: ${qualidade}`);
+                    clearInterval(checkInterval);
+                } catch (e) {
+                    console.warn('Erro ao definir qualidade:', e);
+                }
+            }
+        }, 500);
+    };
+    tentarDefinirQualidade();
+
     setupControlButtons();
 
-    // Define tema escuro fixo
     document.documentElement.setAttribute('data-theme', 'dark');
     document.body.classList.add('dark-mode');
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -61,7 +71,6 @@ function onPlayerReady(event) {
     if (metaThemeColor) metaThemeColor.setAttribute('content', '#13051f');
     if (themeToggleIcon) themeToggleIcon.setAttribute('name', 'sunny-outline');
 
-    // Oculta botão de troca de tema (se desejar)
     const toggleButton = document.getElementById('theme-toggle');
     if (toggleButton) toggleButton.style.display = 'none';
 
@@ -84,7 +93,7 @@ function onPlayerReady(event) {
 
     fetchPlaylistData();
 }
-
+// Resto do código permanece exatamente como estava (sem alterações)
 function setupControlButtons() {
     document.querySelector('.control-button:nth-child(3)').addEventListener('click', function () {
         if (isPlaying) {
