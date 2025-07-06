@@ -293,7 +293,7 @@ font-size: 50px;
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 1;
+    z-index: 3;
 }
 
 #playlist {
@@ -413,10 +413,6 @@ font-size: 50px;
 
 .dark-mode .info .artist {
     color: #aaaaaa;
-}
-
-.dark-mode #playlist-overlay {
-    background: rgba(18, 18, 18, 0.8);
 }
 
 .dark-mode #playlist {
