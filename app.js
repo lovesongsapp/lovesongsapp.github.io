@@ -152,35 +152,6 @@ function setupControlButtons() {
     });
 }
 
-// Detecção e controle de anúncios
-function onPlayerStateChange(event) {
-    // Detector de anúncios
-    if (event.data === YT.PlayerState.PLAYING) {
-        const videoUrl = player.getVideoUrl();
-        if (videoUrl.includes('&ad=')) {
-            console.log("Anúncio detectado, tentando pular...");
-            trySkipAd();
-        }
-    }
-
-    // Verifica o estado do vídeo a cada segundo quando estiver reproduzindo
-    if (event.data === YT.PlayerState.PLAYING) {
-        checkAdInterval = setInterval(() => {
-            const skipButton = document.querySelector('.ytp-ad-skip-button') || 
-                             document.querySelector('.videoAdUiSkipButton') ||
-                             document.querySelector('.ytp-skip-ad-button');
-            
-            if (skipButton) {
-                console.log("Botão de pular anúncio encontrado, pulando...");
-                skipButton.click();
-            }
-        }, 1000);
-    } else {
-        if (checkAdInterval) {
-            clearInterval(checkAdInterval);
-        }
-    }
-
     // Resto do código existente para tratamento do final do vídeo
     if (event.data === YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
@@ -208,17 +179,6 @@ function onPlayerStateChange(event) {
     }
 
     updateTitleAndArtist();
-}
-
-// Função auxiliar para tentar pular anúncios
-function trySkipAd() {
-    const adElement = document.querySelector('.video-ads');
-    if (adElement) {
-        const videoDuration = player.getDuration();
-        if (videoDuration) {
-            player.seekTo(videoDuration, true);
-        }
-    }
 }
 
 function updateTitleAndArtist() {
