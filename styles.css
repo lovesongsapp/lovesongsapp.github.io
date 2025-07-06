@@ -293,6 +293,7 @@ font-size: 50px;
     display: none;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 }
 
 #playlist {
