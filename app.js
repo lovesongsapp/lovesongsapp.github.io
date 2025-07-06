@@ -90,7 +90,18 @@ function onPlayerReady(event) {
         player.seekTo((progressBar.value / 100) * duration, true);
     });
 
-    fetchPlaylistData();
+    // Aguarda até que player.getPlaylist esteja disponível e retorne uma lista válida
+    const waitForPlaylist = setInterval(() => {
+        if (
+            player &&
+            typeof player.getPlaylist === 'function' &&
+            Array.isArray(player.getPlaylist()) &&
+            player.getPlaylist().length > 0
+        ) {
+            clearInterval(waitForPlaylist);
+            fetchPlaylistData();
+        }
+    }, 200);
 }
 // Resto do código permanece exatamente como estava (sem alterações)
 function setupControlButtons() {
