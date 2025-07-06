@@ -152,6 +152,8 @@ function setupControlButtons() {
     });
 }
 
+// Corrigido: encapsular o bloco dentro da função de evento
+function onPlayerStateChange(event) {
     // Resto do código existente para tratamento do final do vídeo
     if (event.data === YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
@@ -179,6 +181,7 @@ function setupControlButtons() {
     }
 
     updateTitleAndArtist();
+}
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
