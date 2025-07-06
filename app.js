@@ -5,8 +5,7 @@ let isShuffle = false;
 let mode = 'repeat';
 let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
-let sharedVideoId = null;
-let checkAdInterval;
+let sharedVideoId = null; // Removido: controle de anúncios/ads não utilizado
 
 document.addEventListener('DOMContentLoaded', function () {
     progressBar = document.getElementById('progress');
