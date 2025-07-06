@@ -179,7 +179,6 @@ function setupControlButtons() {
     }
 
     updateTitleAndArtist();
-}
 
 function updateTitleAndArtist() {
     const videoData = player.getVideoData();
