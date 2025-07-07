@@ -1,11 +1,14 @@
 // Versão ajustada do app.js (controle de qualidade seguro removendo erros no console)
-let player;
+let player, progressBar, currentTimeDisplay, durationDisplay;
 let isPlaying = false;
 let isShuffle = false;
 let mode = 'repeat';
-let progressBar, currentTimeDisplay, durationDisplay;
 let playlistData = [];
 let sharedVideoId = null;
+// Carregar a API do YouTube de forma correta
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+document.head.appendChild(tag);
 // Fix para evitar erro postMessage com o YouTube
 (function() {
   const originalPostMessage = window.postMessage;
@@ -17,19 +20,20 @@ let sharedVideoId = null;
   };
 })();
 
-
+// Espera o DOM ficar pronto para capturar elementos
 document.addEventListener('DOMContentLoaded', function () {
     progressBar = document.getElementById('progress');
     currentTimeDisplay = document.getElementById('current-time');
     durationDisplay = document.getElementById('duration');
 
-    if (progressBar && currentTimeDisplay && durationDisplay) {
-        onYouTubeIframeAPIReady();
-    } else {
+    if (!progressBar || !currentTimeDisplay || !durationDisplay) {
         console.error('Um ou mais elementos DOM não foram encontrados.');
     }
 });
+// log discreto na interface para mostrar a qualidade selecionada ao usuário
+document.getElementById('quality-label')?.innerText = `Qualidade: ${qualidade.toUpperCase()}`;
 
+// Esta função será chamada automaticamente quando a API estiver pronta
 function onYouTubeIframeAPIReady() {
     const urlParams = new URLSearchParams(window.location.search);
     const videoId = urlParams.get('videoId') || '1OgQdgSQB3o';
@@ -57,7 +61,7 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     // Tentativa segura de definir a qualidade sem causar erro no console
     const tentarDefinirQualidade = () => {
-        const qualidade = 'medium';
+       const qualidade = window.innerWidth < 768 ? 'small' : 'medium';
         const checkInterval = setInterval(() => {
             if (player && typeof player.setPlaybackQuality === 'function') {
                 try {
