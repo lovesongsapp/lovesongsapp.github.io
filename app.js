@@ -349,7 +349,7 @@ loadingOverlay.style = `
   padding: 1rem;
   line-height: 1.4;
 `;
-loadingOverlay.innerText = '💖 Carregando playlis, aguarde só um instante!';
+loadingOverlay.innerText = '💖 Carregando playlist, aguarde um instante!';
 document.body.appendChild(loadingOverlay);
 
 // Tempo máximo de espera (ms)
