@@ -1,49 +1,45 @@
+// Variável global para guardar o evento de instalação
 let deferredPrompt;
 
+// Evento disparado antes do prompt de instalação ser mostrado
 window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    const installBanner = document.getElementById('InstallBanner');
-    installBanner.style.display = 'block'; // Mostrar nova div de instalação
+    e.preventDefault(); // Impede o comportamento padrão
+    deferredPrompt = e; // Armazena o evento para uso posterior
+
+    // Mostra o banner de instalação após 60 segundos
+    setTimeout(showInstallBanner, 60000);
 });
 
+// Função que mostra o banner de instalação
+function showInstallBanner() {
+    const installBanner = document.getElementById('InstallBanner');
+    installBanner.style.display = 'block'; // Torna o banner visível
+
+    // Esconde o banner automaticamente após 7 segundos
+    setTimeout(hideInstallBanner, 7000);
+}
+
+// Evento de clique no botão de instalação
 document.getElementById('installButton').addEventListener('click', () => {
     if (deferredPrompt) {
-        deferredPrompt.prompt();
+        deferredPrompt.prompt(); // Exibe o prompt nativo
+
         deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
+                console.log('Usuário aceitou o prompt de instalação');
             } else {
-                console.log('User dismissed the install prompt');
+                console.log('Usuário rejeitou o prompt de instalação');
             }
-            deferredPrompt = null;
-            // Fechar o banner de instalação após o clique
-            closeApp();
+
+            deferredPrompt = null; // Limpa a variável
+            hideInstallBanner(); // Esconde o banner manualmente
         });
     }
 });
 
-function closeApp() {
+// Função que esconde o banner de instalação
+function hideInstallBanner() {
     const installBanner = document.getElementById('InstallBanner');
-    installBanner.style.display = 'none';
+    installBanner.style.display = 'none'; // Oculta o banner
 }
-
-
-///////////////////////////////////////////////////////////////////
-
-function showApp() {
-    const app = document.getElementById('InstallBanner');
-    app.classList.add('show');
-    setTimeout(hideApp, 30000); // Esconde o banner após 30 segundos
-}
-
-function hideApp() {
-    const app = document.getElementById('InstallBanner');
-    app.classList.remove('show');
-}
-
-function closeApp() {
-    hideApp();
-}
-
-setTimeout(showApp, 30000); // Mostra o banner após 5 segundo
+//BY COPILOT
