@@ -31,7 +31,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 // log discreto na interface para mostrar a qualidade selecionada ao usuário
-document.getElementById('quality-label')?.innerText = `Qualidade: ${qualidade.toUpperCase()}`;
+const qualityLabel = document.getElementById('quality-label');
+if (qualityLabel) {
+  qualityLabel.innerText = `Qualidade: ${qualidade.toUpperCase()}`;
+}
 
 // Esta função será chamada automaticamente quando a API estiver pronta
 function onYouTubeIframeAPIReady() {
