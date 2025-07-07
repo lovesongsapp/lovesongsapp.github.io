@@ -28,7 +28,7 @@ html {
 body {
     background: #0f0f0f;
     font-family: 'Roboto', sans-serif;
-    color: #311E56;
+    color: #aaaaaa;
     transition: background-color 0.3s, color 0.3s;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
