@@ -335,11 +335,11 @@ loadingOverlay.style = `
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.85);
-  color: #f76700;
+  color: #00FFBF;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
   z-index: 9999;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -349,7 +349,7 @@ loadingOverlay.style = `
   padding: 1rem;
   line-height: 1.4;
 `;
-loadingOverlay.innerText = '🎧 Carregando a playlist do amor... aguarde só um instante! 💖';
+loadingOverlay.innerText = '💖 Carregando playlis, aguarde só um instante!';
 document.body.appendChild(loadingOverlay);
 
 // Tempo máximo de espera (ms)
