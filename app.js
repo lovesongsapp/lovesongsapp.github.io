@@ -5,6 +5,7 @@ let isShuffle = false;
 let mode = 'repeat';
 let playlistData = [];
 let sharedVideoId = null;
+let qualidade = '';
 // Carregar a API do YouTube de forma correta
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
@@ -30,11 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Um ou mais elementos DOM não foram encontrados.');
     }
 });
-// log discreto na interface para mostrar a qualidade selecionada ao usuário
-const qualityLabel = document.getElementById('quality-label');
-if (qualityLabel) {
-  qualityLabel.innerText = `Qualidade: ${qualidade.toUpperCase()}`;
-}
 
 // Esta função será chamada automaticamente quando a API estiver pronta
 function onYouTubeIframeAPIReady() {
@@ -63,22 +59,29 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     // Tentativa segura de definir a qualidade sem causar erro no console
-    const tentarDefinirQualidade = () => {
-       const qualidade = window.innerWidth < 768 ? 'small' : 'medium';
-        const checkInterval = setInterval(() => {
-            if (player && typeof player.setPlaybackQuality === 'function') {
-                try {
-                    player.setPlaybackQuality(qualidade);
-                    console.log(`Qualidade definida para: ${qualidade}`);
-                    clearInterval(checkInterval);
-                } catch (e) {
-                    console.warn('Erro ao definir qualidade:', e);
-                }
-            }
-        }, 500);
-    };
-    tentarDefinirQualidade();
+    function tentarDefinirQualidade() {
+  qualidade = window.innerWidth < 768 ? 'small' : 'medium';
 
+  const checkInterval = setInterval(() => {
+    if (player && typeof player.setPlaybackQuality === 'function') {
+      try {
+        player.setPlaybackQuality(qualidade);
+        console.log(`Qualidade definida para: ${qualidade}`);
+
+        const qualityLabel = document.getElementById('quality-label');
+        if (qualityLabel) {
+          qualityLabel.innerText = `Qualidade: ${qualidade.toUpperCase()}`;
+        }
+
+        clearInterval(checkInterval);
+      } catch (e) {
+        console.warn('Erro ao definir qualidade:', e);
+      }
+    }
+  }, 500);
+      
+};
+    tentarDefinirQualidade();
     setupControlButtons();
 
     document.documentElement.setAttribute('data-theme', 'dark');
