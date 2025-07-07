@@ -166,6 +166,7 @@ body {
     margin-left: 5px;
     margin-right: 5px;
     font-size:1.1rem;
+    color:#f1f1f1;
 }
 
 .info .artist {
@@ -264,6 +265,7 @@ font-size: 50px;
     position: fixed;
     left: 10px;
     right: 10px;
+    color:#aaa;
 }
 
 #progress {
@@ -380,7 +382,6 @@ font-size: 50px;
 }
 
 .dark-mode .player-controls {
-    color: #f1f1f1;
     background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.9) 80%, #000000 100%), url(https://lovesongsapp.github.io/bg-controls.jpg) no-repeat center center;
     background-size: cover;
 }
