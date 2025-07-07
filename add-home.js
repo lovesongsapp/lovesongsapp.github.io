@@ -46,4 +46,4 @@ function closeApp() {
     hideApp();
 }
 
-setTimeout(showApp, 5000); // Mostra o banner após 5 segundo
+setTimeout(showApp, 30000); // Mostra o banner após 5 segundo
