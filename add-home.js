@@ -6,8 +6,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault(); // Impede o comportamento padrão
     deferredPrompt = e; // Armazena o evento para uso posterior
 
-    // Mostra o banner de instalação após 60 segundos
-    setTimeout(showInstallBanner, 60000);
+    // Mostra o banner de instalação após 30 segundos
+    setTimeout(showInstallBanner, 30000);
 });
 
 // Função que mostra o banner de instalação
