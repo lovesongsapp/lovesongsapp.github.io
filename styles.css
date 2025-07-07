@@ -165,11 +165,11 @@ body {
     font-family: 'Roboto', sans-serif;
     margin-left: 5px;
     margin-right: 5px;
+    font-size:1.1rem;
 }
 
 .info .artist {
     font-weight: 400;
-    color: #311E56;
 }
 
 input[type="range"] {
@@ -409,10 +409,6 @@ font-size: 50px;
 
 .dark-mode .control-button:hover {
     color: #00ffbf;
-}
-
-.dark-mode .info .artist {
-    color: #aaaaaa;
 }
 
 .dark-mode #playlist {
