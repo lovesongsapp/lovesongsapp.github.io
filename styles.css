@@ -171,6 +171,7 @@ body {
 
 .info .artist {
     font-weight: 400;
+    color:#aaaaaa;
 }
 
 input[type="range"] {
