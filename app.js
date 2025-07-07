@@ -315,3 +315,70 @@ document.getElementById('share-icon').addEventListener('click', function() {
         alert(`🩷💚 Confira este vídeo: ${videoData.title}\n${shareUrl}`);
     }
 });
+/* === CORREÇÃO DA ATUALIZAÇÃO DA PLAYLIST - DEV PROMPT WC™ ===
+
+   Este trecho exibe um overlay de carregamento até a playlist estar disponível,
+   evitando erros e frustrações do usuário.
+   Se a playlist não carregar em 15 segundos, a página é recarregada automaticamente.
+*/
+
+// Cria e insere o overlay no DOM
+const loadingOverlay = document.createElement('div');
+loadingOverlay.id = 'loading-overlay';
+loadingOverlay.style = `
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  color: #f76700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  z-index: 9999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  user-select: none;
+  text-align: center;
+  padding: 1rem;
+  line-height: 1.4;
+`;
+loadingOverlay.innerText = '🎧 Carregando a playlist do amor... aguarde só um instante! 💖';
+document.body.appendChild(loadingOverlay);
+
+// Tempo máximo de espera (ms)
+const MAX_WAIT_TIME = 15000;
+let elapsedTime = 0;
+const POLLING_INTERVAL = 500;
+
+// Função que verifica se a playlist já está carregada e válida
+function checkPlaylistReady() {
+  if (
+    player &&
+    typeof player.getPlaylist === 'function' &&
+    Array.isArray(player.getPlaylist()) &&
+    player.getPlaylist().length > 0
+  ) {
+    // Playlist pronta! Remove overlay e para o polling
+    loadingOverlay.remove();
+    clearInterval(pollingTimer);
+    // Aqui pode chamar fetchPlaylistData() se quiser garantir
+    fetchPlaylistData();
+    return true;
+  }
+  return false;
+}
+
+// Polling periódico para checar playlist
+const pollingTimer = setInterval(() => {
+  elapsedTime += POLLING_INTERVAL;
+
+  if (checkPlaylistReady()) return;
+
+  if (elapsedTime >= MAX_WAIT_TIME) {
+    clearInterval(pollingTimer);
+    // Timeout: recarrega a página automaticamente para tentar corrigir o problema
+    console.warn('Playlist não carregou em tempo. Recarregando a página...');
+    location.reload();
+  }
+}, POLLING_INTERVAL);
