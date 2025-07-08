@@ -58,30 +58,36 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-    // Tentativa segura de definir a qualidade sem causar erro no console
-    function tentarDefinirQualidade() {
-  qualidade = window.innerWidth < 768 ? 'small' : 'medium';
+  const qualidade = 'medium'; // 360p, conforme padrão do projeto Love Songs App
 
-  const checkInterval = setInterval(() => {
-    if (player && typeof player.setPlaybackQuality === 'function') {
-      try {
+  const tentarDefinirQualidade = () => {
+    const maxTentativas = 5;
+    let tentativas = 0;
+
+    const interval = setInterval(() => {
+      tentativas++;
+      if (player && typeof player.setPlaybackQuality === 'function') {
         player.setPlaybackQuality(qualidade);
-        console.log(`Qualidade definida para: ${qualidade}`);
+        console.log(`🎯 Qualidade forçada para: ${qualidade.toUpperCase()} (360p)`);
 
         const qualityLabel = document.getElementById('quality-label');
         if (qualityLabel) {
           qualityLabel.innerText = `Qualidade: ${qualidade.toUpperCase()}`;
         }
 
-        clearInterval(checkInterval);
-      } catch (e) {
-        console.warn('Erro ao definir qualidade:', e);
+        if (tentativas >= maxTentativas) {
+          clearInterval(interval);
+        }
+      } else if (tentativas >= maxTentativas) {
+        console.warn('⚠️ Não foi possível definir a qualidade após várias tentativas.');
+        clearInterval(interval);
       }
-    }
-  }, 500);
-      
-};
-    tentarDefinirQualidade();
+    }, 1000);
+  };
+
+  tentarDefinirQualidade();
+}
+
     setupControlButtons();
 
     document.documentElement.setAttribute('data-theme', 'dark');
