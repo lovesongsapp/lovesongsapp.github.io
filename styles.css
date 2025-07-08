@@ -1,8 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-.ytmCuedOverlayPlayButtonIcon{
-    color:#a900c1 !important;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'); @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap'); @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'); .ytmCuedOverlayPlayButtonIcon {
+    color: #a900c1 !important;
 }
 
 * {
@@ -42,7 +39,7 @@ body {
     width: 45%;
     top: 5px;
     border-radius: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(255,255,255,0.3);
     padding-left: 20px;
     z-index: 5;
 }
@@ -91,7 +88,6 @@ body {
     flex-direction: column;
     color: mediumpurple;
     font-weight: 400;
-    
     display: flex;
     align-items: center;
     color: #311E56;
@@ -106,7 +102,6 @@ body {
 .player-header button {
     background: none;
     border: none;
-
     cursor: pointer;
     color: #311E56;
     transition: color 0.3s;
@@ -118,12 +113,12 @@ body {
 .player-header ion-icon {
     background: none;
     border: none;
-    
     cursor: pointer;
     transition: color 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #aaaaaa;
 }
 
 .player-controls {
@@ -142,8 +137,6 @@ body {
     height: 50vh;
     /* Altura do gradiente */
     background: linear-gradient(to bottom, rgba(19, 5, 31, 0.99), rgba(19, 5, 31, 0.5), transparent 20%, transparent 85%, rgba(0, 0, 0, 0.63), rgba(0, 0, 0, 0.99));
-    
-
     pointer-events: none;
 }
 
@@ -169,13 +162,13 @@ body {
     font-family: 'Roboto', sans-serif;
     margin-left: 5px;
     margin-right: 5px;
-    font-size:1.1rem;
-    color:#f1f1f1;
+    font-size: 1.2rem;
+    color: #f1f1f1;
 }
 
 .info .artist {
     font-weight: 400;
-    color:#aaaaaa;
+    color: #aaaaaa;
 }
 
 input[type="range"] {
@@ -245,16 +238,16 @@ input[type="range"]::-ms-thumb {
     border: none;
     font-size: 32px;
     cursor: pointer;
-    color: #311E56;
+    color: #00ffbf;
     transition: color 0.3s;
 }
 
 .play-outline {
-font-size: 50px;
+    font-size: 50px;
 }
 
 .pause-outline {
-font-size: 50px;    
+    font-size: 50px;
 }
 
 .control-button:hover {
@@ -270,7 +263,7 @@ font-size: 50px;
     position: fixed;
     left: 10px;
     right: 10px;
-    color:#aaa;
+    color: #aaa;
 }
 
 #progress {
@@ -279,7 +272,6 @@ font-size: 50px;
 }
 
 .repeat-number {
-  
     color: #00ffbf;
     display: flex;
     position: fixed;
@@ -309,12 +301,12 @@ font-size: 50px;
     height: 100%;
     position: relative;
     width: auto;
+    background: radial-gradient(circle, rgba(72, 46, 120, 1) 0%, rgba(23, 6, 43, 1) 100%);
 }
 
 #playlist h2 {
     margin-top: 0;
     font-weight: 400;
-
     height: 40px;
 }
 
@@ -333,8 +325,6 @@ font-size: 50px;
 #playlist ul li {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #d6d1e1;
-    padding: 2px 0px;
     height: 90px;
 }
 
@@ -352,10 +342,14 @@ font-size: 50px;
     flex: 1;
     position: relative;
     margin-left: 160px;
+    font-size: 0.9rem;
+    color: #eee;
 }
 
 #playlist ul li p {
     margin-left: 160px;
+    color: #00ffbf;
+    font-size: 0.95rem;
 }
 
 #playlist ul li:hover {
@@ -366,13 +360,13 @@ font-size: 50px;
 #close-playlist {
     background: none;
     border: none;
-    color: #000;
+    color: #00ffbf;
     cursor: pointer;
- 
     margin-right: 10px;
     margin-top: 5px;
     right: 0;
     position: absolute;
+    font-size: 24px;
 }
 
 /* //////////////////// DARK MODE ////////////////////////// */
@@ -401,7 +395,6 @@ font-size: 50px;
 
 .dark-mode .player-header button {
     color: #00FFBF;
-
 }
 
 .dark-mode .player-header ion-icon {
@@ -443,7 +436,6 @@ font-size: 50px;
 
 .dark-mode #playlist-items .author {
     color: #AAAAAA;
-    
     position: relative;
     margin-left: 160px;
 }
@@ -455,12 +447,10 @@ font-size: 50px;
     color: #aaaaaa;
     border-radius: 20px;
     background: #242424;
-   
     cursor: pointer;
 }
 
 .dark-mode .header-icons ion-icon {
-   
     color: #aaaaaa !important;
     cursor: pointer;
 }
@@ -594,7 +584,6 @@ input[type="range"]::-ms-fill-upper {
     }
 
     .repeat-number {
-        
         color: #000;
         background: #00ffbf;
         border-radius: 50%;
@@ -625,7 +614,8 @@ input[type="range"]::-ms-fill-upper {
 #playlist-items li {
     display: flex;
     align-items: center;
-    /*margin: 10px 0;*/
+    margin: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 #playlist-items .text-container {
@@ -634,22 +624,19 @@ input[type="range"]::-ms-fill-upper {
 }
 
 #playlist-items .author {
-  
 }
 
 .busca {
-    
     font-weight: 500;
     text-transform: uppercase;
     width: 90%;
     height: 30px;
-    color: #000;
+    color: #00ffbf;
     border: none;
-    background: #fff;
+    background: transparent;
 }
 
 .dark-mode .busca {
- 
     font-weight: 500;
     text-transform: uppercase;
     width: 90%;
@@ -667,15 +654,12 @@ input[type="range"]::-ms-fill-upper {
     display: flex;
     align-items: center;
     padding: 5px 10px;
-    color: #272727;
+    color: #aaaaaa;
     border-radius: 20px;
-
     cursor: pointer;
 }
 
 .header-icons ion-icon {
-  
-    color: #242424 !important;
     cursor: pointer;
 }
 
@@ -692,7 +676,6 @@ input[type="range"]::-ms-fill-upper {
 }
 
 .volume-icon {
-  
     cursor: pointer;
     color: #00ffbf;
 }
@@ -742,5 +725,4 @@ input[type="range"]::-ms-fill-upper {
 }
 
 .volume-value {
-
 }
