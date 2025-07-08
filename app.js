@@ -56,6 +56,41 @@ function onYouTubeIframeAPIReady() {
         }
     });
 }
+//FUNÇÃO QUE ATUALIZA A LABEL
+function atualizarQualidadeNaInterface() {
+  if (player && typeof player.getPlaybackQuality === 'function') {
+    const qualidadeAtual = player.getPlaybackQuality();
+    const label = document.getElementById('quality-label');
+    if (label) {
+      const resolucao = resolucaoAmigavel[qualidadeAtual] || resolucaoAmigavel.default;
+      label.innerText = `Qualidade: ${resolucao}`;
+      console.log(`🎥 Qualidade detectada: ${resolucao}`);
+    }
+  }
+}
+
+//MAPA DE RESOLUÇÃO ELEGIVEL
+const resolucaoAmigavel = {
+  tiny: '144p',
+  small: '240p',
+  medium: '360p',
+  large: '480p',
+  hd720: '720p',
+  hd1080: '1080p',
+  highres: '1080p+',
+  default: 'Desconhecida'
+};
+function atualizarQualidadeNaInterface() {
+    if (player && typeof player.getPlaybackQuality === 'function') {
+        const qualidadeAtual = player.getPlaybackQuality();
+        const label = document.getElementById('quality-label');
+        if (label) {
+            const resolucao = resolucaoAmigavel[qualidadeAtual] || resolucaoAmigavel.default;
+            label.innerText = `Qualidade: ${resolucao}`;
+            console.log(`🎥 Qualidade detectada: ${resolucao}`);
+        }
+    }
+}
 
 function onPlayerReady(event) {
   const qualidade = 'medium'; // 360p, conforme padrão do projeto Love Songs App
@@ -86,9 +121,8 @@ function onPlayerReady(event) {
   };
 
   tentarDefinirQualidade();
+  setupControlButtons();
 }
-
-    setupControlButtons();
 
     document.documentElement.setAttribute('data-theme', 'dark');
     document.body.classList.add('dark-mode');
@@ -191,7 +225,6 @@ function setupControlButtons() {
 
 // Corrigido: encapsular o bloco dentro da função de evento
 function onPlayerStateChange(event) {
-    // Resto do código existente para tratamento do final do vídeo
     if (event.data === YT.PlayerState.ENDED) {
         document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
         isPlaying = false;
@@ -216,7 +249,10 @@ function onPlayerStateChange(event) {
                 break;
         }
     }
-
+ // ✅ Quando o vídeo começar, atualizar a qualidade exibida na interface
+    if (event.data === YT.PlayerState.PLAYING) {
+        atualizarQualidadeNaInterface();
+    }
     updateTitleAndArtist();
 }
 
