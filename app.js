@@ -77,7 +77,6 @@ function atualizarQualidadeNaInterface() {
 // Função chamada quando o player estiver pronto
 function onPlayerReady(event) {
   qualidade = 'medium'; // fixa 360p nos padrões do Love Songs App
-  tentarDefinirQualidade();
   setupControlButtons();
   iniciarVerificacaoPlaylist(); // <- adiciona aqui!
   let tentativas = 0;
