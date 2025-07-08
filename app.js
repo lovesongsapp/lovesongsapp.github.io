@@ -77,7 +77,9 @@ function atualizarQualidadeNaInterface() {
 // Função chamada quando o player estiver pronto
 function onPlayerReady(event) {
   qualidade = 'medium'; // fixa 360p nos padrões do Love Songs App
-
+  tentarDefinirQualidade();
+  setupControlButtons();
+  iniciarVerificacaoPlaylist(); // <- adiciona aqui!
   let tentativas = 0;
   const maxTentativas = 5;
   const interval = setInterval(() => {
@@ -95,8 +97,6 @@ function onPlayerReady(event) {
       clearInterval(interval);
     }
   }, 1000);
-
-  setupControlButtons();
 
   // Atualiza progresso do player
   setInterval(() => {
@@ -298,22 +298,30 @@ loadingOverlay.innerText = '💖 Carregando playlist, aguarde um instante!';
 document.body.appendChild(loadingOverlay);
 
 // Polling para checar playlist e recarregar ou chamar fetch
-const MAX_WAIT_TIME = 15000;
-let elapsedTime = 0;
-const pollingTimer = setInterval(() => {
-  elapsedTime += 200;
-  if (
-    player &&
-    typeof player.getPlaylist === 'function' &&
-    Array.isArray(player.getPlaylist()) &&
-    player.getPlaylist().length > 0
-  ) {
-    clearInterval(pollingTimer);
-    loadingOverlay.remove();
-    fetchPlaylistData();
-  } else if (elapsedTime >= MAX_WAIT_TIME) {
-    clearInterval(pollingTimer);
-    console.warn('⏳ Playlist não carregou. Recarregando...');
-    location.reload();
-  }
-}, 200);
+function iniciarVerificacaoPlaylist() {
+  const MAX_WAIT_TIME = 15000;
+  const POLLING_INTERVAL = 500;
+  let elapsedTime = 0;
+
+  const pollingTimer = setInterval(() => {
+    if (
+      player &&
+      typeof player.getPlaylist === 'function' &&
+      Array.isArray(player.getPlaylist()) &&
+      player.getPlaylist().length > 0
+    ) {
+      clearInterval(pollingTimer);
+      loadingOverlay.remove();
+      fetchPlaylistData();
+      return;
+    }
+
+    elapsedTime += POLLING_INTERVAL;
+    if (elapsedTime >= MAX_WAIT_TIME) {
+      clearInterval(pollingTimer);
+      console.warn('Playlist não carregou em tempo. Recarregando...');
+      location.reload();
+    }
+  }, POLLING_INTERVAL);
+}
+
