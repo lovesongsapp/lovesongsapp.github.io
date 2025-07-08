@@ -5,7 +5,7 @@ let isShuffle = false;
 let mode = 'repeat';
 let playlistData = [];
 let sharedVideoId = null;
-let qualidade = '';
+let qualidade = 'medium';
 // Carregar a API do YouTube de forma correta
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
@@ -55,18 +55,6 @@ function onYouTubeIframeAPIReady() {
             'onStateChange': onPlayerStateChange
         }
     });
-}
-//FUNÇÃO QUE ATUALIZA A LABEL
-function atualizarQualidadeNaInterface() {
-  if (player && typeof player.getPlaybackQuality === 'function') {
-    const qualidadeAtual = player.getPlaybackQuality();
-    const label = document.getElementById('quality-label');
-    if (label) {
-      const resolucao = resolucaoAmigavel[qualidadeAtual] || resolucaoAmigavel.default;
-      label.innerText = `Qualidade: ${resolucao}`;
-      console.log(`🎥 Qualidade detectada: ${resolucao}`);
-    }
-  }
 }
 
 //MAPA DE RESOLUÇÃO ELEGIVEL
@@ -323,8 +311,6 @@ function renderPlaylist(videos) {
         playlistContainer.appendChild(listItem);
     });
 }
-// Renderiza a playlist completa ao carregar a página
-renderPlaylist(playlistData);
 
 // Função para filtrar a playlist
 function filterPlaylist(searchText) {
