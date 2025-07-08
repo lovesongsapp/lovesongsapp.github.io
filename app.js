@@ -125,7 +125,7 @@ function setupControlButtons() {
       this.innerHTML = '<ion-icon name="play-circle-outline"></ion-icon>';
     } else {
       player.playVideo();
-      this.innerHTML = '<ion-icon name="pause-circle-outline"></ion-icon>';
+      this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
     }
     isPlaying = !isPlaying;
   });
