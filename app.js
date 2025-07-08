@@ -122,7 +122,7 @@ function setupControlButtons() {
   document.querySelector('.control-button:nth-child(3)').addEventListener('click', function () {
     if (isPlaying) {
       player.pauseVideo();
-      this.innerHTML = '<ion-icon name="play-circle-outline"></ion-icon>';
+      this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
     } else {
       player.playVideo();
       this.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
