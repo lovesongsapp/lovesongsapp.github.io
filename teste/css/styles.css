@@ -34,15 +34,16 @@ body {
   align-items: center;
   background: var(--bg-secondary);
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1; /* força proporção quadrada */
+  max-width: 100vw;
+  max-height: 100vw;
   position: relative;
 }
 
 .cover {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+  object-fit: cover; /* cobre toda a área, cortando se necessário */
   position: absolute;
   top: 0;
   left: 0;
