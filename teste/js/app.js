@@ -59,7 +59,7 @@ window.onYouTubeIframeAPIReady = function () {
   player = new YT.Player('player', {
     height: '360', // altura padrão para vídeo visível
     width: '640',  // largura padrão para vídeo visível
-    videoId: 'eT5_neXR3FI',
+    videoId: '8tWMCGRWr-Y',
     playerVars: {
       autoplay: 1,
       modestbranding: 1,
