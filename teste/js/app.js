@@ -56,9 +56,20 @@ function onPlayerStateChange(event) {
 
 // Função global para API do YouTube
 window.onYouTubeIframeAPIReady = function () {
+  const playerDiv = document.getElementById('player');
+  if (playerDiv) {
+    playerDiv.style.width = '100%';
+    playerDiv.style.height = '100%';
+    playerDiv.style.position = 'absolute';
+    playerDiv.style.top = '0';
+    playerDiv.style.left = '0';
+    playerDiv.style.zIndex = '2';
+    playerDiv.style.background = 'black';
+  }
+
   player = new YT.Player('player', {
-    height: '360', // altura padrão para vídeo visível
-    width: '640',  // largura padrão para vídeo visível
+    height: '100%',
+    width: '100%',
     videoId: '8tWMCGRWr-Y',
     playerVars: {
       autoplay: 1,
@@ -180,4 +191,3 @@ function monitorarBotaoPularAnuncio() {
     onPlayerStateChange = window.onPlayerStateChange;
   }
 }
- 
