@@ -126,11 +126,10 @@ toggleBtn.addEventListener('click', () => {
 });
 
 /**
- * Detecta se há anúncio em reprodução e exibe um botão customizado para pular anúncio,
- * caso o método skipAd esteja disponível no player.
+ * Exibe um botão customizado para "Pular anúncio" por alguns segundos após o início do vídeo.
+ * Observação: Não é possível pular anúncios do YouTube via API pública, este botão é apenas ilustrativo.
  */
 function monitorarBotaoPularAnuncio() {
-  // Cria o botão customizado se ainda não existir
   let skipBtn = document.getElementById('custom-skip-ad');
   if (!skipBtn) {
     skipBtn = document.createElement('button');
@@ -151,24 +150,34 @@ function monitorarBotaoPularAnuncio() {
     document.body.appendChild(skipBtn);
 
     skipBtn.addEventListener('click', () => {
-      if (player && typeof player.skipAd === 'function') {
-        player.skipAd();
-      }
       skipBtn.style.display = 'none';
     });
   }
 
-  // Checa periodicamente se há anúncio e se o método skipAd está disponível
-  setInterval(() => {
-    if (
-      player &&
-      typeof player.getAdState === 'function' &&
-      player.getAdState() === 1 && // 1 = anúncio em reprodução
-      typeof player.skipAd === 'function'
-    ) {
-      skipBtn.style.display = 'block';
-    } else {
+  // Função para exibir o botão por 7 segundos após o início do vídeo
+  function mostrarBotaoTemporariamente() {
+    skipBtn.style.display = 'block';
+    setTimeout(() => {
       skipBtn.style.display = 'none';
+    }, 7000);
+  }
+
+  // Exibe o botão sempre que um novo vídeo começa a tocar
+  if (window._skipAdListenerAdded) return;
+  window._skipAdListenerAdded = true;
+
+  window.onPlayerStateChange = function(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+      mostrarBotaoTemporariamente();
     }
-  }, 1000);
+    if (typeof window._originalOnPlayerStateChange === 'function') {
+      window._originalOnPlayerStateChange(event);
+    }
+  };
+
+  // Salva o original e substitui
+  if (!window._originalOnPlayerStateChange) {
+    window._originalOnPlayerStateChange = onPlayerStateChange;
+    onPlayerStateChange = window.onPlayerStateChange;
+  }
 }
