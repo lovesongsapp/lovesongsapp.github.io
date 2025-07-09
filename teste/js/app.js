@@ -30,6 +30,7 @@ let playerPronto = false; // flag para saber se o player está pronto
 function onPlayerReady(event) {
   playerPronto = true;
   atualizarInfoVideo(player.getVideoData().video_id);
+  monitorarBotaoPularAnuncio(); // inicia monitoramento
 }
 
 function onPlayerStateChange(event) {
@@ -101,6 +102,73 @@ nextBtn.addEventListener('click', () => {
 
 // TEMA
 const toggleBtn = document.getElementById('theme-toggle');
+const themeMeta = document.querySelector('meta[name="theme-color"]');
+
+function setTheme(dark) {
+  if (dark) {
+    document.documentElement.classList.add('dark-mode');
+    toggleBtn.textContent = '☀️';
+    if (themeMeta) themeMeta.setAttribute('content', '#111');
+  } else {
+    document.documentElement.classList.remove('dark-mode');
+    toggleBtn.textContent = '🌙';
+    if (themeMeta) themeMeta.setAttribute('content', '#fff');
+  }
+}
+
+// Detecta tema inicial do sistema
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+setTheme(prefersDark);
+
 toggleBtn.addEventListener('click', () => {
-  document.documentElement.classList.toggle('dark-mode');
+  const isDark = document.documentElement.classList.toggle('dark-mode');
+  setTheme(isDark);
 });
+
+/**
+ * Detecta se há anúncio em reprodução e exibe um botão customizado para pular anúncio,
+ * caso o método skipAd esteja disponível no player.
+ */
+function monitorarBotaoPularAnuncio() {
+  // Cria o botão customizado se ainda não existir
+  let skipBtn = document.getElementById('custom-skip-ad');
+  if (!skipBtn) {
+    skipBtn = document.createElement('button');
+    skipBtn.id = 'custom-skip-ad';
+    skipBtn.textContent = '⏭️ Pular anúncio';
+    skipBtn.style.position = 'fixed';
+    skipBtn.style.bottom = '20px';
+    skipBtn.style.left = '20px';
+    skipBtn.style.zIndex = '9999';
+    skipBtn.style.padding = '1em 1.5em';
+    skipBtn.style.fontSize = '1.6rem';
+    skipBtn.style.background = 'var(--bg-secondary)';
+    skipBtn.style.color = 'var(--text)';
+    skipBtn.style.border = 'none';
+    skipBtn.style.borderRadius = '0.5rem';
+    skipBtn.style.cursor = 'pointer';
+    skipBtn.style.display = 'none';
+    document.body.appendChild(skipBtn);
+
+    skipBtn.addEventListener('click', () => {
+      if (player && typeof player.skipAd === 'function') {
+        player.skipAd();
+      }
+      skipBtn.style.display = 'none';
+    });
+  }
+
+  // Checa periodicamente se há anúncio e se o método skipAd está disponível
+  setInterval(() => {
+    if (
+      player &&
+      typeof player.getAdState === 'function' &&
+      player.getAdState() === 1 && // 1 = anúncio em reprodução
+      typeof player.skipAd === 'function'
+    ) {
+      skipBtn.style.display = 'block';
+    } else {
+      skipBtn.style.display = 'none';
+    }
+  }, 1000);
+}
