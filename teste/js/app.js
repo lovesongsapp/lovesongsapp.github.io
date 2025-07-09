@@ -57,12 +57,11 @@ function onPlayerStateChange(event) {
 // Função global para API do YouTube
 window.onYouTubeIframeAPIReady = function () {
   player = new YT.Player('player', {
-    height: '0',
-    width: '0',
+    height: '360', // altura padrão para vídeo visível
+    width: '640',  // largura padrão para vídeo visível
     videoId: 'eT5_neXR3FI',
     playerVars: {
       autoplay: 1,
-      controls: 0,
       modestbranding: 1,
       playsinline: 1,
       listType: 'playlist',
@@ -181,3 +180,4 @@ function monitorarBotaoPularAnuncio() {
     onPlayerStateChange = window.onPlayerStateChange;
   }
 }
+ 
