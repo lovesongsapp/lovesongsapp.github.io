@@ -358,7 +358,8 @@ input[type="range"]::-ms-thumb {
 }
 
 #playlist ul li:hover {
-    background: #00ffbf;
+    background: rgba(0,0,0,0.3)
+    color: #fff;
     cursor: pointer;
 }
 
@@ -422,8 +423,9 @@ input[type="range"]::-ms-thumb {
 }
 
 .dark-mode #playlist ul li:hover {
-    color: #00FFBF;
-    background: #340942;
+    background: rgba(0,0,0,0.3)
+    color: #ffffff;
+    cursor: pointer;
 }
 
 .dark-mode #playlist-items .title {
