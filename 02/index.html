@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Love Player</title>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="preload" href="./fonts/roboto-regular.ttf" as="font" type="font/ttf" crossorigin>
+</head>
+<body>
+    <div id="app">
+        <!-- Container principal responsivo -->
+        <div class="player-container">
+            <!-- Parte superior: Video -->
+            <section class="video-section">
+                <div class="video-cover" id="video-cover">
+                    <!-- Capa do vídeo será inserida via JS -->
+                    <img id="cover-img" src="" alt="Capa do vídeo" />
+                    <!-- Iframe do YouTube (sem controles) -->
+                    <div class="iframe-wrapper" id="iframe-wrapper" style="display:none;">
+                        <iframe id="yt-iframe" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    </div>
+                    <button id="play-btn" class="play-btn" aria-label="Tocar vídeo">
+                        <img src="icons/play.svg" alt="Play" />
+                    </button>
+                </div>
+            </section>
+            <!-- Parte inferior: Playlist, info, progresso, controles -->
+            <section class="info-section">
+                <!-- Playlist -->
+                <div class="playlist" id="playlist">
+                    <!-- Itens da playlist serão inseridos via JS -->
+                </div>
+                <!-- Título e artista -->
+                <div class="video-info" id="video-info">
+                    <span class="video-title" id="video-title"></span>
+                    <span class="video-artist" id="video-artist"></span>
+                </div>
+                <!-- Barra de progresso -->
+                <div class="progress-bar-container">
+                    <span id="current-time" class="time">0:00</span>
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                    <span id="duration" class="time">0:00</span>
+                </div>
+                <!-- Controles do player -->
+                <div class="player-controls">
+                    <button id="prev-btn" class="control-btn" aria-label="Anterior">
+                        <img src="icons/prev.svg" alt="Anterior" />
+                    </button>
+                    <button id="rewind-btn" class="control-btn" aria-label="Retroceder">
+                        <img src="icons/rewind.svg" alt="Rebobinar" />
+                    </button>
+                    <button id="main-play-btn" class="control-btn" aria-label="Play/Pause">
+                        <img id="main-play-icon" src="icons/play.svg" alt="Play" />
+                    </button>
+                    <button id="forward-btn" class="control-btn" aria-label="Avançar">
+                        <img src="icons/forward.svg" alt="Avançar" />
+                    </button>
+                    <button id="next-btn" class="control-btn" aria-label="Próximo">
+                        <img src="icons/next.svg" alt="Próximo" />
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
