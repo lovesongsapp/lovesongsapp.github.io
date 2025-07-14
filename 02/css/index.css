@@ -5,6 +5,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Product Sans';
+    src: url('../fonts/ProductSans-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --bg: #0f0f0f;
     --fg: #fff;
@@ -23,7 +30,7 @@ html, body {
     padding: 0;
     background: var(--bg);
     color: var(--fg);
-    font-family: 'Roboto', Arial, sans-serif;
+    font-family: 'Product Sans', Arial, sans-serif;
 }
 
 #app, .player-container {
