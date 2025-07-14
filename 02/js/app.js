@@ -207,7 +207,7 @@ function updateTitleAndArtist() {
 }
 
 async function fetchPlaylistData() {
-  const ids = ytPlayer.getPlaylist();
+  const ids = ytPlayer.getPlaylist() || [];
   PLAYLIST = [];
 
   for (let i = 0; i < ids.length; i++) {
@@ -222,7 +222,7 @@ async function fetchPlaylistData() {
         artist: json.author_name || 'Desconhecido'
       });
     } catch (e) {
-      console.error('Erro ao buscar detalhes do vídeo:', e);
+      console.error(`Erro ao buscar detalhes do vídeo ${ids[i]}:`, e);
     }
   }
   renderPlaylist();
@@ -236,16 +236,22 @@ function iniciarVerificacaoPlaylist() {
 
   const pollingTimer = setInterval(() => {
     if (
+      typeof ytPlayer !== 'undefined' &&
       ytPlayer &&
-      typeof ytPlayer.getPlaylist === 'function' &&
-      Array.isArray(ytPlayer.getPlaylist()) &&
-      ytPlayer.getPlaylist().length > 0
+      typeof ytPlayer.getPlaylist === 'function'
     ) {
-      clearInterval(pollingTimer);
-      fetchPlaylistData();
-      showCover();
-      tick();
-      return;
+      try {
+        const playlist = ytPlayer.getPlaylist();
+        if (Array.isArray(playlist) && playlist.length > 0) {
+          clearInterval(pollingTimer);
+          fetchPlaylistData();
+          showCover();
+          tick();
+          return;
+        }
+      } catch (err) {
+        // Aguardando a estabilidade do player
+      }
     }
 
     elapsedTime += POLLING_INTERVAL;
@@ -258,7 +264,7 @@ function iniciarVerificacaoPlaylist() {
 }
 
 function tick() {
-  if (playing) {
+  if (!document.hidden && playing) {
     fakeCurrent += 1;
     if (fakeCurrent >= fakeDuration) {
       fakeCurrent = 0;
