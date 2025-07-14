@@ -208,6 +208,10 @@ html, body {
     gap: 8px;
     padding: 0 16px;
     margin-bottom: 12px;
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    left: 0;
 }
 .time {
     font-size: 0.9rem;
@@ -238,6 +242,10 @@ html, body {
     justify-content: center;
     gap: 18px;
     padding: 8px 0 0 0;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
 .control-btn {
     background: none;
