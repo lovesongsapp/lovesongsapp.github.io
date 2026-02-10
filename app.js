@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Função chamada pela API do YouTube
 function onYouTubeIframeAPIReady() {
   const urlParams = new URLSearchParams(window.location.search);
-  const videoId = urlParams.get('videoId') || '1OgQdgSQB3o';
+  const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc';
 
   player = new YT.Player('music-player', {
     height: '100%', width: '100%', videoId,
@@ -323,4 +323,5 @@ function iniciarVerificacaoPlaylist() {
     }
   }, POLLING_INTERVAL);
 }
+
 
