@@ -44,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // Função chamada pela API do YouTube
 function onYouTubeIframeAPIReady() {
   const urlParams = new URLSearchParams(window.location.search);
-  const videoId = urlParams.get('videoId') || 'xiN4EOqpvwc';
+  // eT5_neXR3FI > Praying for Time | George Michael
+  const videoId = urlParams.get('videoId') || 'eT5_neXR3FI';
 
   player = new YT.Player('music-player', {
     height: '100%', width: '100%', videoId,
@@ -323,5 +324,6 @@ function iniciarVerificacaoPlaylist() {
     }
   }, POLLING_INTERVAL);
 }
+
 
 
