@@ -1,4 +1,4 @@
-// === Love Songs App – Código Final Revisado ===
+// === Love Songs App – Código Final Corrigido (Anti-Crash) ===
 
 // Variáveis globais
 let player, progressBar, currentTimeDisplay, durationDisplay;
@@ -6,20 +6,21 @@ let isPlaying = false, isShuffle = false;
 let mode = 'repeat';
 let playlistData = [];
 let sharedVideoId = null;
-let qualidade = ''; // armazena a qualidade atual (como 'medium')
+let qualidade = '';
 
-// Mapa para tradução de qualidade
+// Timers globais para evitar duplicidade e vazamento de memória
+let progressTimer = null;
+let qualityTimer = null;
+
 const resolucaoAmigavel = {
   tiny: '144p', small: '240p', medium: '360p', large: '480p',
   hd720: '720p', hd1080: '1080p', highres: '1080p+', default: 'Desconhecida'
 };
 
-// Carrega API do YouTube
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 document.head.appendChild(tag);
 
-// Corrige bug do postMessage do YouTube
 (function() {
   const original = window.postMessage;
   window.postMessage = function(msg, origin, transfer) {
@@ -30,21 +31,14 @@ document.head.appendChild(tag);
   };
 })();
 
-// Aguarda o DOM para capturar elementos
 document.addEventListener('DOMContentLoaded', () => {
   progressBar = document.getElementById('progress');
   currentTimeDisplay = document.getElementById('current-time');
   durationDisplay = document.getElementById('duration');
-
-  if (!progressBar || !currentTimeDisplay || !durationDisplay) {
-    console.error('⚠️ Elementos do DOM não encontrados.');
-  }
 });
 
-// Função chamada pela API do YouTube
 function onYouTubeIframeAPIReady() {
   const urlParams = new URLSearchParams(window.location.search);
-  // eT5_neXR3FI > Praying for Time | George Michael
   const videoId = urlParams.get('videoId') || 'eT5_neXR3FI';
 
   player = new YT.Player('music-player', {
@@ -62,7 +56,6 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
-// Força qualidade 360p e mostra no overlay de qualidade
 function atualizarQualidadeNaInterface() {
   if (player && typeof player.getPlaybackQuality === 'function') {
     const qualidadeAtual = player.getPlaybackQuality();
@@ -70,37 +63,32 @@ function atualizarQualidadeNaInterface() {
     if (label) {
       const resolucao = resolucaoAmigavel[qualidadeAtual] || resolucaoAmigavel.default;
       label.innerText = `Qualidade: ${resolucao}`;
-      console.log(`🎥 Qualidade detectada: ${resolucao}`);
     }
   }
 }
 
-// Função chamada quando o player estiver pronto
 function onPlayerReady(event) {
-  qualidade = 'medium'; // fixa 360p nos padrões do Love Songs App
+  qualidade = 'medium';
   setupControlButtons();
-  iniciarVerificacaoPlaylist(); // <- adiciona aqui!
+  iniciarVerificacaoPlaylist();
+
+  // Limpa timers antigos para evitar acúmulo de processamento (Causa do crash)
+  if (qualityTimer) clearInterval(qualityTimer);
+  if (progressTimer) clearInterval(progressTimer);
+
   let tentativas = 0;
-  const maxTentativas = 5;
-  const interval = setInterval(() => {
+  qualityTimer = setInterval(() => {
     tentativas++;
     if (player && typeof player.setPlaybackQuality === 'function') {
       player.setPlaybackQuality(qualidade);
-      console.log(`🎯 Qualidade forçada para: ${qualidade.toUpperCase()}`);
-
       const label = document.getElementById('quality-label');
       if (label) label.innerText = `Qualidade: ${resolucaoAmigavel[qualidade]}`;
+      if (tentativas >= 5) clearInterval(qualityTimer);
+    } else if (tentativas >= 5) clearInterval(qualityTimer);
+  }, 2000);
 
-      if (tentativas >= maxTentativas) clearInterval(interval);
-    } else if (tentativas >= maxTentativas) {
-      console.warn('⚠️ Falha ao definir qualidade após várias tentativas.');
-      clearInterval(interval);
-    }
-  }, 1000);
-
-  // Atualiza progresso do player
-  setInterval(() => {
-    if (player && player.getCurrentTime) {
+  progressTimer = setInterval(() => {
+    if (player && typeof player.getCurrentTime === 'function' && isPlaying) {
       const cur = player.getCurrentTime(), dur = player.getDuration();
       if (dur > 0) {
         progressBar.value = (cur / dur) * 100;
@@ -110,17 +98,15 @@ function onPlayerReady(event) {
     }
   }, 1000);
 
-  // Handler de seek pela barras de progresso
   progressBar.addEventListener('input', () => {
     const dur = player.getDuration();
     player.seekTo((progressBar.value / 100) * dur, true);
   });
 }
 
-// Setup dos botões de controle
 function setupControlButtons() {
-  // Play/Pause
-  document.querySelector('.control-button:nth-child(3)').addEventListener('click', function () {
+  const playBtn = document.querySelector('.control-button:nth-child(3)');
+  playBtn.addEventListener('click', function () {
     if (isPlaying) {
       player.pauseVideo();
       this.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
@@ -131,129 +117,104 @@ function setupControlButtons() {
     isPlaying = !isPlaying;
   });
 
-  // Previous
-  document.querySelector('.control-button:nth-child(2)').addEventListener('click', () => {
-    player.previousVideo();
-  });
+  document.querySelector('.control-button:nth-child(2)').addEventListener('click', () => player.previousVideo());
 
-  // Next / Shuffle
   document.querySelector('.control-button:nth-child(4)').addEventListener('click', () => {
     if (isShuffle) {
       const playlist = player.getPlaylist();
-      const next = Math.floor(Math.random() * playlist.length);
-      player.playVideoAt(next);
+      player.playVideoAt(Math.floor(Math.random() * playlist.length));
     } else {
-      const idx = player.getPlaylistIndex();
-      const len = player.getPlaylist().length;
-      player.playVideoAt((idx + 1) % len);
+      player.nextVideo();
     }
   });
 
-  // Repeat/Shuffle/RepeatOne
   document.querySelector('.control-button:nth-child(1)').addEventListener('click', function () {
     switch (mode) {
-      case 'repeat':
-        mode = 'repeat_one';
-        this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
-        break;
-      case 'repeat_one':
-        mode = 'shuffle'; isShuffle = true;
-        this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
-        break;
-      case 'shuffle':
-        mode = 'repeat'; isShuffle = false;
-        this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
-        break;
+      case 'repeat': mode = 'repeat_one'; this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>'; break;
+      case 'repeat_one': mode = 'shuffle'; isShuffle = true; this.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>'; break;
+      case 'shuffle': mode = 'repeat'; isShuffle = false; this.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>'; break;
     }
   });
 
-  // Abre playlist
   document.querySelector('.control-button:nth-child(5)').addEventListener('click', () => {
     document.getElementById('playlist-overlay').style.display = 'flex';
     renderPlaylist(playlistData);
   });
 
-  // Fecha overlay
   document.getElementById('close-playlist').addEventListener('click', () => {
     document.getElementById('playlist-overlay').style.display = 'none';
   });
 }
 
-// Main state change handler
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.ENDED) {
-    document.querySelector('.control-button:nth-child(3)').innerHTML = '<ion-icon name="play-outline"></ion-icon>';
     isPlaying = false;
     switch (mode) {
-      case 'repeat_one':
-        player.seekTo(0); player.playVideo(); break;
-      case 'shuffle':
+      case 'repeat_one': player.seekTo(0); player.playVideo(); break;
+      case 'shuffle': 
         const list = player.getPlaylist();
         player.playVideoAt(Math.floor(Math.random() * list.length));
         break;
-      case 'repeat':
-        const idx = player.getPlaylistIndex(), len = player.getPlaylist().length;
-        player.playVideoAt(idx === len - 1 ? 0 : idx + 1);
-        break;
+      case 'repeat': player.nextVideo(); break;
     }
   }
   if (event.data === YT.PlayerState.PLAYING) {
+    isPlaying = true;
     atualizarQualidadeNaInterface();
+    updateTitleAndArtist();
   }
-  updateTitleAndArtist();
 }
 
-// Atualiza título e artista
 function updateTitleAndArtist() {
   const d = player.getVideoData();
-  document.getElementById('title').textContent = d.title;
-  document.getElementById('artist').textContent = d.author;
+  if (d) {
+    document.getElementById('title').textContent = d.title || "Carregando...";
+    document.getElementById('artist').textContent = d.author || "";
+  }
 }
 
-// Formata tempo em mm:ss
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
   return `${m}:${s < 10 ? '0' : ''}${s}`;
 }
 
-// Obtém dados da playlist
 async function fetchPlaylistData() {
   const ids = player.getPlaylist();
-  playlistData = ids.map((id, i) => ({ videoId: id, index: i, title: '', author: '' }));
+  if (!ids) return;
+  
+  playlistData = ids.map((id, i) => ({ videoId: id, index: i, title: 'Carregando...', author: '' }));
+  renderPlaylist(playlistData);
+
+  // Busca detalhes em lotes para não estourar a memória (Causa principal do erro 3:04)
   for (let i = 0; i < playlistData.length; i++) {
     try {
-      const res = await fetch(
-        `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${playlistData[i].videoId}`
-      );
+      if (i % 5 === 0) await new Promise(r => setTimeout(r, 600)); 
+      const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${playlistData[i].videoId}`);
       const json = await res.json();
       playlistData[i].title = json.title;
       playlistData[i].author = json.author_name;
+      
+      if (i % 10 === 0 || i === playlistData.length - 1) renderPlaylist(playlistData);
     } catch (e) {
       console.error('Erro ao buscar detalhes:', e);
     }
   }
-  renderPlaylist(playlistData);
 }
 
-// Exibe a playlist
 function renderPlaylist(videos) {
   const c = document.getElementById('playlist-items');
+  if (!c) return;
   c.innerHTML = '';
   videos.forEach(v => {
     const li = document.createElement('li');
-    const img = document.createElement('img');
-    img.src = `https://img.youtube.com/vi/${v.videoId}/default.jpg`;
-    li.appendChild(img);
-
-    const txt = document.createElement('div');
-    txt.classList.add('video-info');
-
-    const t = document.createElement('p'); t.textContent = v.title;
-    const a = document.createElement('span'); a.textContent = v.author;
-    txt.append(t, a);
-    li.appendChild(txt);
-
+    li.innerHTML = `
+      <img src="https://img.youtube.com/vi/${v.videoId}/default.jpg">
+      <div class="video-info">
+        <p>${v.title}</p>
+        <span>${v.author}</span>
+      </div>
+    `;
     li.addEventListener('click', () => {
       player.playVideoAt(v.index);
       document.getElementById('playlist-overlay').style.display = 'none';
@@ -262,68 +223,43 @@ function renderPlaylist(videos) {
   });
 }
 
-// Filtra a playlist no input de busca
 document.getElementById('search-input').addEventListener('input', () => {
   const text = document.getElementById('search-input').value.trim().toLowerCase();
-  const filtered = playlistData.filter(v =>
-    (v.title || '').toLowerCase().includes(text) ||
-    (v.author || '').toLowerCase().includes(text)
+  const filtered = playlistData.filter(v => 
+    v.title.toLowerCase().includes(text) || v.author.toLowerCase().includes(text)
   );
   renderPlaylist(filtered);
 });
 
-// Compartilhamento
 document.getElementById('share-icon').addEventListener('click', () => {
   const vid = player.getVideoData().video_id;
   const shareUrl = `https://lovesongsapp.github.io/?videoId=${vid}`;
   if (navigator.share) {
-    navigator.share({ title: player.getVideoData().title, text: '🥰 LoveSongs: ' + player.getVideoData().title, url: shareUrl })
-      .catch(e => console.error('Erro no share:', e));
+    navigator.share({ title: 'LoveSongs App', url: shareUrl });
   } else {
-    alert(`🩷 Confira: ${player.getVideoData().title}\n${shareUrl}`);
+    alert(`Link: ${shareUrl}`);
   }
 });
 
-// Overlay de carregamento de playlist
 const loadingOverlay = document.createElement('div');
 loadingOverlay.id = 'loading-overlay';
-loadingOverlay.style = `
-  position:fixed; inset:0; background:rgba(0,0,0,0.85);
-  color:#00FFBF; display:flex; justify-content:center; align-items:center;
-  font-size:1.3rem; font-weight:600; z-index:9999;
-  font-family:-apple-system,Segoe UI,Roboto,sans-serif;
-  user-select:none; text-align:center; padding:1rem; line-height:1.4;
-`;
-loadingOverlay.innerText = '💖 Carregando playlist, aguarde um instante!';
+loadingOverlay.style = "position:fixed; inset:0; background:rgba(0,0,0,0.85); color:#00FFBF; display:flex; justify-content:center; align-items:center; font-size:1.3rem; z-index:9999; text-align:center; padding:1rem;";
+loadingOverlay.innerText = '💖 Carregando playlist...';
 document.body.appendChild(loadingOverlay);
 
-// Polling para checar playlist e recarregar ou chamar fetch
 function iniciarVerificacaoPlaylist() {
-  const MAX_WAIT_TIME = 15000;
-  const POLLING_INTERVAL = 500;
   let elapsedTime = 0;
-
   const pollingTimer = setInterval(() => {
-    if (
-      player &&
-      typeof player.getPlaylist === 'function' &&
-      Array.isArray(player.getPlaylist()) &&
-      player.getPlaylist().length > 0
-    ) {
+    if (player && typeof player.getPlaylist === 'function' && player.getPlaylist()) {
       clearInterval(pollingTimer);
-      loadingOverlay.remove();
+      if(document.getElementById('loading-overlay')) loadingOverlay.remove();
       fetchPlaylistData();
-      return;
+    } else {
+      elapsedTime += 500;
+      if (elapsedTime >= 15000) {
+        clearInterval(pollingTimer);
+        location.reload();
+      }
     }
-
-    elapsedTime += POLLING_INTERVAL;
-    if (elapsedTime >= MAX_WAIT_TIME) {
-      clearInterval(pollingTimer);
-      console.warn('Playlist não carregou em tempo. Recarregando...');
-      location.reload();
-    }
-  }, POLLING_INTERVAL);
+  }, 500);
 }
-
-
-
