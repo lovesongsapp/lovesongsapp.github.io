@@ -6,29 +6,40 @@ const urlsToCache = [
   '/offline.html'
 ];
 
-// Instalação do service worker e cache dos recursos
+// Instalação do service worker e cache dos recursos iniciais
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       console.log('Cached offline page during install');
       return cache.addAll(urlsToCache);
-    }).then(() => self.skipWaiting()) // Força o novo SW a assumir o controle
+    }).then(() => self.skipWaiting())
   );
 });
 
-// Fetch event para servir recursos do cache
+// Fetch event: Onde corrigimos o erro do "Estilingue" (Aw Snap!)
 self.addEventListener('fetch', event => {
+  // Só processamos requisições GET
   if (event.request.method !== 'GET') return;
+
+  const url = event.request.url;
+
+  // --- CORREÇÃO CRÍTICA PARA VÍDEOS DO YOUTUBE ---
+  // Se a requisição for para o YouTube ou servidores de vídeo do Google,
+  // nós saímos do Service Worker e deixamos a rede cuidar disso.
+  // Isso evita o estouro de memória aos 3:04 de vídeo.
+  if (url.includes('youtube.com') || url.includes('googlevideo.com') || url.includes('ytimg.com')) {
+    return; 
+  }
 
   event.respondWith(
     caches.match(event.request).then(response => {
       if (response) {
-        console.log('Serving from cache:', event.request.url);
         return response;
       }
 
-      console.log('Fetching from network:', event.request.url);
       return fetch(event.request).then(networkResponse => {
+        // Não cacheamos respostas que não sejam sucesso padrão (status 200)
+        // Isso protege contra erros de Range Requests (comum em mídias)
         if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
           return networkResponse;
         }
@@ -40,17 +51,18 @@ self.addEventListener('fetch', event => {
 
         return networkResponse;
       }).catch(() => {
-        console.log('Fetch failed; returning offline page instead.');
-        return caches.match('/offline.html');
+        // Se falhar a rede e for uma navegação de página, mostra o offline.html
+        if (event.request.mode === 'navigate') {
+          return caches.match('/offline.html');
+        }
       });
     })
   );
 });
 
-// Ativação do service worker e limpeza de caches antigos
+// Ativação e limpeza de caches antigos
 self.addEventListener('activate', event => {
   console.log('Activating new service worker...');
-
   const cacheWhitelist = [CACHE_NAME];
 
   event.waitUntil(
@@ -63,7 +75,7 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    }).then(() => self.clients.claim()) // Garante que o novo SW controle os clientes imediatamente
+    }).then(() => self.clients.claim())
   );
 });
 
@@ -123,7 +135,7 @@ self.addEventListener('notificationclick', event => {
   event.waitUntil(clients.openWindow('/'));
 });
 
-// Recebe mensagem para ativar imediatamente o novo service worker
+// Recebe mensagem para skipWaiting
 self.addEventListener('message', event => {
   if (event.data && event.data.action === 'skipWaiting') {
     self.skipWaiting();
