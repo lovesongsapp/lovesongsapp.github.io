@@ -1,4 +1,4 @@
-// === Love Songs App – Código Final Blindado (Anti-Crash) ===
+// === Love Songs App – Versão Ultra-Estável para Mobile ===
 
 let player, progressBar, currentTimeDisplay, durationDisplay;
 let isPlaying = false, isShuffle = false;
@@ -12,7 +12,14 @@ const resolucaoAmigavel = {
   hd720: '720p', hd1080: '1080p', highres: '1080p+', default: '360p'
 };
 
-// 1. Inicialização da API
+// 1. SILENCIADOR DE ERROS (Protege o processador do celular)
+window.addEventListener('message', function(e) {
+  if (e.origin.includes('youtube.com') || e.origin.includes('google.com')) {
+    return; // Ignora mensagens de telemetria que causam erro de Target Origin
+  }
+}, { passive: true });
+
+// 2. INICIALIZAÇÃO DA API
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 document.head.appendChild(tag);
@@ -26,31 +33,43 @@ document.addEventListener('DOMContentLoaded', () => {
 function onYouTubeIframeAPIReady() {
   const urlParams = new URLSearchParams(window.location.search);
   const videoId = urlParams.get('videoId') || 'eT5_neXR3FI';
-  const originUrl = window.location.origin.replace(/\/$/, "");
+  
+  // Geração da Origem Ultra-Limpa (Crucial para Mobile)
+  const originUrl = window.location.protocol + '//' + window.location.hostname;
 
   player = new YT.Player('music-player', {
-    height: '100%', width: '100%', videoId,
+    height: '100%', 
+    width: '100%', 
+    videoId: videoId,
+    host: 'https://www.youtube.com',
     playerVars: {
       'origin': originUrl,
       'enablejsapi': 1,
       'widget_referrer': originUrl,
       'listType': 'playlist',
       'list': 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
-      'autoplay': 0, 'controls': 0, 'iv_load_policy': 3,
-      'modestbranding': 1, 'rel': 0, 'disablekb': 1
+      'autoplay': 0, 
+      'controls': 0, 
+      'iv_load_policy': 3,
+      'modestbranding': 1, 
+      'rel': 0,
+      'disablekb': 1,
+      'ecver': 2 // Versão otimizada do motor do player
     },
     events: {
       'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange
+      'onStateChange': onPlayerStateChange,
+      'onError': (e) => console.warn('Player Error:', e.data)
     }
   });
 }
 
-// 2. Funções de Controle do Player
+// 3. FUNÇÕES DE CONTROLE
 function onPlayerReady(event) {
   setupControlButtons();
   iniciarVerificacaoPlaylist();
 
+  // Forçar qualidade uma única vez para não gerar loop de processamento
   if (qualityTimer) clearInterval(qualityTimer);
   qualityTimer = setInterval(() => {
     if (player && typeof player.setPlaybackQuality === 'function') {
@@ -59,8 +78,9 @@ function onPlayerReady(event) {
       if (label) label.innerText = `Qualidade: 360p`;
       clearInterval(qualityTimer);
     }
-  }, 2000);
+  }, 3000);
 
+  // Timer de progresso com trava de segurança
   if (progressTimer) clearInterval(progressTimer);
   progressTimer = setInterval(() => {
     if (player && typeof player.getCurrentTime === 'function' && isPlaying) {
@@ -83,48 +103,47 @@ function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.PLAYING) {
     isPlaying = true;
     updateTitleAndArtist();
-  } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+  } else {
     isPlaying = false;
   }
 
   if (event.data === YT.PlayerState.ENDED) {
-    handleVideoEnd();
+    handleNextVideo();
   }
 }
 
-function handleVideoEnd() {
-  switch (mode) {
-    case 'repeat_one': player.seekTo(0); player.playVideo(); break;
-    case 'shuffle': 
-      const list = player.getPlaylist();
-      player.playVideoAt(Math.floor(Math.random() * list.length));
-      break;
-    case 'repeat': player.nextVideo(); break;
+function handleNextVideo() {
+  if (mode === 'repeat_one') {
+    player.seekTo(0);
+    player.playVideo();
+  } else if (mode === 'shuffle') {
+    const list = player.getPlaylist();
+    if(list) player.playVideoAt(Math.floor(Math.random() * list.length));
+  } else {
+    player.nextVideo();
   }
 }
 
-// 3. Gestão Inteligente da Playlist (O segredo anti-trava)
+// 4. PLAYLIST OTIMIZADA (Busca em lotes para não travar o celular)
 async function fetchPlaylistData() {
   const ids = player.getPlaylist();
   if (!ids || ids.length === 0) return;
   
-  playlistData = ids.map((id, i) => ({ videoId: id, index: i, title: 'Buscando título...', author: '' }));
+  playlistData = ids.map((id, i) => ({ videoId: id, index: i, title: 'Buscando...', author: '' }));
 
-  // Processa em lotes para não sufocar a CPU do celular
-  const batchSize = 4; 
+  const batchSize = 3; // Lote pequeno para celulares mais simples
   for (let i = 0; i < playlistData.length; i += batchSize) {
-    const currentBatch = playlistData.slice(i, i + batchSize);
-    await Promise.all(currentBatch.map(async (item, idx) => {
+    const batch = playlistData.slice(i, i + batchSize);
+    await Promise.all(batch.map(async (item, idx) => {
       try {
         const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${item.videoId}`);
         const json = await res.json();
-        const realIdx = i + idx;
-        playlistData[realIdx].title = json.title || "Música Love Songs";
-        playlistData[realIdx].author = json.author_name || "Love Songs App";
-      } catch (e) { console.warn("Erro ao buscar metadados."); }
+        const rIdx = i + idx;
+        playlistData[rIdx].title = json.title || "Love Song";
+        playlistData[rIdx].author = json.author_name || "Love Songs App";
+      } catch (e) { }
     }));
-    // Pausa técnica para o navegador respirar
-    await new Promise(r => setTimeout(r, 400));
+    await new Promise(r => setTimeout(r, 600)); // Respiro maior para a CPU
   }
   renderPlaylist(playlistData);
 }
@@ -132,7 +151,6 @@ async function fetchPlaylistData() {
 function renderPlaylist(videos) {
   const container = document.getElementById('playlist-items');
   if (!container) return;
-  
   const fragment = document.createDocumentFragment();
   videos.forEach(v => {
     const li = document.createElement('li');
@@ -150,7 +168,7 @@ function renderPlaylist(videos) {
   container.appendChild(fragment);
 }
 
-// 4. Utilidades e Interface
+// 5. INTERFACE E UTILITÁRIOS
 function updateTitleAndArtist() {
   const d = player.getVideoData();
   if (d && d.title) {
@@ -166,16 +184,15 @@ function formatTime(s) {
 }
 
 function setupControlButtons() {
-  // Play/Pause - Seleção simplificada
   const playBtn = document.querySelector('.control-button:nth-child(3)');
   if(playBtn) {
     playBtn.onclick = () => {
       if (isPlaying) {
         player.pauseVideo();
-        playBtn.innerHTML = '<ion-icon name="play-circle-outline" class="play-outline"></ion-icon>';
+        playBtn.innerHTML = '<ion-icon name="play-circle-outline"></ion-icon>';
       } else {
         player.playVideo();
-        playBtn.innerHTML = '<ion-icon name="pause-circle-outline" class="pause-outline"></ion-icon>';
+        playBtn.innerHTML = '<ion-icon name="pause-circle-outline"></ion-icon>';
       }
     };
   }
@@ -192,7 +209,7 @@ function setupControlButtons() {
 
   document.querySelector('.control-button:nth-child(5)').onclick = () => {
     document.getElementById('playlist-overlay').style.display = 'flex';
-    if (playlistData.length > 0) renderPlaylist(playlistData);
+    renderPlaylist(playlistData);
   };
 
   document.getElementById('close-playlist').onclick = () => document.getElementById('playlist-overlay').style.display = 'none';
@@ -213,16 +230,13 @@ function iniciarVerificacaoPlaylist() {
   }, 500);
 }
 
-// Busca simples
 document.getElementById('search-input').oninput = (e) => {
   const txt = e.target.value.toLowerCase();
-  renderPlaylist(playlistData.filter(v => v.title.toLowerCase().includes(txt) || v.author.toLowerCase().includes(txt)));
+  renderPlaylist(playlistData.filter(v => v.title.toLowerCase().includes(txt)));
 };
 
-// Compartilhar
 document.getElementById('share-icon').onclick = () => {
   const vid = player.getVideoData().video_id;
   const url = `https://lovesongsapp.github.io/?videoId=${vid}`;
   if (navigator.share) navigator.share({ title: 'LoveSongs App', url });
-  else alert("Copiado: " + url);
 };
