@@ -31,38 +31,56 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function onYouTubeIframeAPIReady() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const videoId = urlParams.get('videoId') || 'eT5_neXR3FI';
-  
-  // Geração da Origem Ultra-Limpa (Crucial para Mobile)
+  criarPlayer();
+}
+
+function criarPlayer(startIndex = 0) {
+
   const originUrl = window.location.protocol + '//' + window.location.hostname;
 
   player = new YT.Player('music-player', {
-    height: '100%', 
-    width: '100%', 
-    videoId: videoId,
-    host: 'https://www.youtube.com',
+    height: '100%',
+    width: '100%',
+    host: 'https://www.youtube-nocookie.com',
     playerVars: {
-      'origin': originUrl,
-      'enablejsapi': 1,
-      'widget_referrer': originUrl,
-      'listType': 'playlist',
-      'list': 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
-      'autoplay': 0, 
-      'controls': 0, 
-      'iv_load_policy': 3,
-      'modestbranding': 1, 
-      'rel': 0,
-      'disablekb': 1,
-      'ecver': 2 // Versão otimizada do motor do player
+      origin: originUrl,
+      enablejsapi: 1,
+      listType: 'playlist',
+      list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
+      autoplay: 0,
+      controls: 0,
+      modestbranding: 1,
+      rel: 0,
+      iv_load_policy: 3
     },
     events: {
-      'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange,
-      'onError': (e) => console.warn('Player Error:', e.data)
+      onReady: function () {
+        if (startIndex > 0) {
+          player.playVideoAt(startIndex);
+        }
+        onPlayerReady();
+      },
+
+      onStateChange: onPlayerStateChange,
+
+      onError: function (e) {
+        console.warn('YouTube Error:', e.data);
+
+        const fatalErrors = [2, 5, 100, 101, 150];
+
+        if (fatalErrors.includes(e.data)) {
+          const currentIndex = player.getPlaylistIndex() || 0;
+
+          setTimeout(() => {
+            player.destroy();
+            criarPlayer(currentIndex);
+          }, 800);
+        }
+      }
     }
   });
 }
+
 
 // 3. FUNÇÕES DE CONTROLE
 function onPlayerReady(event) {
@@ -240,3 +258,4 @@ document.getElementById('share-icon').onclick = () => {
   const url = `https://lovesongsapp.github.io/?videoId=${vid}`;
   if (navigator.share) navigator.share({ title: 'LoveSongs App', url });
 };
+
