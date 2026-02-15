@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lovesongsapp-cache-v2.0';
+const CACHE_NAME = 'lovesongsapp-cache-v2.1';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -141,4 +141,5 @@ self.addEventListener('message', event => {
     self.skipWaiting();
   }
 });
+
 
