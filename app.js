@@ -31,15 +31,22 @@ function onYouTubeIframeAPIReady() {
   const urlParams = new URLSearchParams(window.location.search);
   const videoId = urlParams.get('videoId') || 'eT5_neXR3FI';
 
+  // Forçamos a origem a ser uma string limpa sem barras extras
+  const originUrl = window.location.origin.replace(/\/$/, "");
+
   player = new YT.Player('music-player', {
     height: '100%', width: '100%', videoId,
     playerVars: {
-      'origin': window.location.origin, //adicionado
-      'enablejsapi': 1, // adicionado
-      listType: 'playlist',
-      list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
-      autoplay: 0, controls: 0, iv_load_policy: 3,
-      modestbranding: 1, rel: 0
+      'origin': originUrl, // Versão higienizada
+      'enablejsapi': 1,
+      'widget_referrer': originUrl, // Ajuda o YouTube a validar o domínio
+      'listType': 'playlist',
+      'list': 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
+      'autoplay': 0, 
+      'controls': 0, 
+      'iv_load_policy:': 3,
+      'modestbranding': 1, 
+      'rel': 0
     },
     events: {
       'onReady': onPlayerReady,
@@ -255,5 +262,6 @@ function iniciarVerificacaoPlaylist() {
     }
   }, 500);
 }
+
 
 
