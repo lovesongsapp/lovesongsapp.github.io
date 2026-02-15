@@ -3,7 +3,7 @@
   "name": "LoveSongsApp",
   "short_name": "LoveSongs",
   "version": "1.0.1",
-  "display": "browser",
+  "display": "standalone",
   "background_color": "#00ffbf",
   "theme_color": "#00ffbf",
   "start_url": "/index.html",
