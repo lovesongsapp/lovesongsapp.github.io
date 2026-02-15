@@ -7,8 +7,8 @@
   "background_color": "#00ffbf",
   "theme_color": "#00ffbf",
   "start_url": "/index.html",
-  "orientation": "any",
   "scope": "/",
+  "orientation": "any",
   "description": "Descubra o amor nas melodias atemporais do nosso aplicativo de música romântica, onde as décadas de 80 e 90 se encontram. Deixe-se envolver por uma trilha sonora nostálgica que celebra o romance em cada nota.",
   "prefer_related_applications": false,
   "related_applications": [
@@ -162,11 +162,6 @@
   "dir": "ltr",
   "categories": [
     "music"
-  ],
-  "scope_extensions": [
-    {
-      "origin": "https://lovesongsapp.github.io"
-    }
   ],
   "launch_handler": {
     "client_mode": "navigate-existing",
