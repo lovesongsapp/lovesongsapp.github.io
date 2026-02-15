@@ -13,11 +13,12 @@ const resolucaoAmigavel = {
 };
 
 // 1. SILENCIADOR DE ERROS (Protege o processador do celular)
-window.addEventListener('message', function(e) {
-  if (e.origin.includes('youtube.com') || e.origin.includes('google.com')) {
-    return; // Ignora mensagens de telemetria que causam erro de Target Origin
-  }
-}, { passive: true });
+
+// window.addEventListener('message', function(e) {
+//  if (e.origin.includes('youtube.com') || e.origin.includes('google.com')) {
+//    return; // Ignora mensagens de telemetria que causam erro de Target Origin
+//  }
+// }, { passive: true });
 
 // 2. INICIALIZAÇÃO DA API
 const tag = document.createElement('script');
@@ -258,4 +259,5 @@ document.getElementById('share-icon').onclick = () => {
   const url = `https://lovesongsapp.github.io/?videoId=${vid}`;
   if (navigator.share) navigator.share({ title: 'LoveSongs App', url });
 };
+
 
