@@ -1,0 +1,74 @@
+Substitua as funções correspondentes por estas:
+
+// 1. Variáveis de controle para evitar duplicidade
+let progressTimer = null;
+let qualityTimer = null;
+
+function onPlayerReady(event) {
+  qualidade = 'medium'; 
+  setupControlButtons();
+  iniciarVerificacaoPlaylist();
+
+  let tentativas = 0;
+  const maxTentativas = 5;
+
+  // Limpa timer de qualidade se já existir
+  if (qualityTimer) clearInterval(qualityTimer);
+  
+  qualityTimer = setInterval(() => {
+    tentativas++;
+    if (player && typeof player.setPlaybackQuality === 'function') {
+      player.setPlaybackQuality(qualidade);
+      const label = document.getElementById('quality-label');
+      if (label) label.innerText = `Qualidade: ${resolucaoAmigavel[qualidade]}`;
+      if (tentativas >= maxTentativas) clearInterval(qualityTimer);
+    } else if (tentativas >= maxTentativas) {
+      clearInterval(qualityTimer);
+    }
+  }, 1000);
+
+  // 2. Atualiza progresso com proteção de duplicidade
+  if (progressTimer) clearInterval(progressTimer);
+  
+  progressTimer = setInterval(() => {
+    if (player && typeof player.getCurrentTime === 'function' && isPlaying) {
+      const cur = player.getCurrentTime();
+      const dur = player.getDuration();
+      if (dur > 0) {
+        progressBar.value = (cur / dur) * 100;
+        currentTimeDisplay.textContent = formatTime(cur);
+        durationDisplay.textContent = formatTime(dur);
+      }
+    }
+  }, 1000);
+}
+
+// 3. Busca de dados da playlist OTIMIZADA (evita crash de rede)
+async function fetchPlaylistData() {
+  const ids = player.getPlaylist();
+  if (!ids) return;
+  
+  playlistData = ids.map((id, i) => ({ videoId: id, index: i, title: 'Carregando...', author: '' }));
+  
+  // Renderiza primeiro com o que tem, para não travar a UI
+  renderPlaylist(playlistData);
+
+  for (let i = 0; i < playlistData.length; i++) {
+    try {
+      // Pequena pausa a cada 5 requisições para não travar o processador do celular
+      if (i % 5 === 0) await new Promise(r => setTimeout(r, 500));
+
+      const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${playlistData[i].videoId}`);
+      const json = await res.json();
+      playlistData[i].title = json.title || 'Vídeo sem título';
+      playlistData[i].author = json.author_name || '';
+      
+      // Atualiza apenas o item necessário na lista em vez de reconstruir tudo
+      // ou renderiza a cada 5 itens para economizar CPU
+      if (i % 5 === 0 || i === playlistData.length - 1) renderPlaylist(playlistData);
+      
+    } catch (e) {
+      console.error('Erro ao buscar detalhes:', e);
+    }
+  }
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>LoveSongs Experience</title>
+  <meta name="description" content="Experimente a LovesSongs com uma interface moderna e recursos interativos. Ouça música, veja letras originais e traduzidas, compartilhe sua experiência." />
+  <link rel="stylesheet" href="css/styles.css" />
+  
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta name="theme-color" content="#181818">
+  <!-- FAVICON-->
+   <link rel="shortcut icon" href="https://lovesongsapp.github.io/icons/favicon32.png" />
+   <link rel="icon" type="image/png" sizes="32x32" href="https://lovesongsapp.github.io/icons/favicon32.png" />
+   <link rel="icon" type="image/png" sizes="16x16" href="https://lovesongsapp.github.io/icons/favicon16.png" />
+   <!--AppleTouchIcon-->
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon76.png" sizes="76x76">
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon120.png" sizes="120x120">
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon152.png" sizes="152x152">
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon180.png" sizes="180x180">
+   <link rel="apple-touch-icon" href="https://lovesongsapp.github.io/icons/icon512.png" sizes="512x512">
+  <!-- SEO | OG -->
+   <meta name="apple-mobile-web-app-capable" content="yes" />
+   <meta name="keywords" content="Waltemar Carneiro, LovesSongs Experience" />
+   <meta property="og:title" content="LovesSongs Experience" />
+   <meta property="og:description" content="Experimente a Radio LovesSongs com uma interface moderna e recursos interativos. Ouça música, veja letras originais e traduzidas, compartilhe sua experiência." />
+   <meta property="og:image" content="https://lovesongsapp.github.io/radio/img/og-image.webp" />
+   <meta content='website' property='og:type' />
+   <meta property="og:site_name" content="LoveSongsApp />
+   <meta name="mobile-web-app-capable" content="yes" />
+</head>
+<body>
+  <div class="app-wrapper">
+    <header class="header-controls">
+      <button class="icon-button" aria-label="Menu">
+        <span class="material-icons">
+          <img src="/icons/icon192.png" height="24" style="border-radius: 5px;">
+        </span>
+      </button>
+      <h4>LoveSongs Experience</h4>
+      <div style="margin-left:auto; display:flex; gap:0.5rem;">
+        <button class="icon-button" aria-label="Sobre o App" onclick="window.modalManager.open('about.html')">
+          <span class="material-icons">info</span>
+        </button>
+        <button class="icon-button" aria-label="Artista" onclick="window.modalManager.open('artist-info.html')">
+          <span class="material-icons">person</span>
+        </button>
+        <button class="icon-button" aria-label="Compartilhar" onclick="window.modalManager.open('share.html')">
+          <span class="material-icons">share</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="player">
+      <div class="cover-wrapper">
+        <div class="cover-container">
+          <img id="cover" alt="Capa do álbum atual" loading="lazy">
+          <div class="no-cover">
+            <span class="material-icons">album</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-wrapper">
+        <h1 id="title">Carregando...</h1>
+        <p id="artist">Aguardando artista</p>
+        
+        <div class="player-controls">
+          <button class="control-button" id="lyricsOriginalBtn" aria-label="Letra Original" onclick="window.modalManager.open('lyrics-original.html')">
+            <span class="material-icons">library_music</span>
+          </button>
+          <button style="background: #ff5e66;width:4rem;height: 4rem;" class="control-button" id="playButton" aria-label="Play/Pause">
+            <span class="material-icons">play_arrow</span>
+          </button>
+          <button class="control-button" id="lyricsTranslationBtn" aria-label="Letra Traduzida" onclick="window.modalManager.open('lyrics-translation.html')">
+            <span class="material-icons">translate</span>
+          </button>
+        </div>
+
+        <audio id="audio-player" preload="auto">
+          <source src="https://playerservices.streamtheworld.com/api/livestream-redirect/TLPSTR04.mp3" type="audio/mpeg">
+        </audio>
+      </div>
+    </main>
+  </div>
+  
+  <script src="js/script.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="js/share.js"></script>
+
+
+</body>
+</html>

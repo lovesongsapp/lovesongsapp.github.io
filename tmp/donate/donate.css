@@ -1,0 +1,290 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap'); @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'); * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.popup {
+    padding: 20px;
+    display: none;
+    bottom: 0;
+    min-height: 100%;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.95), #311e56d9), url(donate.css) no-repeat center center fixed;
+    /*border-top: 5px solid #00FFBF;*/
+    overflow: hidden;
+    color: #fff;
+    z-index: 2;
+    /*-webkit-border-top-left-radius: 15px;
+    -webkit-border-top-right-radius: 15px;
+    -moz-border-radius-topleft: 15px;
+    -moz-border-radius-topright: 15px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;*/
+    animation: slideUp 2s ease-out forwards;
+    right: 0;
+    margin: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.popup-content {
+    /* background: #311e56; */
+    /* background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://lovesongsapp.github.io/donate/donate-bg.jpg') no-repeat center center fixed; */
+    background-size: cover;
+    height: 70%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    padding: 20px;
+    left: 0;
+}
+
+.logo-popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.logo-popup h1 {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.logo-popup p {
+    font-weight: 300;
+    color: #fff;
+    opacity: 0.5;
+}
+
+.logo-popup img {
+    margin-right: 10px;
+    font-weight: 300;
+    text-align: left;
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(100%);
+    }
+}
+
+.qrcode {
+    margin: 20px;
+    display: flex;
+    position: absolute;
+    bottom: 20px;
+    margin: auto;
+    width: 100px;
+    left: 0;
+    right: 0;
+}
+
+.qrcode img {
+    border-radius: 5px;
+}
+
+.donate-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+.key1 {
+    /* width: 150px; */
+    /* height: 120px; */
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* padding: 10px; */
+    background: none;
+    line-height: 2;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.key2 {
+    /* width: 150px; */
+    /* height: 120px; */
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* padding: 10px; */
+    background: none;
+    line-height: 2;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.key1 ion-icon, .key2 ion-icon {
+    font-size: 4rem;
+}
+
+.donate-close {
+    font-weight: 300;
+    width: 40px;
+    height: 40px;
+    color: #fafafa;
+    cursor: pointer;
+    font-size: 1rem;
+    border: none;
+    border-radius: 100%;
+    display: flex;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.chave {
+    display: none;
+}
+
+/*anime icon*/
+.swal2-header {
+    padding: 0 !important;
+}
+
+.swal2-success-line-tip {
+    background: #00ffbf !important;
+}
+
+.swal2-success-line-long {
+    background: #00ffbf !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+    position: absolute;
+    z-index: 2;
+    top: -0.25em;
+    left: -0.25em;
+    box-sizing: content-box;
+    width: 100%;
+    height: 100%;
+    border: 0.25em solid #00ffbf !important;
+    border-radius: 50%;
+}
+
+.swal2-container.swal2-backdrop-show, .swal2-container.swal2-noanimation {
+    background: rgba(0,0,0,0.95) !important;
+}
+
+.swal2-popup {
+    display: none;
+    position: relative;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    width: 32em;
+    max-width: 100%;
+    padding: 1.25em;
+    border: none;
+    border-radius: 5px;
+    background: #0f0225;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.swal2-title {
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+    max-width: 100%;
+    margin: 0 0 .4em;
+    padding: 0;
+    color: #fff;
+    font-size: 1.875em;
+    font-weight: 500;
+    text-align: center;
+    text-transform: none;
+    word-wrap: break-word;
+}
+
+.swal2-content {
+    font-family: 'Roboto', sans-serif;
+    padding: 0 !important;
+    color: #ddd;
+    font-size: 1.125em;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.swal-text-title .highlight {
+    color: #00ffbf;
+}
+
+.swal-text-custom .highlight {
+    color: #00ffbf;
+}
+
+.swal2-styled {
+    margin: .3125em;
+    padding: .625em 1.4em;
+    box-shadow: none;
+    font-weight: 500;
+}
+
+.swal2-styled.swal2-confirm {
+    border: 0;
+    border-radius: 2em !important;
+    background-color: #00ffbf !important;
+    color: #311e56 !important;
+    font-size: 1.0625em !important;
+}
+
+/*moblile config*/
+@media (orientation: landscape) {
+    .logo-popup {
+        position: absolute;
+        left: 20px;
+        display: flex;
+        bottom: 160px;
+    }
+
+    .donate-btn {
+        display: flex;
+        align-items: center;
+        right: 20px;
+        left: 50%;
+        position: absolute;
+        top: 100px;
+        justify-content: space-around;
+    }
+
+    .qrcode {
+        position: absolute;
+        margin-left: 20px;
+        margin-right: 20px;
+        width: auto;
+    }
+}
