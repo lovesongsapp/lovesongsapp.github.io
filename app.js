@@ -21,16 +21,6 @@ const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 document.head.appendChild(tag);
 
-(function() {
-  const original = window.postMessage;
-  window.postMessage = function(msg, origin, transfer) {
-    if (typeof origin === 'string' && origin.includes('youtube.com')) {
-      origin = '*';
-    }
-    return original.call(this, msg, origin, transfer);
-  };
-})();
-
 document.addEventListener('DOMContentLoaded', () => {
   progressBar = document.getElementById('progress');
   currentTimeDisplay = document.getElementById('current-time');
@@ -263,3 +253,4 @@ function iniciarVerificacaoPlaylist() {
     }
   }, 500);
 }
+
