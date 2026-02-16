@@ -12,19 +12,7 @@ const resolucaoAmigavel = {
   hd720: '720p', hd1080: '1080p', highres: '1080p+', default: '360p'
 };
 
-// 1. SILENCIADOR DE ERROS (Protege o processador do celular)
-
-// window.addEventListener('message', function(e) {
-//  if (e.origin.includes('youtube.com') || e.origin.includes('google.com')) {
-//    return; // Ignora mensagens de telemetria que causam erro de Target Origin
-//  }
-// }, { passive: true });
-
-// 2. INICIALIZAÇÃO DA API
-const tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-document.head.appendChild(tag);
-
+// 1. INICIALIZAÇÃO DA API
 document.addEventListener('DOMContentLoaded', () => {
   progressBar = document.getElementById('progress');
   currentTimeDisplay = document.getElementById('current-time');
@@ -37,14 +25,10 @@ function onYouTubeIframeAPIReady() {
 
 function criarPlayer(startIndex = 0) {
 
-  const originUrl = window.location.protocol + '//' + window.location.hostname;
-
   player = new YT.Player('music-player', {
     height: '100%',
     width: '100%',
-    host: 'https://www.youtube-nocookie.com',
     playerVars: {
-      origin: originUrl,
       enablejsapi: 1,
       listType: 'playlist',
       list: 'PLX_YaKXOr1s6u6O3srDxVJn720Zi2RRC5',
@@ -82,13 +66,11 @@ function criarPlayer(startIndex = 0) {
   });
 }
 
-
 // 3. FUNÇÕES DE CONTROLE
-function onPlayerReady(event) {
+function onPlayerReady() {
   setupControlButtons();
   iniciarVerificacaoPlaylist();
 
-  // Forçar qualidade uma única vez para não gerar loop de processamento
   if (qualityTimer) clearInterval(qualityTimer);
   qualityTimer = setInterval(() => {
     if (player && typeof player.setPlaybackQuality === 'function') {
@@ -99,7 +81,6 @@ function onPlayerReady(event) {
     }
   }, 3000);
 
-  // Timer de progresso com trava de segurança
   if (progressTimer) clearInterval(progressTimer);
   progressTimer = setInterval(() => {
     if (player && typeof player.getCurrentTime === 'function' && isPlaying) {
@@ -137,22 +118,29 @@ function handleNextVideo() {
     player.playVideo();
   } else if (mode === 'shuffle') {
     const list = player.getPlaylist();
-    if(list) player.playVideoAt(Math.floor(Math.random() * list.length));
+    if (list) player.playVideoAt(Math.floor(Math.random() * list.length));
   } else {
     player.nextVideo();
   }
 }
 
-// 4. PLAYLIST OTIMIZADA (Busca em lotes para não travar o celular)
+// PLAYLIST
 async function fetchPlaylistData() {
   const ids = player.getPlaylist();
   if (!ids || ids.length === 0) return;
-  
-  playlistData = ids.map((id, i) => ({ videoId: id, index: i, title: 'Buscando...', author: '' }));
 
-  const batchSize = 3; // Lote pequeno para celulares mais simples
+  playlistData = ids.map((id, i) => ({
+    videoId: id,
+    index: i,
+    title: 'Buscando...',
+    author: ''
+  }));
+
+  const batchSize = 3;
+
   for (let i = 0; i < playlistData.length; i += batchSize) {
     const batch = playlistData.slice(i, i + batchSize);
+
     await Promise.all(batch.map(async (item, idx) => {
       try {
         const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${item.videoId}`);
@@ -160,22 +148,29 @@ async function fetchPlaylistData() {
         const rIdx = i + idx;
         playlistData[rIdx].title = json.title || "Love Song";
         playlistData[rIdx].author = json.author_name || "Love Songs App";
-      } catch (e) { }
+      } catch (e) {}
     }));
-    await new Promise(r => setTimeout(r, 600)); // Respiro maior para a CPU
+
+    await new Promise(r => setTimeout(r, 600));
   }
+
   renderPlaylist(playlistData);
 }
 
 function renderPlaylist(videos) {
   const container = document.getElementById('playlist-items');
   if (!container) return;
+
   const fragment = document.createDocumentFragment();
+
   videos.forEach(v => {
     const li = document.createElement('li');
     li.innerHTML = `
       <img src="https://img.youtube.com/vi/${v.videoId}/default.jpg" loading="lazy">
-      <div class="video-info"><p>${v.title}</p><span>${v.author}</span></div>
+      <div class="video-info">
+        <p>${v.title}</p>
+        <span>${v.author}</span>
+      </div>
     `;
     li.onclick = () => {
       player.playVideoAt(v.index);
@@ -183,11 +178,11 @@ function renderPlaylist(videos) {
     };
     fragment.appendChild(li);
   });
+
   container.innerHTML = '';
   container.appendChild(fragment);
 }
 
-// 5. INTERFACE E UTILITÁRIOS
 function updateTitleAndArtist() {
   const d = player.getVideoData();
   if (d && d.title) {
@@ -204,7 +199,7 @@ function formatTime(s) {
 
 function setupControlButtons() {
   const playBtn = document.querySelector('.control-button:nth-child(3)');
-  if(playBtn) {
+  if (playBtn) {
     playBtn.onclick = () => {
       if (isPlaying) {
         player.pauseVideo();
@@ -221,9 +216,18 @@ function setupControlButtons() {
 
   const modeBtn = document.querySelector('.control-button:nth-child(1)');
   modeBtn.onclick = () => {
-    if (mode === 'repeat') { mode = 'repeat_one'; modeBtn.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>'; }
-    else if (mode === 'repeat_one') { mode = 'shuffle'; isShuffle = true; modeBtn.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>'; }
-    else { mode = 'repeat'; isShuffle = false; modeBtn.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>'; }
+    if (mode === 'repeat') {
+      mode = 'repeat_one';
+      modeBtn.innerHTML = '<ion-icon name="repeat-outline"></ion-icon><span class="repeat-number">1</span>';
+    } else if (mode === 'repeat_one') {
+      mode = 'shuffle';
+      isShuffle = true;
+      modeBtn.innerHTML = '<ion-icon name="shuffle-outline"></ion-icon>';
+    } else {
+      mode = 'repeat';
+      isShuffle = false;
+      modeBtn.innerHTML = '<ion-icon name="repeat-outline"></ion-icon>';
+    }
   };
 
   document.querySelector('.control-button:nth-child(5)').onclick = () => {
@@ -231,7 +235,8 @@ function setupControlButtons() {
     renderPlaylist(playlistData);
   };
 
-  document.getElementById('close-playlist').onclick = () => document.getElementById('playlist-overlay').style.display = 'none';
+  document.getElementById('close-playlist').onclick = () =>
+    document.getElementById('playlist-overlay').style.display = 'none';
 }
 
 function iniciarVerificacaoPlaylist() {
@@ -239,8 +244,6 @@ function iniciarVerificacaoPlaylist() {
   const timer = setInterval(() => {
     if (player && typeof player.getPlaylist === 'function' && player.getPlaylist()) {
       clearInterval(timer);
-      const loader = document.getElementById('loading-overlay');
-      if (loader) loader.remove();
       fetchPlaylistData();
     } else if ((elapsed += 500) >= 15000) {
       clearInterval(timer);
@@ -251,7 +254,9 @@ function iniciarVerificacaoPlaylist() {
 
 document.getElementById('search-input').oninput = (e) => {
   const txt = e.target.value.toLowerCase();
-  renderPlaylist(playlistData.filter(v => v.title.toLowerCase().includes(txt)));
+  renderPlaylist(
+    playlistData.filter(v => v.title.toLowerCase().includes(txt))
+  );
 };
 
 document.getElementById('share-icon').onclick = () => {
@@ -259,5 +264,3 @@ document.getElementById('share-icon').onclick = () => {
   const url = `https://lovesongsapp.github.io/?videoId=${vid}`;
   if (navigator.share) navigator.share({ title: 'LoveSongs App', url });
 };
-
-
