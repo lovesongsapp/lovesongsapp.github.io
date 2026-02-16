@@ -135,7 +135,7 @@ body {
     bottom: 0;
 }
 
-.gradient-overlay {
+..gradient-overlay {
     top: 0;
     position: absolute;
     width: 100%;
@@ -728,3 +728,4 @@ input[type="range"]::-ms-fill-upper {
 
 .volume-value {
 }
+
